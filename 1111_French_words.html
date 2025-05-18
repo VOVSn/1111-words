@@ -1,0 +1,2803 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1111 Французских слов - Игра на Сопоставление</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #e8e3d9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            transition: background-color 0.3s ease; /* Smooth transition for dark mode */
+        }
+
+        /* Main Game Container */
+        .game-app {
+            width: 800px;
+            height: 650px;
+            background: linear-gradient(145deg, #eae5db, #dcd7cd);
+            border-radius: 20px;
+            box-shadow:
+                15px 15px 35px #c4c0b7,
+                -15px -15px 35px #fcf7ed;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Game Header */
+        .game-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 20px; /* Adjusted padding */
+            background: linear-gradient(145deg, #eae5db, #e0dbd1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: relative;
+            z-index: 2;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+            gap: 10px; /* Gap between header items */
+        }
+
+        .game-info {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0; /* Prevent title from shrinking too much */
+        }
+         .game-info-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .game-title {
+            font-weight: bold;
+            font-size: 20px;
+            color: #5a5346;
+            transition: color 0.3s ease;
+        }
+
+        .game-subtitle { /* General class for subtitles */
+            font-size: 12px;
+            color: #847c6f;
+            margin-top: 2px;
+            transition: color 0.3s ease;
+        }
+        #game-subtitle-mode { /* Specific ID for mode subtitle */
+             /* Inherits .game-subtitle styles */
+        }
+        #game-subtitle-round { /* Specific ID for round subtitle */
+            font-weight: 500;
+            /* Inherits .game-subtitle styles */
+        }
+
+
+        /* Topic Selector */
+        .topic-selector-container {
+            position: relative;
+            flex-grow: 1; /* Allow it to take available space */
+            display: flex;
+            justify-content: center;
+            min-width: 130px; /* Minimum width for the button */
+        }
+
+        .topic-button {
+            padding: 8px 12px;
+            border-radius: 10px;
+            background: linear-gradient(145deg, #e8e3d9, #d9d4ca);
+            box-shadow: 3px 3px 7px #c4c0b7, -3px -3px 7px #fcf7ed;
+            border: 1px solid rgba(173, 157, 124, 0.15);
+            color: #5a5346;
+            font-weight: 500;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 5px;
+            min-width: 120px;
+            text-align: left;
+        }
+        .topic-button:active {
+            box-shadow: inset 2px 2px 4px #c4c0b7, inset -2px -2px 4px #fcf7ed;
+        }
+        .topic-button .dropdown-arrow {
+            font-size: 10px;
+            transition: transform 0.3s ease;
+        }
+        .topic-button.open .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .topic-dropdown-content {
+            display: none;
+            position: absolute;
+            top: calc(100% + 5px);
+            left: 50%;
+            transform: translateX(-50%);
+            width: 220px;
+            background: linear-gradient(145deg, #e8e3d9, #dcd7cd);
+            box-shadow:
+                6px 6px 15px #c4c0b7,
+                -6px -6px 15px #fcf7ed;
+            border-radius: 10px;
+            padding: 10px;
+            z-index: 11;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .topic-dropdown-content.active {
+            display: flex;
+        }
+        .topic-dropdown-content label {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            color: #5a5346;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+        }
+        .topic-dropdown-content label:hover {
+            background-color: rgba(173, 157, 124, 0.1);
+        }
+        .topic-dropdown-content input[type="checkbox"] {
+            margin-right: 8px;
+            accent-color: #847c6f;
+        }
+
+        /* Rounds Selector */
+        .rounds-selector-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0; /* Prevent shrinking */
+            margin: 0 5px; /* Spacing from neighbors */
+        }
+        .rounds-label {
+            font-size: 13px;
+            color: #5a5346;
+            font-weight: 500;
+            white-space: nowrap;
+             transition: color 0.3s ease;
+        }
+        .rounds-select-dropdown {
+            padding: 7px 10px;
+            border-radius: 10px;
+            background: linear-gradient(145deg, #e8e3d9, #d9d4ca);
+            box-shadow: 3px 3px 7px #c4c0b7, -3px -3px 7px #fcf7ed;
+            border: 1px solid rgba(173, 157, 124, 0.15);
+            color: #5a5346;
+            font-weight: 500;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            outline: none;
+            min-width: 50px; /* Ensure it has some width */
+            text-align: center;
+        }
+        .rounds-select-dropdown:focus {
+            box-shadow: inset 1px 1px 2px #c4c0b7, inset -1px -1px 2px #fcf7ed,
+                        3px 3px 7px #c4c0b7, -3px -3px 7px #fcf7ed;
+        }
+
+
+        /* Menu Button */
+        .menu-button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #eae5db, #dcd7cd);
+            box-shadow: 4px 4px 8px #c4c0b7, -4px -4px 8px #fcf7ed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #5a5346;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        .menu-button:active {
+            box-shadow: inset 3px 3px 6px #c4c0b7, inset -3px -3px 6px #fcf7ed;
+        }
+
+        /* Settings Dropdown Panel */
+        .settings-dropdown {
+            position: absolute;
+            top: 70px; /* Below header */
+            right: 20px; /* Adjusted for header padding */
+            width: 280px;
+            padding: 15px;
+            background: linear-gradient(145deg, #e8e3d9, #dcd7cd);
+            box-shadow:
+                8px 8px 20px #c4c0b7,
+                -8px -8px 20px #fcf7ed;
+            border-radius: 15px;
+            z-index: 10;
+            display: none;
+            flex-direction: column;
+            gap: 15px;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+        }
+        .settings-dropdown.active {
+            display: flex;
+        }
+
+        .settings-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .settings-label {
+            font-size: 14px;
+            color: #5a5346;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        .game-mode-label-text {
+            font-size: 12px;
+            color: #847c6f;
+            margin-left: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .settings-action-button {
+            padding: 8px 15px;
+            border-radius: 10px;
+            background: linear-gradient(145deg, #e8e3d9, #d9d4ca);
+            box-shadow: 3px 3px 7px #c4c0b7, -3px -3px 7px #fcf7ed;
+            border: 1px solid rgba(173, 157, 124, 0.15);
+            color: #5a5346;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+            text-align: center;
+            margin-top: 5px; /* Optional: adds a bit of space if it's the last item */
+        }
+        .settings-action-button:active {
+            box-shadow: inset 2px 2px 4px #c4c0b7, inset -2px -2px 4px #fcf7ed;
+        }
+
+
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+        }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: #dcd7cd;
+            box-shadow: inset 2px 2px 4px #cbc6bd, inset -2px -2px 4px #f5f0e5;
+            border-radius: 34px;
+            transition: .4s;
+        }
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px; width: 20px;
+            left: 3px; bottom: 3px;
+            background: linear-gradient(145deg, #f0ebe1, #e0dbd1);
+            border-radius: 50%;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+            transition: .4s;
+        }
+        input:checked + .toggle-slider { background: linear-gradient(145deg, #d5ccb8, #c6bdaa); }
+        input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+            background: linear-gradient(145deg, #d9cebc, #c8beac);
+        }
+
+        /* Game Board */
+        .game-board {
+            flex: 1;
+            padding: 20px 25px;
+            background: linear-gradient(125deg, #e6e1d7, #dbd6cc);
+            box-shadow: inset 5px 5px 15px #cbc6bd, inset -5px -5px 15px #f5f0e5;
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 15px;
+            overflow: auto;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+        }
+         .game-board-message {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            grid-column: 1 / -1; /* Span all columns */
+            grid-row: 1 / -1;    /* Span all rows */
+            height: 100%;
+            font-size: 16px;
+            color: #5a5346;
+            padding: 20px;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+
+        /* Game Card - Flipping Structure */
+        .memory-card {
+            position: relative;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: box-shadow 0.3s;
+            perspective: 1000px;
+        }
+        .memory-card:hover:not(.matched) {
+            box-shadow:
+                7px 7px 20px #c4c0b7,
+                -7px -7px 20px #fcf7ed;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .memory-card.is-flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow:
+                5px 5px 15px #cbc6bd,
+                -5px -5px 15px #f5f0e5;
+            border: 1px solid rgba(173, 157, 124, 0.1);
+            overflow: hidden;
+            transition: background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+        .card-face::before {
+            content: "";
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: linear-gradient(60deg, transparent 35%, rgba(255, 215, 0, 0.04) 45%, rgba(255, 215, 0, 0.08) 50%, rgba(255, 215, 0, 0.04) 55%, transparent 65%);
+            transform: rotate(30deg);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .card-front {
+            background: linear-gradient(145deg, #e8e3d9, #d9d4ca);
+        }
+
+        .card-back {
+            background: linear-gradient(145deg, #d5ccb8, #c6bdaa);
+            transform: rotateY(180deg);
+            color: #5a5346;
+            font-size: 32px;
+            font-weight: bold;
+            transition: color 0.3s ease, background 0.3s ease;
+        }
+
+        .card-content {
+            padding: 10px;
+            text-align: center;
+            word-break: break-word;
+            font-size: 18px;
+            color: #5a5346;
+            font-weight: bold;
+            transition: color 0.3s;
+            position: relative;
+            z-index: 2;
+        }
+        /* Adjust font size for longer words */
+        .card-content.small-text { font-size: 14px; }
+        .card-content.x-small-text { font-size: 12px; }
+        .card-content.xx-small-text { font-size: 10px; } /* For very long terms like BDP */
+
+
+        .memory-card.is-flipped:active .card-back {
+             box-shadow:
+                inset 3px 3px 6px #cbc6bd,
+                inset -3px -3px 6px #f5f0e5,
+                3px 3px 10px #cbc6bd,
+                -3px -3px 10px #f5f0e5;
+        }
+        .memory-card:not(.is-flipped):active .card-front {
+             box-shadow:
+                inset 3px 3px 6px #cbc6bd,
+                inset -3px -3px 6px #f5f0e5,
+                3px 3px 10px #cbc6bd,
+                -3px -3px 10px #f5f0e5;
+        }
+
+        .memory-card.selected .card-front {
+            background: linear-gradient(145deg, #dad2c5, #cbc3b6);
+            box-shadow:
+                inset 4px 4px 8px #b5ac9a,
+                inset -4px -4px 8px #e5dcc8,
+                3px 3px 10px #cbc6bd,
+                -3px -3px 10px #f5f0e5;
+            border: 1px solid #ad9d7c;
+        }
+
+        .memory-card.matched {
+            cursor: default;
+        }
+        .memory-card.matched .card-front {
+            opacity: 0.65;
+            background: linear-gradient(145deg, #d1c9bd, #c2b8a8);
+            box-shadow:
+                inset 3px 3px 6px #b9b2a5,
+                inset -3px -3px 6px #e9e2d5;
+        }
+        .memory-card.matched .card-front .card-content {
+            color: #756e60;
+        }
+
+        .memory-card.incorrect {
+            animation: shake 0.5s;
+        }
+        .memory-card.incorrect:not(.is-flipped) .card-front {
+            background: linear-gradient(145deg, #eddcd2, #e3cdc2);
+        }
+        .memory-card.incorrect.is-flipped .card-back {
+             background: linear-gradient(145deg, #eddcd2, #e3cdc2);
+        }
+
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+        }
+
+        /* Game Stats Area */
+        .game-stats {
+            padding: 15px 25px;
+            background: linear-gradient(145deg, #e8e3d9, #dcd7cd);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(173, 157, 124, 0.1);
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.03);
+            position: relative;
+            z-index: 1;
+            transition: background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+        .stat-item { display: flex; flex-direction: column; align-items: center; }
+        .stat-label { font-size: 12px; color: #847c6f; transition: color 0.3s ease; }
+        .stat-value { font-size: 16px; font-weight: bold; color: #5a5346; transition: color 0.3s ease; }
+
+        .new-game-button {
+            padding: 10px 20px;
+            border-radius: 15px;
+            background: linear-gradient(145deg, #d9cebc, #c8beac);
+            box-shadow: 4px 4px 8px #b5ac9a, -4px -4px 8px #e5dcc8;
+            border: 1px solid rgba(173, 157, 124, 0.2);
+            color: #5a5346;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        .new-game-button:active { box-shadow: inset 3px 3px 6px #b5ac9a, inset -3px -3px 6px #e5dcc8; }
+        .new-game-button::before {
+            content: ""; position: absolute; inset: -1px; border-radius: inherit;
+            background: linear-gradient(135deg, transparent 30%, rgba(255, 215, 0, 0.15) 50%, transparent 70%);
+            opacity: 0; transition: opacity 0.3s; z-index: -1; pointer-events: none;
+        }
+        .new-game-button:hover::before { opacity: 1; }
+
+        /* Custom Scrollbar */
+        .game-board::-webkit-scrollbar { width: 8px; }
+        .game-board::-webkit-scrollbar-track { background: transparent; margin: 5px 0; }
+        .game-board::-webkit-scrollbar-thumb { background-color: #c5bdab; border-radius: 10px; border: 2px solid transparent; transition: background-color 0.3s ease;}
+        .game-board::-webkit-scrollbar-thumb:hover { background-color: #b9b1a0; }
+
+        /* Golden shimmer effect for game-app */
+        .game-app::before {
+            content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(45deg, transparent 0%, rgba(255, 215, 0, 0.03) 25%, rgba(255, 215, 0, 0.06) 50%, rgba(255, 215, 0, 0.03) 75%, transparent 100%);
+            border-radius: 20px; z-index: 0; pointer-events: none;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(90, 83, 70, 0.65); /* Darker beige overlay */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+            padding: 20px;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.3s ease, visibility 0s linear 0s;
+        }
+
+        .modal-content-wrapper {
+            background: linear-gradient(145deg, #eae5db, #dcd7cd);
+            border-radius: 20px;
+            box-shadow:
+                15px 15px 35px #c4c0b7,
+                -15px -15px 35px #fcf7ed;
+            padding: 25px 30px;
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+            transform: scale(0.9);
+            transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+            color: #5a5346;
+        }
+        .modal-overlay.active .modal-content-wrapper {
+            transform: scale(1);
+        }
+
+        .modal-content-wrapper h3 {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #5a5346;
+             transition: color 0.3s ease;
+        }
+        .modal-content-wrapper p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            white-space: pre-line; /* To respect \n in message from JS */
+             transition: color 0.3s ease;
+        }
+        .modal-content-wrapper p .modal-link {
+            color: #4a4336; /* Darker than main text for emphasis */
+            text-decoration: underline;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        .modal-content-wrapper p .modal-link:hover {
+            color: #3a3326;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap; /* Allow buttons to wrap on smaller modal */
+        }
+        #modal-close-btn { /* Slightly less prominent style */
+            background: linear-gradient(145deg, #e8e3d9, #d9d4ca);
+            box-shadow: 3px 3px 7px #c4c0b7, -3px -3px 7px #fcf7ed;
+        }
+        #modal-close-btn:active {
+            box-shadow: inset 2px 2px 4px #c4c0b7, inset -2px -2px 4px #fcf7ed;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 850px) {
+            .game-app { width: 95%; height: 90vh; }
+            .game-board { grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(4, 1fr); }
+            .settings-dropdown { width: 250px; right: 15px; }
+            .topic-selector-container { min-width: 120px; }
+            .topic-button { font-size: 12px; padding: 8px 10px; min-width: 110px; }
+            .rounds-selector-container { margin: 0; }
+            .rounds-label { font-size: 12px; }
+            .rounds-select-dropdown { font-size: 12px; padding: 7px 8px; min-width: 40px; }
+            .game-header { padding: 10px 15px; gap: 5px;}
+        }
+        @media (max-width: 680px) { /* Header items wrap */
+            .game-header { flex-wrap: wrap; justify-content: space-between; padding: 10px 15px;}
+            .game-info { order: 1; width: calc(100% - 50px); /* Title takes most width, leaves space for menu btn */}
+            .menu-button { order: 2; width: 35px; height: 35px; font-size: 18px;}
+            .topic-selector-container { order: 3; width: calc(50% - 5px); margin-top: 10px; justify-content: flex-start; }
+            .rounds-selector-container { order: 4; width: calc(50% - 5px); margin-top: 10px; justify-content: flex-end; }
+        }
+
+        @media (max-width: 576px) {
+             /* .game-header inherited from 680px */
+            .game-info { width: calc(100% - 45px); }
+            .topic-selector-container { width: 100%; justify-content: center; }
+            .rounds-selector-container { width: 100%; margin-top: 8px; justify-content: center; }
+
+            .game-app { height: auto; min-height: 85vh; }
+            .game-board { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(6, 1fr); gap: 10px; padding: 15px; }
+            .game-stats { flex-wrap: wrap; gap: 10px; justify-content: center; padding: 10px 15px; }
+            .stat-item { flex: 0 0 40%; align-items: center; }
+            .new-game-button { flex-basis: 100%; margin-top: 10px; }
+            .game-title { font-size: 18px; }
+            .game-subtitle { font-size: 11px; }
+             #game-subtitle-round { font-size: 11px; }
+            .card-content { font-size: 14px; }
+            .card-content.small-text { font-size: 12px; }
+            .card-content.x-small-text { font-size: 11px; }
+            .card-content.xx-small-text { font-size: 10px;}
+            .settings-dropdown { top: 60px; width: calc(100% - 30px); right: 15px; left: 15px; }
+            .topic-dropdown-content { width: calc(100% - 30px); }
+            .modal-content-wrapper { padding: 20px; }
+            .modal-content-wrapper h3 { font-size: 20px; }
+            .modal-content-wrapper p { font-size: 14px; }
+            .modal-buttons .new-game-button { flex-basis: 100%; } /* Stack buttons on small screens */
+        }
+
+        /* Dark Mode Styles */
+        body.dark-mode {
+            background-color: #2c2c2c;
+        }
+
+        .dark-mode .game-app {
+            background: linear-gradient(145deg, #454545, #3b3b3b);
+            box-shadow:
+                15px 15px 35px #252525,
+                -15px -15px 35px #515151;
+        }
+        .dark-mode .game-app::before {
+             background: linear-gradient(45deg, transparent 0%, rgba(255, 255, 255, 0.02) 25%, rgba(255, 255, 255, 0.04) 50%, rgba(255, 255, 255, 0.02) 75%, transparent 100%);
+        }
+
+        .dark-mode .game-header {
+            background: linear-gradient(145deg, #424242, #383838);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        .dark-mode .game-title { color: #d1d1d1; }
+        .dark-mode .game-subtitle { color: #9e9e9e; }
+
+        .dark-mode .topic-button {
+            background: linear-gradient(145deg, #4f4f4f, #454545);
+            box-shadow: 3px 3px 7px #252525, -3px -3px 7px #515151;
+            border: 1px solid rgba(100, 100, 100, 0.15);
+            color: #d1d1d1;
+        }
+        .dark-mode .topic-button:active {
+            box-shadow: inset 2px 2px 4px #252525, inset -2px -2px 4px #515151;
+        }
+        .dark-mode .topic-dropdown-content {
+            background: linear-gradient(145deg, #404040, #363636);
+            box-shadow: 6px 6px 15px #222222, -6px -6px 15px #4e4e4e;
+        }
+        .dark-mode .topic-dropdown-content label {
+            color: #c0c0c0;
+        }
+        .dark-mode .topic-dropdown-content label:hover {
+            background-color: rgba(100, 100, 100, 0.1);
+        }
+        .dark-mode .topic-dropdown-content input[type="checkbox"] {
+            accent-color: #707070;
+        }
+
+        .dark-mode .rounds-label { color: #c0c0c0; }
+        .dark-mode .rounds-select-dropdown {
+            background: linear-gradient(145deg, #4f4f4f, #454545);
+            box-shadow: 3px 3px 7px #252525, -3px -3px 7px #515151;
+            border: 1px solid rgba(100, 100, 100, 0.15);
+            color: #d1d1d1;
+        }
+        .dark-mode .rounds-select-dropdown:focus {
+             box-shadow: inset 1px 1px 2px #252525, inset -1px -1px 2px #515151,
+                        3px 3px 7px #252525, -3px -3px 7px #515151;
+        }
+
+
+        .dark-mode .menu-button {
+            background: linear-gradient(145deg, #454545, #3b3b3b);
+            box-shadow: 4px 4px 8px #252525, -4px -4px 8px #515151;
+            color: #d1d1d1;
+        }
+        .dark-mode .menu-button:active {
+            box-shadow: inset 3px 3px 6px #252525, inset -3px -3px 6px #515151;
+        }
+
+        .dark-mode .settings-dropdown {
+            background: linear-gradient(145deg, #404040, #363636);
+            box-shadow:
+                8px 8px 20px #222222,
+                -8px -8px 20px #4e4e4e;
+        }
+        .dark-mode .settings-label { color: #c0c0c0; }
+        .dark-mode .game-mode-label-text { color: #909090; }
+        .dark-mode .settings-action-button {
+            background: linear-gradient(145deg, #4f4f4f, #454545);
+            box-shadow: 3px 3px 7px #252525, -3px -3px 7px #515151;
+            border: 1px solid rgba(100, 100, 100, 0.15);
+            color: #d1d1d1;
+        }
+        .dark-mode .settings-action-button:active {
+            box-shadow: inset 2px 2px 4px #252525, inset -2px -2px 4px #515151;
+        }
+
+        .dark-mode .toggle-slider {
+            background: #3a3a3a;
+            box-shadow: inset 2px 2px 4px #2d2d2d, inset -2px -2px 4px #474747;
+        }
+        .dark-mode .toggle-slider:before {
+            background: linear-gradient(145deg, #525252, #484848);
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        }
+        .dark-mode input:checked + .toggle-slider {
+            background: linear-gradient(145deg, #507a50, #406a40); /* Kept green for generic "on" state */
+        }
+        .dark-mode input:checked + .toggle-slider:before {
+            background: linear-gradient(145deg, #608a60, #507a50); /* Kept green */
+        }
+
+        .dark-mode .game-board {
+            background: linear-gradient(125deg, #3f3f3f, #353535);
+            box-shadow: inset 5px 5px 15px #2a2a2a, inset -5px -5px 15px #4a4a4a;
+        }
+        .dark-mode .game-board::-webkit-scrollbar-thumb { background-color: #5a5a5a; }
+        .dark-mode .game-board::-webkit-scrollbar-thumb:hover { background-color: #6a6a6a; }
+        .dark-mode .game-board-message {
+            color: #c0c0c0;
+        }
+
+
+        .dark-mode .memory-card:hover:not(.matched) {
+            box-shadow:
+                7px 7px 20px #232323,
+                -7px -7px 20px #4f4f4f;
+        }
+
+        .dark-mode .card-face {
+            box-shadow:
+                5px 5px 15px #282828,
+                -5px -5px 15px #484848;
+            border: 1px solid rgba(100, 100, 100, 0.1);
+        }
+        .dark-mode .card-face::before {
+            background: linear-gradient(60deg, transparent 35%, rgba(255, 255, 255, 0.02) 45%, rgba(255, 255, 255, 0.04) 50%, rgba(255, 255, 255, 0.02) 55%, transparent 65%);
+        }
+        .dark-mode .card-front {
+            background: linear-gradient(145deg, #4f4f4f, #454545);
+        }
+        .dark-mode .card-back {
+            background: linear-gradient(145deg, #4a4a4a, #404040);
+            color: #c0c0c0;
+        }
+        .dark-mode .card-content {
+            color: #dcdcdc;
+        }
+
+        .dark-mode .memory-card.is-flipped:active .card-back {
+             box-shadow:
+                inset 3px 3px 6px #282828,
+                inset -3px -3px 6px #484848,
+                3px 3px 10px #282828,
+                -3px -3px 10px #484848;
+        }
+         .dark-mode .memory-card:not(.is-flipped):active .card-front {
+             box-shadow:
+                inset 3px 3px 6px #282828,
+                inset -3px -3px 6px #484848,
+                3px 3px 10px #282828,
+                -3px -3px 10px #484848;
+        }
+
+        .dark-mode .memory-card.selected .card-front {
+            background: linear-gradient(145deg, #4a4a4a, #404040);
+            box-shadow:
+                inset 4px 4px 8px #2d2d2d,
+                inset -4px -4px 8px #575757,
+                3px 3px 10px #282828,
+                -3px -3px 10px #484848;
+            border: 1px solid #707070;
+        }
+
+        .dark-mode .memory-card.matched .card-front {
+            opacity: 0.7;
+            background: linear-gradient(145deg, #3e3e3e, #343434);
+            box-shadow:
+                inset 3px 3px 6px #242424,
+                inset -3px -3px 6px #444444;
+        }
+        .dark-mode .memory-card.matched .card-front .card-content {
+            color: #888888;
+        }
+
+        .dark-mode .memory-card.incorrect:not(.is-flipped) .card-front {
+            background: linear-gradient(145deg, #5c4545, #523b3b);
+        }
+        .dark-mode .memory-card.incorrect.is-flipped .card-back {
+             background: linear-gradient(145deg, #5c4545, #523b3b);
+        }
+
+        .dark-mode .game-stats {
+            background: linear-gradient(145deg, #404040, #363636);
+            border-top: 1px solid rgba(100, 100, 100, 0.15);
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.15);
+        }
+        .dark-mode .stat-label { color: #a0a0a0; }
+        .dark-mode .stat-value { color: #dcdcdc; }
+
+        .dark-mode .new-game-button {
+            background: linear-gradient(145deg, #585858, #4e4e4e);
+            box-shadow: 4px 4px 8px #2a2a2a, -4px -4px 8px #626262;
+            border: 1px solid rgba(100, 100, 100, 0.2);
+            color: #dcdcdc;
+        }
+        .dark-mode .new-game-button:active {
+            box-shadow: inset 3px 3px 6px #2a2a2a, inset -3px -3px 6px #626262;
+        }
+        .dark-mode .new-game-button::before {
+            background: linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.06) 50%, transparent 70%);
+        }
+
+        /* Dark Mode Modal Styles */
+        .dark-mode .modal-overlay {
+            background-color: rgba(20, 20, 20, 0.75); /* Darker overlay for dark mode */
+        }
+        .dark-mode .modal-content-wrapper {
+            background: linear-gradient(145deg, #454545, #3b3b3b);
+            box-shadow:
+                15px 15px 35px #252525,
+                -15px -15px 35px #515151;
+            color: #d1d1d1;
+        }
+        .dark-mode .modal-content-wrapper h3 {
+            color: #d1d1d1;
+        }
+         .dark-mode .modal-content-wrapper p .modal-link {
+            color: #e1e1e1;
+        }
+        .dark-mode .modal-content-wrapper p .modal-link:hover {
+            color: #f1f1f1;
+        }
+        .dark-mode #modal-close-btn {
+            background: linear-gradient(145deg, #4f4f4f, #454545); /* Dark mode specific for close button */
+            box-shadow: 3px 3px 7px #252525, -3px -3px 7px #515151;
+            color: #d1d1d1;
+        }
+        .dark-mode #modal-close-btn:active {
+            box-shadow: inset 2px 2px 4px #252525, inset -2px -2px 4px #515151;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="game-app">
+        <div class="game-header">
+            <div class="game-info">
+                <div class="game-info-text">
+                    <div class="game-title">1111 Французских слов</div>
+                    <div class="game-subtitle" id="game-subtitle-mode">Сопоставьте слова с переводом</div>
+                    <div class="game-subtitle" id="game-subtitle-round"></div>
+                </div>
+            </div>
+            <div class="topic-selector-container">
+                <button id="topic-selector-button" class="topic-button">
+                    Темы (<span id="topic-count-display">1</span>)
+                    <span class="dropdown-arrow">▼</span>
+                </button>
+                <div id="topic-dropdown" class="topic-dropdown-content">
+                    <!-- Checkboxes will be generated by JS -->
+                </div>
+            </div>
+             <div class="rounds-selector-container">
+                <label for="rounds-select" class="rounds-label">Раунды:</label>
+                <select id="rounds-select" class="rounds-select-dropdown">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            <div class="menu-button" id="menu-button" title="Настройки">
+                ⋮ <!-- Vertical ellipsis -->
+            </div>
+        </div>
+
+        <div class="settings-dropdown" id="settings-dropdown">
+            <div class="settings-row">
+                <div class="settings-label">Режим игры</div>
+                <div style="display: flex; align-items: center;">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="game-mode-toggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <span class="game-mode-label-text" id="game-mode-label">Простой</span>
+                </div>
+            </div>
+            <div class="settings-row">
+                <div class="settings-label">Звук</div>
+                <label class="toggle-switch">
+                    <input type="checkbox" checked id="sound-toggle">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="settings-row">
+                <div class="settings-label">Темная тема</div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="dark-mode-toggle">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="settings-row"> 
+                <button id="about-button" class="settings-action-button">О программе</button>
+            </div>
+        </div>
+
+        <div class="game-board"></div>
+
+        <div class="game-stats">
+            <div class="stat-item">
+                <div class="stat-label">Ходы</div>
+                <div class="stat-value" id="moves-value">0</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Пары</div>
+                <div class="stat-value" id="matches-value">0/0</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Время</div>
+                <div class="stat-value" id="time-value">00:00</div>
+            </div>
+            <button class="new-game-button" id="new-game-btn">Новая игра</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="game-end-modal">
+        <div class="modal-content-wrapper">
+            <h3 id="modal-title"></h3>
+            <p id="modal-message-text"></p>
+            <div class="modal-buttons">
+                <button id="modal-play-again-btn" class="new-game-button">Играть снова</button>
+                <button id="modal-close-btn" class="new-game-button">Закрыть</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="about-modal">
+        <div class="modal-content-wrapper">
+            <h3 id="about-modal-title">О программе</h3>
+            <p id="about-modal-message-text-content"></p> 
+            <div class="modal-buttons">
+                <button id="about-modal-close-btn" class="new-game-button">Закрыть</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const gameBoard = document.querySelector('.game-board');
+        const movesValueEl = document.getElementById('moves-value');
+        const matchesValueEl = document.getElementById('matches-value');
+        const timeValueEl = document.getElementById('time-value');
+        const newGameButton = document.getElementById('new-game-btn');
+
+        const menuButton = document.getElementById('menu-button');
+        const settingsDropdown = document.getElementById('settings-dropdown');
+        const soundToggle = document.getElementById('sound-toggle');
+        const gameModeToggle = document.getElementById('game-mode-toggle');
+        const gameModeLabel = document.getElementById('game-mode-label');
+        const gameSubtitleModeEl = document.getElementById('game-subtitle-mode');
+        const gameSubtitleRoundEl = document.getElementById('game-subtitle-round');
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+
+        const topicSelectorButton = document.getElementById('topic-selector-button');
+        const topicDropdown = document.getElementById('topic-dropdown');
+        const topicCountDisplay = document.getElementById('topic-count-display');
+        const roundsSelect = document.getElementById('rounds-select');
+
+        const gameEndModal = document.getElementById('game-end-modal');
+        const modalTitleEl = document.getElementById('modal-title');
+        const modalMessageTextEl = document.getElementById('modal-message-text');
+        const modalPlayAgainBtn = document.getElementById('modal-play-again-btn');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
+
+        const aboutButton = document.getElementById('about-button');
+        const aboutModal = document.getElementById('about-modal');
+        const aboutModalMessageTextContentEl = document.getElementById('about-modal-message-text-content');
+        const aboutModalCloseBtn = document.getElementById('about-modal-close-btn');
+
+
+        let audioCtx;
+
+        let firstCard = null;
+        let secondCard = null;
+        let lockBoard = true;
+        let gameActive = false;
+        let boardHasBeenSetUpAtLeastOnce = false;
+
+        let moves = 0;
+        let matches = 0;
+        let roundTimerInterval;
+        let roundSecondsElapsed = 0;
+
+        let selectedNumberOfRounds = 1;
+        let currentRound = 0;
+        let wordsUsedInAllRounds = new Set();
+        let totalMovesAcrossAllRounds = 0;
+        let totalTimeAcrossAllRounds = 0;
+
+
+        const MAX_PAIRS_DISPLAYED = 6;
+        let currentTotalPairsInRound = 0;
+
+        let soundEnabled = true;
+        let gameMode = 'simple';
+        let isDarkMode = false;
+
+        const topicsData = {
+            basics: "Основы",
+            food: "Еда/Рестораны",
+            travel: "Путешествия",
+            tech: "Техника/Компьютеры",
+            business: "Бизнес/Экономика"
+        };
+        let selectedTopics = ['basics'];
+
+// --- WORD LISTS (FRENCH) ---
+// IMPORTANT: You need to populate these lists with 1111 French-Russian word pairs.
+// The pairId must be unique across all words.
+// Example structure: { ru: "RussianWord", fr: "FrenchWord", pairId: unique_id, topic: "topic_key" }
+
+const basicsFrenchWords = [
+    // Initial 100 "Basics" words (pairId: 1-100)
+    { ru: "Привет", fr: "Bonjour", pairId: 1, topic: 'basics' }, // Salut (informal)
+    { ru: "Спасибо", fr: "Merci", pairId: 2, topic: 'basics' },
+    { ru: "Пожалуйста", fr: "S'il vous plaît", pairId: 3, topic: 'basics' }, // S'il te plaît (informal)
+    { ru: "Да", fr: "Oui", pairId: 4, topic: 'basics' },
+    { ru: "Нет", fr: "Non", pairId: 5, topic: 'basics' },
+    { ru: "Доброе утро", fr: "Bonjour", pairId: 6, topic: 'basics' }, // (Used until midday)
+    { ru: "Добрый день", fr: "Bonjour", pairId: 7, topic: 'basics' }, // (Used all day) / Bon après-midi (Good afternoon)
+    { ru: "Добрый вечер", fr: "Bonsoir", pairId: 8, topic: 'basics' },
+    { ru: "До свидания", fr: "Au revoir", pairId: 9, topic: 'basics' },
+    { ru: "Как дела?", fr: "Comment ça va ?", pairId: 10, topic: 'basics' }, // Ça va ? (informal)
+    { ru: "Хорошо", fr: "Bien", pairId: 11, topic: 'basics' },
+    { ru: "Плохо", fr: "Mal", pairId: 12, topic: 'basics' },
+    { ru: "Извините", fr: "Excusez-moi", pairId: 13, topic: 'basics' }, // Pardon
+    { ru: "Я не понимаю", fr: "Je ne comprends pas", pairId: 14, topic: 'basics' },
+    { ru: "Помощь", fr: "Aide", pairId: 15, topic: 'basics' },
+    { ru: "Мама", fr: "Maman", pairId: 16, topic: 'basics' },
+    { ru: "Папа", fr: "Papa", pairId: 17, topic: 'basics' },
+    { ru: "Брат", fr: "Frère", pairId: 18, topic: 'basics' },
+    { ru: "Сестра", fr: "Sœur", pairId: 19, topic: 'basics' },
+    { ru: "Сын", fr: "Fils", pairId: 20, topic: 'basics' },
+    { ru: "Дочь", fr: "Fille", pairId: 21, topic: 'basics' },
+    { ru: "Муж", fr: "Mari", pairId: 22, topic: 'basics' }, // Époux
+    { ru: "Жена", fr: "Femme", pairId: 23, topic: 'basics' }, // Épouse
+    { ru: "Ребенок", fr: "Enfant", pairId: 24, topic: 'basics' }, // Garçon (boy), Fille (girl)
+    { ru: "Семья", fr: "Famille", pairId: 25, topic: 'basics' },
+    { ru: "Друг", fr: "Ami", pairId: 26, topic: 'basics' }, // (male)
+    { ru: "Подруга", fr: "Amie", pairId: 27, topic: 'basics' }, // (female)
+    { ru: "Бабушка", fr: "Grand-mère", pairId: 28, topic: 'basics' },
+    { ru: "Дедушка", fr: "Grand-père", pairId: 29, topic: 'basics' },
+    { ru: "Человек", fr: "Personne", pairId: 30, topic: 'basics' },
+    { ru: "Вода", fr: "Eau", pairId: 31, topic: 'basics' },
+    { ru: "Еда", fr: "Nourriture", pairId: 32, topic: 'basics' }, // Repas (meal)
+    { ru: "Хлеб", fr: "Pain", pairId: 33, topic: 'basics' },
+    { ru: "Молоко", fr: "Lait", pairId: 34, topic: 'basics' },
+    { ru: "Сыр", fr: "Fromage", pairId: 35, topic: 'basics' },
+    { ru: "Мясо", fr: "Viande", pairId: 36, topic: 'basics' },
+    { ru: "Рыба", fr: "Poisson", pairId: 37, topic: 'basics' },
+    { ru: "Фрукты", fr: "Fruit", pairId: 38, topic: 'basics' }, // Fruits (plural)
+    { ru: "Овощи", fr: "Légume", pairId: 39, topic: 'basics' }, // Légumes (plural)
+    { ru: "Кофе", fr: "Café", pairId: 40, topic: 'basics' },
+    { ru: "Чай", fr: "Thé", pairId: 41, topic: 'basics' },
+    { ru: "Сахар", fr: "Sucre", pairId: 42, topic: 'basics' },
+    { ru: "Соль", fr: "Sel", pairId: 43, topic: 'basics' },
+    { ru: "Завтрак", fr: "Petit déjeuner", pairId: 44, topic: 'basics' },
+    { ru: "Обед", fr: "Déjeuner", pairId: 45, topic: 'basics' },
+    { ru: "Ужин", fr: "Dîner", pairId: 46, topic: 'basics' },
+    { ru: "Яблоко", fr: "Pomme", pairId: 47, topic: 'basics' },
+    { ru: "Апельсин", fr: "Orange", pairId: 48, topic: 'basics' },
+    { ru: "Картофель", fr: "Pomme de terre", pairId: 49, topic: 'basics' },
+    { ru: "Сок", fr: "Jus", pairId: 50, topic: 'basics' },
+    { ru: "Дом", fr: "Maison", pairId: 51, topic: 'basics' },
+    { ru: "Квартира", fr: "Appartement", pairId: 52, topic: 'basics' },
+    { ru: "Комната", fr: "Chambre", pairId: 53, topic: 'basics' }, // Pièce (room in general)
+    { ru: "Кровать", fr: "Lit", pairId: 54, topic: 'basics' },
+    { ru: "Стол", fr: "Table", pairId: 55, topic: 'basics' },
+    { ru: "Стул", fr: "Chaise", pairId: 56, topic: 'basics' },
+    { ru: "Дверь", fr: "Porte", pairId: 57, topic: 'basics' },
+    { ru: "Окно", fr: "Fenêtre", pairId: 58, topic: 'basics' },
+    { ru: "Книга", fr: "Livre", pairId: 59, topic: 'basics' },
+    { ru: "Телефон", fr: "Téléphone", pairId: 60, topic: 'basics' },
+    { ru: "Компьютер", fr: "Ordinateur", pairId: 61, topic: 'basics' },
+    { ru: "Телевизор", fr: "Télévision", pairId: 62, topic: 'basics' }, // Télé
+    { ru: "Машина", fr: "Voiture", pairId: 63, topic: 'basics' },
+    { ru: "Деньги", fr: "Argent", pairId: 64, topic: 'basics' },
+    { ru: "Часы (наручные)", fr: "Montre", pairId: 65, topic: 'basics' },
+    { ru: "Ключ", fr: "Clé", pairId: 66, topic: 'basics' }, // Clef (older spelling)
+    { ru: "Сумка", fr: "Sac", pairId: 67, topic: 'basics' },
+    { ru: "Одежда", fr: "Vêtements", pairId: 68, topic: 'basics' },
+    { ru: "Обувь", fr: "Chaussures", pairId: 69, topic: 'basics' },
+    { ru: "Свет", fr: "Lumière", pairId: 70, topic: 'basics' },
+    { ru: "Город", fr: "Ville", pairId: 71, topic: 'basics' },
+    { ru: "Улица", fr: "Rue", pairId: 72, topic: 'basics' },
+    { ru: "Магазин", fr: "Magasin", pairId: 73, topic: 'basics' }, // Boutique (smaller shop)
+    { ru: "Рынок", fr: "Marché", pairId: 74, topic: 'basics' },
+    { ru: "Школа", fr: "École", pairId: 75, topic: 'basics' },
+    { ru: "Больница", fr: "Hôpital", pairId: 76, topic: 'basics' },
+    { ru: "Аптека", fr: "Pharmacie", pairId: 77, topic: 'basics' },
+    { ru: "Ресторан", fr: "Restaurant", pairId: 78, topic: 'basics' },
+    { ru: "Кафе", fr: "Café", pairId: 79, topic: 'basics' }, // (Place)
+    { ru: "Парк", fr: "Parc", pairId: 80, topic: 'basics' },
+    { ru: "Работа", fr: "Travail", pairId: 81, topic: 'basics' }, // Emploi, Boulot (informal)
+    { ru: "Банк", fr: "Banque", pairId: 82, topic: 'basics' },
+    { ru: "Почта", fr: "Poste", pairId: 83, topic: 'basics' }, // Bureau de poste
+    { ru: "Отель", fr: "Hôtel", pairId: 84, topic: 'basics' },
+    { ru: "Туалет", fr: "Toilettes", pairId: 85, topic: 'basics' }, // Salle de bain (bathroom)
+    { ru: "Быть (являться)", fr: "Être", pairId: 86, topic: 'basics' },
+    { ru: "Иметь", fr: "Avoir", pairId: 87, topic: 'basics' },
+    { ru: "Делать", fr: "Faire", pairId: 88, topic: 'basics' },
+    { ru: "Идти", fr: "Aller", pairId: 89, topic: 'basics' },
+    { ru: "Говорить", fr: "Parler", pairId: 90, topic: 'basics' }, // Dire (to say)
+    { ru: "Видеть", fr: "Voir", pairId: 91, topic: 'basics' },
+    { ru: "Слышать", fr: "Entendre", pairId: 92, topic: 'basics' }, // Écouter (to listen)
+    { ru: "Хотеть", fr: "Vouloir", pairId: 93, topic: 'basics' },
+    { ru: "Мочь", fr: "Pouvoir", pairId: 94, topic: 'basics' },
+    { ru: "Жить", fr: "Vivre", pairId: 95, topic: 'basics' }, // Habiter (to live in a place)
+    { ru: "Любить", fr: "Aimer", pairId: 96, topic: 'basics' },
+    { ru: "Есть (кушать)", fr: "Manger", pairId: 97, topic: 'basics' },
+    { ru: "Пить", fr: "Boire", pairId: 98, topic: 'basics' },
+    { ru: "Спать", fr: "Dormir", pairId: 99, topic: 'basics' },
+    { ru: "Читать", fr: "Lire", pairId: 100, topic: 'basics' },
+
+    // Additional 211 "Basics" words (pairId: 501-711)
+    { ru: "Один", fr: "Un", pairId: 501, topic: 'basics' },
+    { ru: "Два", fr: "Deux", pairId: 502, topic: 'basics' },
+    { ru: "Три", fr: "Trois", pairId: 503, topic: 'basics' },
+    { ru: "Четыре", fr: "Quatre", pairId: 504, topic: 'basics' },
+    { ru: "Пять", fr: "Cinq", pairId: 505, topic: 'basics' },
+    { ru: "Шесть", fr: "Six", pairId: 506, topic: 'basics' },
+    { ru: "Семь", fr: "Sept", pairId: 507, topic: 'basics' },
+    { ru: "Восемь", fr: "Huit", pairId: 508, topic: 'basics' },
+    { ru: "Девять", fr: "Neuf", pairId: 509, topic: 'basics' },
+    { ru: "Десять", fr: "Dix", pairId: 510, topic: 'basics' },
+    { ru: "Одиннадцать", fr: "Onze", pairId: 511, topic: 'basics' },
+    { ru: "Двенадцать", fr: "Douze", pairId: 512, topic: 'basics' },
+    { ru: "Двадцать", fr: "Vingt", pairId: 513, topic: 'basics' },
+    { ru: "Сто", fr: "Cent", pairId: 514, topic: 'basics' },
+    { ru: "Тысяча", fr: "Mille", pairId: 515, topic: 'basics' },
+    { ru: "Красный", fr: "Rouge", pairId: 516, topic: 'basics' },
+    { ru: "Синий", fr: "Bleu", pairId: 517, topic: 'basics' },
+    { ru: "Зеленый", fr: "Vert", pairId: 518, topic: 'basics' },
+    { ru: "Желтый", fr: "Jaune", pairId: 519, topic: 'basics' },
+    { ru: "Черный", fr: "Noir", pairId: 520, topic: 'basics' },
+    { ru: "Белый", fr: "Blanc", pairId: 521, topic: 'basics' },
+    { ru: "Серый", fr: "Gris", pairId: 522, topic: 'basics' },
+    { ru: "Коричневый", fr: "Marron", pairId: 523, topic: 'basics' }, // Brun
+    { ru: "Розовый", fr: "Rose", pairId: 524, topic: 'basics' },
+    { ru: "Фиолетовый", fr: "Violet", pairId: 525, topic: 'basics' }, // Mauve
+    { ru: "Оранжевый", fr: "Orange", pairId: 526, topic: 'basics' }, // (Color and fruit)
+    { ru: "Цвет", fr: "Couleur", pairId: 527, topic: 'basics' },
+    { ru: "Сегодня", fr: "Aujourd'hui", pairId: 528, topic: 'basics' },
+    { ru: "Вчера", fr: "Hier", pairId: 529, topic: 'basics' },
+    { ru: "Завтра", fr: "Demain", pairId: 530, topic: 'basics' },
+    { ru: "Неделя", fr: "Semaine", pairId: 531, topic: 'basics' },
+    { ru: "Месяц", fr: "Mois", pairId: 532, topic: 'basics' },
+    { ru: "Год", fr: "An", pairId: 533, topic: 'basics' }, // Année (duration)
+    { ru: "Понедельник", fr: "Lundi", pairId: 534, topic: 'basics' },
+    { ru: "Вторник", fr: "Mardi", pairId: 535, topic: 'basics' },
+    { ru: "Среда", fr: "Mercredi", pairId: 536, topic: 'basics' },
+    { ru: "Четверг", fr: "Jeudi", pairId: 537, topic: 'basics' },
+    { ru: "Пятница", fr: "Vendredi", pairId: 538, topic: 'basics' },
+    { ru: "Суббота", fr: "Samedi", pairId: 539, topic: 'basics' },
+    { ru: "Воскресенье", fr: "Dimanche", pairId: 540, topic: 'basics' },
+    { ru: "Январь", fr: "Janvier", pairId: 541, topic: 'basics' },
+    { ru: "Февраль", fr: "Février", pairId: 542, topic: 'basics' },
+    { ru: "Март", fr: "Mars", pairId: 543, topic: 'basics' },
+    { ru: "Апрель", fr: "Avril", pairId: 544, topic: 'basics' },
+    { ru: "Май", fr: "Mai", pairId: 545, topic: 'basics' },
+    { ru: "Июнь", fr: "Juin", pairId: 546, topic: 'basics' },
+    { ru: "Июль", fr: "Juillet", pairId: 547, topic: 'basics' },
+    { ru: "Август", fr: "Août", pairId: 548, topic: 'basics' },
+    { ru: "Сентябрь", fr: "Septembre", pairId: 549, topic: 'basics' },
+    { ru: "Октябрь", fr: "Octobre", pairId: 550, topic: 'basics' },
+    { ru: "Ноябрь", fr: "Novembre", pairId: 551, topic: 'basics' },
+    { ru: "Декабрь", fr: "Décembre", pairId: 552, topic: 'basics' },
+    { ru: "Время", fr: "Temps", pairId: 553, topic: 'basics' }, // Heure (o'clock)
+    { ru: "Час", fr: "Heure", pairId: 554, topic: 'basics' },
+    { ru: "Минута", fr: "Minute", pairId: 555, topic: 'basics' },
+    { ru: "Секунда", fr: "Seconde", pairId: 556, topic: 'basics' },
+    { ru: "Утро", fr: "Matin", pairId: 557, topic: 'basics' },
+    { ru: "День (время суток)", fr: "Jour", pairId: 558, topic: 'basics' }, // Journée (duration)
+    { ru: "Вечер", fr: "Soir", pairId: 559, topic: 'basics' }, // Soirée (duration)
+    { ru: "Ночь", fr: "Nuit", pairId: 560, topic: 'basics' },
+    { ru: "Сейчас", fr: "Maintenant", pairId: 561, topic: 'basics' },
+    { ru: "Потом", fr: "Après", pairId: 562, topic: 'basics' }, // Ensuite, Puis
+    { ru: "Раньше", fr: "Avant", pairId: 563, topic: 'basics' },
+    { ru: "Всегда", fr: "Toujours", pairId: 564, topic: 'basics' },
+    { ru: "Никогда", fr: "Jamais", pairId: 565, topic: 'basics' },
+    { ru: "Иногда", fr: "Parfois", pairId: 566, topic: 'basics' }, // Quelquefois
+    { ru: "Часто", fr: "Souvent", pairId: 567, topic: 'basics' }, // Fréquemment
+    { ru: "Редко", fr: "Rarement", pairId: 568, topic: 'basics' },
+    { ru: "Здесь", fr: "Ici", pairId: 569, topic: 'basics' },
+    { ru: "Там", fr: "Là", pairId: 570, topic: 'basics' }, // Là-bas (further away)
+    { ru: "Большой", fr: "Grand", pairId: 571, topic: 'basics' },
+    { ru: "Маленький", fr: "Petit", pairId: 572, topic: 'basics' },
+    { ru: "Хороший", fr: "Bon", pairId: 573, topic: 'basics' },
+    { ru: "Плохой", fr: "Mauvais", pairId: 574, topic: 'basics' },
+    { ru: "Новый", fr: "Nouveau", pairId: 575, topic: 'basics' }, // Neuf (brand new)
+    { ru: "Старый", fr: "Vieux", pairId: 576, topic: 'basics' }, // Ancien (former, antique)
+    { ru: "Красивый", fr: "Beau", pairId: 577, topic: 'basics' }, // Joli (pretty)
+    { ru: "Уродливый", fr: "Laid", pairId: 578, topic: 'basics' }, // Moche (informal)
+    { ru: "Быстрый", fr: "Rapide", pairId: 579, topic: 'basics' }, // Vite (adverb)
+    { ru: "Медленный", fr: "Lent", pairId: 580, topic: 'basics' },
+    { ru: "Горячий", fr: "Chaud", pairId: 581, topic: 'basics' },
+    { ru: "Холодный", fr: "Froid", pairId: 582, topic: 'basics' },
+    { ru: "Легкий (по весу)", fr: "Léger", pairId: 583, topic: 'basics' },
+    { ru: "Тяжелый", fr: "Lourd", pairId: 584, topic: 'basics' },
+    { ru: "Легкий (простой)", fr: "Facile", pairId: 585, topic: 'basics' },
+    { ru: "Трудный", fr: "Difficile", pairId: 586, topic: 'basics' },
+    { ru: "Счастливый", fr: "Heureux", pairId: 587, topic: 'basics' }, // Content (content)
+    { ru: "Грустный", fr: "Triste", pairId: 588, topic: 'basics' },
+    { ru: "Богатый", fr: "Riche", pairId: 589, topic: 'basics' },
+    { ru: "Бедный", fr: "Pauvre", pairId: 590, topic: 'basics' },
+    { ru: "Молодой", fr: "Jeune", pairId: 591, topic: 'basics' },
+    { ru: "Пожилой", fr: "Âgé", pairId: 592, topic: 'basics' }, // (Personne) âgée
+    { ru: "Сильный", fr: "Fort", pairId: 593, topic: 'basics' },
+    { ru: "Слабый", fr: "Faible", pairId: 594, topic: 'basics' },
+    { ru: "Высокий", fr: "Haut", pairId: 595, topic: 'basics' }, // Grand (for people)
+    { ru: "Низкий", fr: "Bas", pairId: 596, topic: 'basics' }, // Petit (for people)
+    { ru: "Длинный", fr: "Long", pairId: 597, topic: 'basics' },
+    { ru: "Короткий", fr: "Court", pairId: 598, topic: 'basics' },
+    { ru: "Широкий", fr: "Large", pairId: 599, topic: 'basics' },
+    { ru: "Узкий", fr: "Étroit", pairId: 600, topic: 'basics' },
+    { ru: "Толстый", fr: "Gros", pairId: 601, topic: 'basics' }, // Épais (for objects)
+    { ru: "Тонкий (худой)", fr: "Mince", pairId: 602, topic: 'basics' }, // Fin (for objects)
+    { ru: "Много", fr: "Beaucoup", pairId: 603, topic: 'basics' },
+    { ru: "Мало", fr: "Peu", pairId: 604, topic: 'basics' },
+    { ru: "Очень", fr: "Très", pairId: 605, topic: 'basics' },
+    { ru: "Тоже", fr: "Aussi", pairId: 606, topic: 'basics' },
+    { ru: "Или", fr: "Ou", pairId: 607, topic: 'basics' },
+    { ru: "И", fr: "Et", pairId: 608, topic: 'basics' },
+    { ru: "Но", fr: "Mais", pairId: 609, topic: 'basics' },
+    { ru: "Потому что", fr: "Parce que", pairId: 610, topic: 'basics' }, // Car
+    { ru: "Если", fr: "Si", pairId: 611, topic: 'basics' },
+    { ru: "Кто", fr: "Qui", pairId: 612, topic: 'basics' },
+    { ru: "Что", fr: "Que", pairId: 613, topic: 'basics' }, // Quoi (after preposition or alone)
+    { ru: "Где", fr: "Où", pairId: 614, topic: 'basics' },
+    { ru: "Когда", fr: "Quand", pairId: 615, topic: 'basics' },
+    { ru: "Почему", fr: "Pourquoi", pairId: 616, topic: 'basics' },
+    { ru: "Как", fr: "Comment", pairId: 617, topic: 'basics' },
+    { ru: "Сколько", fr: "Combien", pairId: 618, topic: 'basics' },
+    { ru: "Этот", fr: "Ce", pairId: 619, topic: 'basics' }, // Cet (before vowel), Cette (f), Ceci/Cela (this/that neutral)
+    { ru: "Тот", fr: "Ce ... -là", pairId: 620, topic: 'basics' }, // e.g. Ce livre-là (that book)
+    { ru: "Я", fr: "Je", pairId: 621, topic: 'basics' }, // Moi (emphatic)
+    { ru: "Ты", fr: "Tu", pairId: 622, topic: 'basics' }, // Toi (emphatic)
+    { ru: "Он", fr: "Il", pairId: 623, topic: 'basics' }, // Lui (emphatic)
+    { ru: "Она", fr: "Elle", pairId: 624, topic: 'basics' }, // Elle (emphatic)
+    { ru: "Мы", fr: "Nous", pairId: 625, topic: 'basics' }, // On (informal "we"/"one")
+    { ru: "Вы (мн.ч.)", fr: "Vous", pairId: 626, topic: 'basics' }, // (also formal singular)
+    { ru: "Они", fr: "Ils", pairId: 627, topic: 'basics' }, // (m. or mixed), Elles (f.)
+    { ru: "Мой", fr: "Mon", pairId: 628, topic: 'basics' }, // Ma (f), Mes (pl)
+    { ru: "Твой", fr: "Ton", pairId: 629, topic: 'basics' }, // Ta (f), Tes (pl)
+    { ru: "Его/Её/Ваш", fr: "Son", pairId: 630, topic: 'basics' }, // Sa (f), Ses (pl) / Votre (your formal/pl)
+    { ru: "Наш", fr: "Notre", pairId: 631, topic: 'basics' }, // Nos (pl)
+    { ru: "Ваш (мн.ч., Испания)", fr: "Votre", pairId: 632, topic: 'basics' }, // Vos (pl) - (Same as formal singular in French)
+    { ru: "Их/Ваш (мн.ч., Латам)", fr: "Leur", pairId: 633, topic: 'basics' }, // Leurs (pl) - Their
+    { ru: "Голова", fr: "Tête", pairId: 634, topic: 'basics' },
+    { ru: "Лицо", fr: "Visage", pairId: 635, topic: 'basics' },
+    { ru: "Глаз", fr: "Œil", pairId: 636, topic: 'basics' }, // Yeux (pl)
+    { ru: "Нос", fr: "Nez", pairId: 637, topic: 'basics' },
+    { ru: "Рот", fr: "Bouche", pairId: 638, topic: 'basics' },
+    { ru: "Ухо", fr: "Oreille", pairId: 639, topic: 'basics' },
+    { ru: "Волосы", fr: "Cheveux", pairId: 640, topic: 'basics' }, // (usually plural)
+    { ru: "Рука (кисть)", fr: "Main", pairId: 641, topic: 'basics' },
+    { ru: "Рука (от плеча)", fr: "Bras", pairId: 642, topic: 'basics' },
+    { ru: "Нога (стопа)", fr: "Pied", pairId: 643, topic: 'basics' },
+    { ru: "Нога (вся)", fr: "Jambe", pairId: 644, topic: 'basics' },
+    { ru: "Тело", fr: "Corps", pairId: 645, topic: 'basics' },
+    { ru: "Сердце", fr: "Cœur", pairId: 646, topic: 'basics' },
+    { ru: "Кровь", fr: "Sang", pairId: 647, topic: 'basics' },
+    { ru: "Погода", fr: "Temps", pairId: 648, topic: 'basics' }, // Météo
+    { ru: "Солнце", fr: "Soleil", pairId: 649, topic: 'basics' },
+    { ru: "Луна", fr: "Lune", pairId: 650, topic: 'basics' },
+    { ru: "Небо", fr: "Ciel", pairId: 651, topic: 'basics' },
+    { ru: "Звезда", fr: "Étoile", pairId: 652, topic: 'basics' },
+    { ru: "Ветер", fr: "Vent", pairId: 653, topic: 'basics' },
+    { ru: "Дождь", fr: "Pluie", pairId: 654, topic: 'basics' },
+    { ru: "Снег", fr: "Neige", pairId: 655, topic: 'basics' },
+    { ru: "Облако", fr: "Nuage", pairId: 656, topic: 'basics' },
+    { ru: "Тепло", fr: "Chaleur", pairId: 657, topic: 'basics' }, // Il fait chaud (It's warm)
+    { ru: "Холод", fr: "Froid", pairId: 658, topic: 'basics' }, // Il fait froid (It's cold)
+    { ru: "Мир (вселенная)", fr: "Monde", pairId: 659, topic: 'basics' },
+    { ru: "Земля (планета)", fr: "Terre", pairId: 660, topic: 'basics' },
+    { ru: "Воздух", fr: "Air", pairId: 661, topic: 'basics' },
+    { ru: "Огонь", fr: "Feu", pairId: 662, topic: 'basics' },
+    { ru: "Дерево", fr: "Arbre", pairId: 663, topic: 'basics' },
+    { ru: "Цветок", fr: "Fleur", pairId: 664, topic: 'basics' },
+    { ru: "Трава", fr: "Herbe", pairId: 665, topic: 'basics' }, // Pelouse (lawn)
+    { ru: "Гора", fr: "Montagne", pairId: 666, topic: 'basics' },
+    { ru: "Река", fr: "Rivière", pairId: 667, topic: 'basics' }, // Fleuve (large river flowing to sea)
+    { ru: "Море", fr: "Mer", pairId: 668, topic: 'basics' },
+    { ru: "Океан", fr: "Océan", pairId: 669, topic: 'basics' },
+    { ru: "Озеро", fr: "Lac", pairId: 670, topic: 'basics' },
+    { ru: "Животное", fr: "Animal", pairId: 671, topic: 'basics' },
+    { ru: "Собака", fr: "Chien", pairId: 672, topic: 'basics' },
+    { ru: "Кошка", fr: "Chat", pairId: 673, topic: 'basics' },
+    { ru: "Птица", fr: "Oiseau", pairId: 674, topic: 'basics' },
+    { ru: "Страна", fr: "Pays", pairId: 675, topic: 'basics' },
+    { ru: "Язык", fr: "Langue", pairId: 676, topic: 'basics' }, // Langage (faculty of speech)
+    { ru: "Слово", fr: "Mot", pairId: 677, topic: 'basics' },
+    { ru: "Вопрос", fr: "Question", pairId: 678, topic: 'basics' },
+    { ru: "Ответ", fr: "Réponse", pairId: 679, topic: 'basics' },
+    { ru: "Начало", fr: "Début", pairId: 680, topic: 'basics' }, // Commencement
+    { ru: "Конец", fr: "Fin", pairId: 681, topic: 'basics' },
+    { ru: "Жизнь", fr: "Vie", pairId: 682, topic: 'basics' },
+    { ru: "Смерть", fr: "Mort", pairId: 683, topic: 'basics' },
+    { ru: "Любовь", fr: "Amour", pairId: 684, topic: 'basics' },
+    { ru: "Счастье", fr: "Bonheur", pairId: 685, topic: 'basics' }, // Joie (joy)
+    { ru: "Мечта", fr: "Rêve", pairId: 686, topic: 'basics' }, // Songe (literary)
+    { ru: "Проблема", fr: "Problème", pairId: 687, topic: 'basics' },
+    { ru: "Идея", fr: "Idée", pairId: 688, topic: 'basics' },
+    { ru: "История", fr: "Histoire", pairId: 689, topic: 'basics' },
+    { ru: "Музыка", fr: "Musique", pairId: 690, topic: 'basics' },
+    { ru: "Искусство", fr: "Art", pairId: 691, topic: 'basics' },
+    { ru: "Игра", fr: "Jeu", pairId: 692, topic: 'basics' },
+    { ru: "Давать", fr: "Donner", pairId: 693, topic: 'basics' },
+    { ru: "Брать", fr: "Prendre", pairId: 694, topic: 'basics' },
+    { ru: "Приходить", fr: "Venir", pairId: 695, topic: 'basics' },
+    { ru: "Уходить", fr: "Partir", pairId: 696, topic: 'basics' }, // Sortir (to go out)
+    { ru: "Смотреть", fr: "Regarder", pairId: 697, topic: 'basics' },
+    { ru: "Слушать", fr: "Écouter", pairId: 698, topic: 'basics' },
+    { ru: "Писать", fr: "Écrire", pairId: 699, topic: 'basics' },
+    { ru: "Учить(ся)", fr: "Apprendre", pairId: 700, topic: 'basics' }, // Étudier (to study)
+    { ru: "Знать", fr: "Savoir", pairId: 701, topic: 'basics' }, // Connaître (to be familiar with)
+    { ru: "Думать", fr: "Penser", pairId: 702, topic: 'basics' },
+    { ru: "Понимать", fr: "Comprendre", pairId: 703, topic: 'basics' }, // Entendre (can also mean understand)
+    { ru: "Помнить", fr: "Se souvenir de", pairId: 704, topic: 'basics' }, // Se rappeler
+    { ru: "Забывать", fr: "Oublier", pairId: 705, topic: 'basics' },
+    { ru: "Работать", fr: "Travailler", pairId: 706, topic: 'basics' },
+    { ru: "Отдыхать", fr: "Se reposer", pairId: 707, topic: 'basics' },
+    { ru: "Путешествовать", fr: "Voyager", pairId: 708, topic: 'basics' },
+    { ru: "Покупать", fr: "Acheter", pairId: 709, topic: 'basics' },
+    { ru: "Продавать", fr: "Vendre", pairId: 710, topic: 'basics' },
+    { ru: "Платить", fr: "Payer", pairId: 711, topic: 'basics' },
+];
+
+const foodFrenchWords = [
+    // 200 "Food" words (pairId: 101-300) - some are re-used from basics, new specific ones start here
+    { ru: "Вино", fr: "Vin", pairId: 104, topic: 'food' },
+    { ru: "Пиво", fr: "Bière", pairId: 106, topic: 'food' },
+    { ru: "Перец (специя)", fr: "Poivre", pairId: 108, topic: 'food' },
+    { ru: "Масло (сливочное)", fr: "Beurre", pairId: 109, topic: 'food' },
+    { ru: "Масло (растительное)", fr: "Huile", pairId: 110, topic: 'food' },
+    { ru: "Яйцо", fr: "Œuf", pairId: 111, topic: 'food' },
+    { ru: "Мука", fr: "Farine", pairId: 112, topic: 'food' },
+    { ru: "Рис", fr: "Riz", pairId: 113, topic: 'food' },
+    { ru: "Макароны", fr: "Pâtes", pairId: 114, topic: 'food' },
+    { ru: "Курица", fr: "Poulet", pairId: 115, topic: 'food' },
+    { ru: "Говядина", fr: "Bœuf", pairId: 116, topic: 'food' },
+    { ru: "Свинина", fr: "Porc", pairId: 117, topic: 'food' },
+    { ru: "Баранина", fr: "Agneau", pairId: 118, topic: 'food' },
+    { ru: "Колбаса", fr: "Saucisse", pairId: 119, topic: 'food' }, // Saucisson (dry sausage)
+    { ru: "Ветчина", fr: "Jambon", pairId: 120, topic: 'food' },
+    { ru: "Лосось", fr: "Saumon", pairId: 121, topic: 'food' },
+    { ru: "Тунец", fr: "Thon", pairId: 122, topic: 'food' },
+    { ru: "Креветка", fr: "Crevette", pairId: 123, topic: 'food' },
+    { ru: "Мидия", fr: "Moule", pairId: 124, topic: 'food' },
+    { ru: "Кальмар", fr: "Calmar", pairId: 125, topic: 'food' }, // Encornet
+    { ru: "Помидор", fr: "Tomate", pairId: 126, topic: 'food' },
+    { ru: "Огурец", fr: "Concombre", pairId: 127, topic: 'food' },
+    { ru: "Лук", fr: "Oignon", pairId: 128, topic: 'food' },
+    { ru: "Чеснок", fr: "Ail", pairId: 129, topic: 'food' },
+    { ru: "Морковь", fr: "Carotte", pairId: 130, topic: 'food' },
+    { ru: "Перец (овощ)", fr: "Poivron", pairId: 131, topic: 'food' },
+    { ru: "Капуста", fr: "Chou", pairId: 132, topic: 'food' },
+    { ru: "Салат (листья)", fr: "Laitue", pairId: 133, topic: 'food' }, // Salade verte
+    { ru: "Грибы", fr: "Champignon", pairId: 134, topic: 'food' },
+    { ru: "Банан", fr: "Banane", pairId: 135, topic: 'food' },
+    { ru: "Виноград", fr: "Raisin", pairId: 136, topic: 'food' },
+    { ru: "Клубника", fr: "Fraise", pairId: 137, topic: 'food' },
+    { ru: "Малина", fr: "Framboise", pairId: 138, topic: 'food' },
+    { ru: "Лимон", fr: "Citron", pairId: 139, topic: 'food' },
+    { ru: "Персик", fr: "Pêche", pairId: 140, topic: 'food' },
+    { ru: "Абрикос", fr: "Abricot", pairId: 141, topic: 'food' },
+    { ru: "Слива", fr: "Prune", pairId: 142, topic: 'food' },
+    { ru: "Вишня", fr: "Cerise", pairId: 143, topic: 'food' },
+    { ru: "Груша", fr: "Poire", pairId: 144, topic: 'food' },
+    { ru: "Арбуз", fr: "Pastèque", pairId: 145, topic: 'food' }, // Melon d'eau (Canada)
+    { ru: "Дыня", fr: "Melon", pairId: 146, topic: 'food' },
+    { ru: "Ананас", fr: "Ananas", pairId: 147, topic: 'food' },
+    { ru: "Манго", fr: "Mangue", pairId: 148, topic: 'food' },
+    { ru: "Авокадо", fr: "Avocat", pairId: 149, topic: 'food' },
+    { ru: "Орех", fr: "Noix", pairId: 150, topic: 'food' }, // Fruit à coque (general nut)
+    { ru: "Мед", fr: "Miel", pairId: 151, topic: 'food' },
+    { ru: "Джем", fr: "Confiture", pairId: 152, topic: 'food' },
+    { ru: "Шоколад", fr: "Chocolat", pairId: 153, topic: 'food' },
+    { ru: "Мороженое", fr: "Glace", pairId: 154, topic: 'food' }, // Crème glacée
+    { ru: "Торт", fr: "Gâteau", pairId: 155, topic: 'food' }, // Tarte (pie)
+    { ru: "Печенье", fr: "Biscuit", pairId: 156, topic: 'food' }, // Gâteau sec
+    { ru: "Конфета", fr: "Bonbon", pairId: 157, topic: 'food' }, // Friandise
+    { ru: "Суп", fr: "Soupe", pairId: 158, topic: 'food' }, // Potage
+    { ru: "Салат (блюдо)", fr: "Salade", pairId: 159, topic: 'food' },
+    { ru: "Бутерброд", fr: "Sandwich", pairId: 160, topic: 'food' },
+    { ru: "Пицца", fr: "Pizza", pairId: 161, topic: 'food' },
+    { ru: "Закуска", fr: "Entrée", pairId: 162, topic: 'food' }, // Apéritif (pre-meal drink/snack), Hors-d'œuvre
+    { ru: "Основное блюдо", fr: "Plat principal", pairId: 163, topic: 'food' },
+    { ru: "Десерт", fr: "Dessert", pairId: 164, topic: 'food' },
+    { ru: "Напиток", fr: "Boisson", pairId: 165, topic: 'food' },
+    { ru: "Йогурт", fr: "Yaourt", pairId: 166, topic: 'food' }, // Yogourt (Canada)
+    { ru: "Кефир", fr: "Kéfir", pairId: 167, topic: 'food' },
+    { ru: "Творог", fr: "Fromage blanc", pairId: 168, topic: 'food' }, // Cottage cheese
+    { ru: "Сметана", fr: "Crème fraîche", pairId: 169, topic: 'food' }, // Crème aigre (sour cream)
+    { ru: "Сливки", fr: "Crème", pairId: 170, topic: 'food' },
+    { ru: "Столовая", fr: "Salle à manger", pairId: 171, topic: 'food' }, // Cantine (cafeteria)
+    { ru: "Кухня", fr: "Cuisine", pairId: 172, topic: 'food' },
+    { ru: "Повар", fr: "Cuisinier", pairId: 173, topic: 'food' }, // Chef
+    { ru: "Официант", fr: "Serveur", pairId: 174, topic: 'food' }, // Serveuse (f)
+    { ru: "Меню", fr: "Menu", pairId: 175, topic: 'food' }, // Carte (list of dishes)
+    { ru: "Счет", fr: "Addition", pairId: 176, topic: 'food' },
+    { ru: "Чаевые", fr: "Pourboire", pairId: 177, topic: 'food' },
+    { ru: "Тарелка", fr: "Assiette", pairId: 178, topic: 'food' },
+    { ru: "Стакан", fr: "Verre", pairId: 179, topic: 'food' },
+    { ru: "Чашка", fr: "Tasse", pairId: 180, topic: 'food' },
+    { ru: "Вилка", fr: "Fourchette", pairId: 181, topic: 'food' },
+    { ru: "Нож", fr: "Couteau", pairId: 182, topic: 'food' },
+    { ru: "Ложка", fr: "Cuillère", pairId: 183, topic: 'food' },
+    { ru: "Салфетка", fr: "Serviette", pairId: 184, topic: 'food' },
+    { ru: "Скатерть", fr: "Nappe", pairId: 185, topic: 'food' },
+    { ru: "Готовить", fr: "Cuisiner", pairId: 186, topic: 'food' }, // Préparer
+    { ru: "Жарить", fr: "Frire", pairId: 187, topic: 'food' }, // Poêler, Rôtir
+    { ru: "Варить", fr: "Bouillir", pairId: 188, topic: 'food' }, // Cuire à l'eau
+    { ru: "Печь", fr: "Cuire au four", pairId: 189, topic: 'food' },
+    { ru: "Резать", fr: "Couper", pairId: 190, topic: 'food' }, // Trancher (to slice)
+    { ru: "Смешивать", fr: "Mélanger", pairId: 191, topic: 'food' },
+    { ru: "Добавлять", fr: "Ajouter", pairId: 192, topic: 'food' },
+    { ru: "Пробовать (еду)", fr: "Goûter", pairId: 193, topic: 'food' },
+    { ru: "Вкусный", fr: "Délicieux", pairId: 194, topic: 'food' }, // Savoureux, Bon
+    { ru: "Невкусный", fr: "Fade", pairId: 195, topic: 'food' }, // Mauvais (bad taste)
+    { ru: "Сладкий", fr: "Sucré", pairId: 196, topic: 'food' },
+    { ru: "Кислый", fr: "Acide", pairId: 197, topic: 'food' }, // Aigre
+    { ru: "Соленый", fr: "Salé", pairId: 198, topic: 'food' },
+    { ru: "Горький", fr: "Amer", pairId: 199, topic: 'food' },
+    { ru: "Острый", fr: "Piquant", pairId: 200, topic: 'food' }, // Épicé, Relevé
+    { ru: "Свежий", fr: "Frais", pairId: 201, topic: 'food' },
+    { ru: "Сырой", fr: "Cru", pairId: 202, topic: 'food' },
+    { ru: "Приготовленный", fr: "Cuit", pairId: 203, topic: 'food' },
+    { ru: "Голодный", fr: "Avoir faim", pairId: 204, topic: 'food' }, // (Lit: to have hunger)
+    { ru: "Сытый", fr: "Rassasié", pairId: 205, topic: 'food' }, // Avoir assez mangé
+    { ru: "Жаждущий", fr: "Avoir soif", pairId: 206, topic: 'food' }, // (Lit: to have thirst)
+    { ru: "Закусочная", fr: "Snack-bar", pairId: 207, topic: 'food' }, // Casse-croûte
+    { ru: "Столовые приборы", fr: "Couverts", pairId: 208, topic: 'food' },
+    { ru: "Кастрюля", fr: "Casserole", pairId: 209, topic: 'food' }, // Marmite (pot)
+    { ru: "Сковорода", fr: "Poêle", pairId: 210, topic: 'food' },
+    { ru: "Духовка", fr: "Four", pairId: 211, topic: 'food' },
+    { ru: "Холодильник", fr: "Réfrigérateur", pairId: 212, topic: 'food' }, // Frigo (informal)
+    { ru: "Микроволновка", fr: "Micro-ondes", pairId: 213, topic: 'food' },
+    { ru: "Чайник", fr: "Théière", pairId: 214, topic: 'food' }, // Bouilloire (kettle)
+    { ru: "Тостер", fr: "Grille-pain", pairId: 215, topic: 'food' },
+    { ru: "Рецепт", fr: "Recette", pairId: 216, topic: 'food' },
+    { ru: "Ингредиент", fr: "Ingrédient", pairId: 217, topic: 'food' },
+    { ru: "Порция", fr: "Portion", pairId: 218, topic: 'food' }, // Part
+    { ru: "Диета", fr: "Régime", pairId: 219, topic: 'food' },
+    { ru: "Вегетарианец", fr: "Végétarien", pairId: 220, topic: 'food' },
+    { ru: "Веган", fr: "Végétalien", pairId: 221, topic: 'food' }, // Végan (more common)
+    { ru: "Аллергия", fr: "Allergie", pairId: 222, topic: 'food' },
+    { ru: "Безглютеновый", fr: "Sans gluten", pairId: 223, topic: 'food' },
+    { ru: "Морепродукты", fr: "Fruits de mer", pairId: 224, topic: 'food' },
+    { ru: "Зерновые", fr: "Céréales", pairId: 225, topic: 'food' },
+    { ru: "Бобовые", fr: "Légumineuses", pairId: 226, topic: 'food' },
+    { ru: "Травы (специи)", fr: "Herbes", pairId: 227, topic: 'food' }, // Fines herbes
+    { ru: "Специи", fr: "Épices", pairId: 228, topic: 'food' },
+    { ru: "Уксус", fr: "Vinaigre", pairId: 229, topic: 'food' },
+    { ru: "Горчица", fr: "Moutarde", pairId: 230, topic: 'food' },
+    { ru: "Кетчуп", fr: "Ketchup", pairId: 231, topic: 'food' },
+    { ru: "Майонез", fr: "Mayonnaise", pairId: 232, topic: 'food' },
+    { ru: "Соус", fr: "Sauce", pairId: 233, topic: 'food' },
+    { ru: "Бульон", fr: "Bouillon", pairId: 234, topic: 'food' },
+    { ru: "Фарш", fr: "Viande hachée", pairId: 235, topic: 'food' },
+    { ru: "Стейк", fr: "Steak", pairId: 236, topic: 'food' }, // Bifteck
+    { ru: "Шашлык", fr: "Brochette", pairId: 237, topic: 'food' },
+    { ru: "Гарнир", fr: "Garniture", pairId: 238, topic: 'food' }, // Accompagnement
+    { ru: "Прохладительный напиток", fr: "Boisson gazeuse", pairId: 239, topic: 'food' }, // Soda, Boisson fraîche
+    { ru: "Лимонад", fr: "Limonade", pairId: 240, topic: 'food' }, // Citronnade (lemon-based)
+    { ru: "Минеральная вода", fr: "Eau minérale", pairId: 241, topic: 'food' },
+    { ru: "Газированная вода", fr: "Eau gazeuse", pairId: 242, topic: 'food' }, // Eau pétillante
+    { ru: "Без газа", fr: "Eau plate", pairId: 243, topic: 'food' }, // (Still water)
+    { ru: "Коктейль", fr: "Cocktail", pairId: 244, topic: 'food' },
+    { ru: "Круассан", fr: "Croissant", pairId: 245, topic: 'food' },
+    { ru: "Булочка", fr: "Petit pain", pairId: 246, topic: 'food' }, // Brioche
+    { ru: "Оливки", fr: "Olives", pairId: 247, topic: 'food' },
+    { ru: "Кукуруза", fr: "Maïs", pairId: 248, topic: 'food' },
+    { ru: "Горох", fr: "Petits pois", pairId: 249, topic: 'food' },
+    { ru: "Фасоль", fr: "Haricots", pairId: 250, topic: 'food' },
+    { ru: "Чечевица", fr: "Lentilles", pairId: 251, topic: 'food' },
+    { ru: "Брокколи", fr: "Brocoli", pairId: 252, topic: 'food' },
+    { ru: "Цветная капуста", fr: "Chou-fleur", pairId: 253, topic: 'food' },
+    { ru: "Шпинат", fr: "Épinards", pairId: 254, topic: 'food' },
+    { ru: "Тыква", fr: "Citrouille", pairId: 255, topic: 'food' }, // Potiron, Courge
+    { ru: "Баклажан", fr: "Aubergine", pairId: 256, topic: 'food' },
+    { ru: "Кабачок", fr: "Courgette", pairId: 257, topic: 'food' },
+    { ru: "Редис", fr: "Radis", pairId: 258, topic: 'food' },
+    { ru: "Спаржа", fr: "Asperge", pairId: 259, topic: 'food' },
+    { ru: "Артишок", fr: "Artichaut", pairId: 260, topic: 'food' },
+    { ru: "Сельдерей", fr: "Céleri", pairId: 261, topic: 'food' },
+    { ru: "Петрушка", fr: "Persil", pairId: 262, topic: 'food' },
+    { ru: "Укроп", fr: "Aneth", pairId: 263, topic: 'food' },
+    { ru: "Базилик", fr: "Basilic", pairId: 264, topic: 'food' },
+    { ru: "Мята", fr: "Menthe", pairId: 265, topic: 'food' },
+    { ru: "Корица", fr: "Cannelle", pairId: 266, topic: 'food' },
+    { ru: "Ваниль", fr: "Vanille", pairId: 267, topic: 'food' },
+    { ru: "Имбирь", fr: "Gingembre", pairId: 268, topic: 'food' },
+    { ru: "Кардамон", fr: "Cardamome", pairId: 269, topic: 'food' },
+    { ru: "Гвоздика (пряность)", fr: "Clou de girofle", pairId: 270, topic: 'food' },
+    { ru: "Мускатный орех", fr: "Noix de muscade", pairId: 271, topic: 'food' },
+    { ru: "Лавровый лист", fr: "Feuille de laurier", pairId: 272, topic: 'food' },
+    { ru: "Фисташки", fr: "Pistache", pairId: 273, topic: 'food' },
+    { ru: "Миндаль", fr: "Amande", pairId: 274, topic: 'food' },
+    { ru: "Фундук", fr: "Noisette", pairId: 275, topic: 'food' },
+    { ru: "Кешью", fr: "Noix de cajou", pairId: 276, topic: 'food' },
+    { ru: "Арахис", fr: "Cacahuète", pairId: 277, topic: 'food' }, // Arachide
+    { ru: "Изюм", fr: "Raisin sec", pairId: 278, topic: 'food' },
+    { ru: "Финики", fr: "Datte", pairId: 279, topic: 'food' },
+    { ru: "Инжир", fr: "Figue", pairId: 280, topic: 'food' },
+    { ru: "Чернослив", fr: "Pruneau", pairId: 281, topic: 'food' },
+    { ru: "Курага", fr: "Abricot sec", pairId: 282, topic: 'food' },
+    { ru: "Черника", fr: "Myrtille", pairId: 283, topic: 'food' },
+    { ru: "Голубика", fr: "Bleuet", pairId: 284, topic: 'food' }, // (Canada), Myrtille (Europe if cultivated)
+    { ru: "Ежевика", fr: "Mûre", pairId: 285, topic: 'food' },
+    { ru: "Смородина (красная)", fr: "Groseille", pairId: 286, topic: 'food' },
+    { ru: "Смородина (черная)", fr: "Cassis", pairId: 287, topic: 'food' },
+    { ru: "Крыжовник", fr: "Groseille à maquereau", pairId: 288, topic: 'food' },
+    { ru: "Киви", fr: "Kiwi", pairId: 289, topic: 'food' },
+    { ru: "Гранат", fr: "Grenade", pairId: 290, topic: 'food' },
+    { ru: "Хурма", fr: "Kaki", pairId: 291, topic: 'food' },
+    { ru: "Лайм", fr: "Citron vert", pairId: 292, topic: 'food' }, // Lime
+    { ru: "Грейпфрут", fr: "Pamplemousse", pairId: 293, topic: 'food' },
+    { ru: "Мандарин", fr: "Mandarine", pairId: 294, topic: 'food' }, // Clémentine
+    { ru: "Нектарин", fr: "Nectarine", pairId: 295, topic: 'food' },
+    { ru: "Папайя", fr: "Papaye", pairId: 296, topic: 'food' },
+    { ru: "Маракуйя", fr: "Fruit de la passion", pairId: 297, topic: 'food' }, // Maracuja
+    { ru: "Гуава", fr: "Goyave", pairId: 298, topic: 'food' },
+    { ru: "Личи", fr: "Litchi", pairId: 299, topic: 'food' },
+    { ru: "Кокос", fr: "Noix de coco", pairId: 300, topic: 'food' },
+];
+
+const travelFrenchWords = [
+    // 200 "Travel" words (pairId: 301-500)
+    { ru: "Аэропорт", fr: "Aéroport", pairId: 301, topic: 'travel' },
+    { ru: "Пляж", fr: "Plage", pairId: 303, topic: 'travel' },
+    { ru: "Билет", fr: "Billet", pairId: 304, topic: 'travel' },
+    { ru: "Карта (географическая)", fr: "Carte", pairId: 305, topic: 'travel' }, // Plan (city map)
+    { ru: "Поезд", fr: "Train", pairId: 306, topic: 'travel' },
+    { ru: "Самолет", fr: "Avion", pairId: 307, topic: 'travel' },
+    { ru: "Автобус", fr: "Bus", pairId: 308, topic: 'travel' }, // Autocar (long distance)
+    { ru: "Корабль", fr: "Bateau", pairId: 309, topic: 'travel' }, // Navire (large ship)
+    { ru: "Такси", fr: "Taxi", pairId: 310, topic: 'travel' },
+    { ru: "Вокзал", fr: "Gare", pairId: 311, topic: 'travel' }, // (Train station)
+    { ru: "Автовокзал", fr: "Gare routière", pairId: 312, topic: 'travel' },
+    { ru: "Порт", fr: "Port", pairId: 313, topic: 'travel' },
+    { ru: "Чемодан", fr: "Valise", pairId: 314, topic: 'travel' },
+    { ru: "Багаж", fr: "Bagages", pairId: 315, topic: 'travel' }, // (Plural)
+    { ru: "Паспорт", fr: "Passeport", pairId: 316, topic: 'travel' },
+    { ru: "Виза", fr: "Visa", pairId: 317, topic: 'travel' },
+    { ru: "Таможня", fr: "Douane", pairId: 318, topic: 'travel' },
+    { ru: "Граница", fr: "Frontière", pairId: 319, topic: 'travel' },
+    { ru: "Рейс", fr: "Vol", pairId: 320, topic: 'travel' },
+    { ru: "Посадка (на самолет)", fr: "Embarquement", pairId: 321, topic: 'travel' },
+    { ru: "Выход (к самолету)", fr: "Porte d'embarquement", pairId: 322, topic: 'travel' },
+    { ru: "Место (в самолете/поезде)", fr: "Siège", pairId: 323, topic: 'travel' }, // Place
+    { ru: "Расписание", fr: "Horaire", pairId: 324, topic: 'travel' },
+    { ru: "Прибытие", fr: "Arrivée", pairId: 325, topic: 'travel' },
+    { ru: "Отправление", fr: "Départ", pairId: 326, topic: 'travel' },
+    { ru: "Задержка (рейса)", fr: "Retard", pairId: 327, topic: 'travel' },
+    { ru: "Отмена (рейса)", fr: "Annulation", pairId: 328, topic: 'travel' },
+    { ru: "Информация", fr: "Information", pairId: 329, topic: 'travel' }, // Renseignements
+    { ru: "Справочная", fr: "Bureau d'information", pairId: 330, topic: 'travel' },
+    { ru: "Бронирование", fr: "Réservation", pairId: 331, topic: 'travel' },
+    { ru: "Забронировать", fr: "Réserver", pairId: 332, topic: 'travel' },
+    { ru: "Номер (в отеле)", fr: "Chambre", pairId: 333, topic: 'travel' },
+    { ru: "Одноместный номер", fr: "Chambre simple", pairId: 334, topic: 'travel' },
+    { ru: "Двухместный номер", fr: "Chambre double", pairId: 335, topic: 'travel' },
+    { ru: "Регистрация (в отеле)", fr: "Enregistrement", pairId: 336, topic: 'travel' }, // Check-in
+    { ru: "Выезд (из отеля)", fr: "Départ de l'hôtel", pairId: 337, topic: 'travel' }, // Check-out, Libération de la chambre
+    { ru: "Ключ (от номера)", fr: "Clé", pairId: 338, topic: 'travel' },
+    { ru: "Стойка регистрации", fr: "Réception", pairId: 339, topic: 'travel' }, // Accueil
+    { ru: "Обмен валюты", fr: "Change de devises", pairId: 340, topic: 'travel' },
+    { ru: "Валюта", fr: "Devise", pairId: 341, topic: 'travel' }, // Monnaie
+    { ru: "Банкомат", fr: "Distributeur automatique de billets", pairId: 342, topic: 'travel' }, // DAB, Guichet automatique
+    { ru: "Кредитная карта", fr: "Carte de crédit", pairId: 343, topic: 'travel' }, // Carte bancaire
+    { ru: "Наличные", fr: "Espèces", pairId: 344, topic: 'travel' }, // Argent liquide
+    { ru: "Дорога", fr: "Route", pairId: 345, topic: 'travel' }, // Chemin (path)
+    { ru: "Путь", fr: "Itinéraire", pairId: 346, topic: 'travel' }, // Trajet
+    { ru: "Направление", fr: "Direction", pairId: 347, topic: 'travel' },
+    { ru: "Налево", fr: "À gauche", pairId: 348, topic: 'travel' },
+    { ru: "Направо", fr: "À droite", pairId: 349, topic: 'travel' },
+    { ru: "Прямо", fr: "Tout droit", pairId: 350, topic: 'travel' },
+    { ru: "Далеко", fr: "Loin", pairId: 351, topic: 'travel' },
+    { ru: "Близко", fr: "Près", pairId: 352, topic: 'travel' }, // Proche
+    { ru: "Здесь", fr: "Ici", pairId: 353, topic: 'travel' },
+    { ru: "Там", fr: "Là", pairId: 354, topic: 'travel' },
+    { ru: "Остановка (автобуса)", fr: "Arrêt de bus", pairId: 355, topic: 'travel' },
+    { ru: "Станция (метро)", fr: "Station de métro", pairId: 356, topic: 'travel' },
+    { ru: "Метро", fr: "Métro", pairId: 357, topic: 'travel' },
+    { ru: "Экскурсия", fr: "Excursion", pairId: 358, topic: 'travel' }, // Visite guidée
+    { ru: "Гид", fr: "Guide", pairId: 359, topic: 'travel' },
+    { ru: "Музей", fr: "Musée", pairId: 360, topic: 'travel' },
+    { ru: "Галерея", fr: "Galerie", pairId: 361, topic: 'travel' },
+    { ru: "Памятник", fr: "Monument", pairId: 362, topic: 'travel' },
+    { ru: "Церковь", fr: "Église", pairId: 363, topic: 'travel' },
+    { ru: "Собор", fr: "Cathédrale", pairId: 364, topic: 'travel' },
+    { ru: "Замок", fr: "Château", pairId: 365, topic: 'travel' },
+    { ru: "Дворец", fr: "Palais", pairId: 366, topic: 'travel' },
+    { ru: "Площадь", fr: "Place", pairId: 367, topic: 'travel' },
+    { ru: "Мост", fr: "Pont", pairId: 368, topic: 'travel' },
+    { ru: "Фонтан", fr: "Fontaine", pairId: 369, topic: 'travel' },
+    { ru: "Сад", fr: "Jardin", pairId: 370, topic: 'travel' },
+    { ru: "Зоопарк", fr: "Zoo", pairId: 371, topic: 'travel' },
+    { ru: "Театр", fr: "Théâtre", pairId: 372, topic: 'travel' },
+    { ru: "Кино", fr: "Cinéma", pairId: 373, topic: 'travel' },
+    { ru: "Концерт", fr: "Concert", pairId: 374, topic: 'travel' },
+    { ru: "Фестиваль", fr: "Festival", pairId: 375, topic: 'travel' },
+    { ru: "Фотография", fr: "Photo", pairId: 376, topic: 'travel' }, // Photographie (art/act)
+    { ru: "Фотографировать", fr: "Prendre des photos", pairId: 377, topic: 'travel' }, // Photographier
+    { ru: "Сувенир", fr: "Souvenir", pairId: 378, topic: 'travel' },
+    { ru: "Открытка", fr: "Carte postale", pairId: 379, topic: 'travel' },
+    { ru: "Аренда (авто)", fr: "Location de voiture", pairId: 380, topic: 'travel' },
+    { ru: "Страховка", fr: "Assurance", pairId: 381, topic: 'travel' },
+    { ru: "Авария", fr: "Accident", pairId: 382, topic: 'travel' },
+    { ru: "Полиция", fr: "Police", pairId: 383, topic: 'travel' },
+    { ru: "Посольство", fr: "Ambassade", pairId: 384, topic: 'travel' },
+    { ru: "Консульство", fr: "Consulat", pairId: 385, topic: 'travel' },
+    { ru: "Врач", fr: "Médecin", pairId: 386, topic: 'travel' }, // Docteur
+    { ru: "Аптечка", fr: "Trousse de secours", pairId: 387, topic: 'travel' },
+    { ru: "Лекарство", fr: "Médicament", pairId: 388, topic: 'travel' },
+    { ru: "Опасно", fr: "Dangereux", pairId: 389, topic: 'travel' },
+    { ru: "Безопасно", fr: "Sûr", pairId: 390, topic: 'travel' }, // En sécurité
+    { ru: "Потерял(а)", fr: "Perdu", pairId: 391, topic: 'travel' }, // Être perdu
+    { ru: "Помогите!", fr: "Au secours !", pairId: 392, topic: 'travel' }, // Aidez-moi !
+    { ru: "Турист", fr: "Touriste", pairId: 393, topic: 'travel' },
+    { ru: "Путешественник", fr: "Voyageur", pairId: 394, topic: 'travel' },
+    { ru: "Отпуск", fr: "Vacances", pairId: 395, topic: 'travel' }, // (Plural)
+    { ru: "Каникулы", fr: "Vacances scolaires", pairId: 396, topic: 'travel' },
+    { ru: "Выходные", fr: "Week-end", pairId: 397, topic: 'travel' },
+    { ru: "Приключение", fr: "Aventure", pairId: 398, topic: 'travel' },
+    { ru: "Остров", fr: "Île", pairId: 399, topic: 'travel' },
+    { ru: "Полуостров", fr: "Péninsule", pairId: 400, topic: 'travel' },
+    { ru: "Континент", fr: "Continent", pairId: 401, topic: 'travel' },
+    { ru: "Север", fr: "Nord", pairId: 402, topic: 'travel' },
+    { ru: "Юг", fr: "Sud", pairId: 403, topic: 'travel' },
+    { ru: "Запад", fr: "Ouest", pairId: 404, topic: 'travel' },
+    { ru: "Восток", fr: "Est", pairId: 405, topic: 'travel' },
+    { ru: "Градус (температура)", fr: "Degré", pairId: 406, topic: 'travel' },
+    { ru: "Солнечно", fr: "Ensoleillé", pairId: 407, topic: 'travel' }, // Il fait du soleil
+    { ru: "Облачно", fr: "Nuageux", pairId: 408, topic: 'travel' }, // Il y a des nuages
+    { ru: "Дождливо", fr: "Pluvieux", pairId: 409, topic: 'travel' }, // Il pleut
+    { ru: "Ветрено", fr: "Venteux", pairId: 410, topic: 'travel' }, // Il y a du vent
+    { ru: "Туман", fr: "Brouillard", pairId: 411, topic: 'travel' },
+    { ru: "Авиакомпания", fr: "Compagnie aérienne", pairId: 412, topic: 'travel' },
+    { ru: "Круиз", fr: "Croisière", pairId: 413, topic: 'travel' },
+    { ru: "Паром", fr: "Ferry", pairId: 414, topic: 'travel' },
+    { ru: "Яхта", fr: "Yacht", pairId: 415, topic: 'travel' },
+    { ru: "Велосипед", fr: "Vélo", pairId: 416, topic: 'travel' }, // Bicyclette
+    { ru: "Мотоцикл", fr: "Moto", pairId: 417, topic: 'travel' }, // Motocyclette
+    { ru: "Пешком", fr: "À pied", pairId: 418, topic: 'travel' },
+    { ru: "Прокат", fr: "Location", pairId: 419, topic: 'travel' },
+    { ru: "Хостел", fr: "Auberge de jeunesse", pairId: 420, topic: 'travel' },
+    { ru: "Кемпинг", fr: "Camping", pairId: 421, topic: 'travel' },
+    { ru: "Палатка", fr: "Tente", pairId: 422, topic: 'travel' },
+    { ru: "Рюкзак", fr: "Sac à dos", pairId: 423, topic: 'travel' },
+    { ru: "Путеводитель", fr: "Guide touristique", pairId: 424, topic: 'travel' }, // (Book)
+    { ru: "Разговорник", fr: "Guide de conversation", pairId: 425, topic: 'travel' },
+    { ru: "Местный (житель)", fr: "Habitant local", pairId: 426, topic: 'travel' }, // Local (adj)
+    { ru: "Иностранец", fr: "Étranger", pairId: 427, topic: 'travel' },
+    { ru: "Гостеприимство", fr: "Hospitalité", pairId: 428, topic: 'travel' },
+    { ru: "Традиция", fr: "Tradition", pairId: 429, topic: 'travel' },
+    { ru: "Культура", fr: "Culture", pairId: 430, topic: 'travel' },
+    { ru: "Достопримечательность", fr: "Attraction touristique", pairId: 431, topic: 'travel' }, // Site touristique
+    { ru: "Вход", fr: "Entrée", pairId: 432, topic: 'travel' },
+    { ru: "Выход", fr: "Sortie", pairId: 433, topic: 'travel' },
+    { ru: "Бесплатно", fr: "Gratuit", pairId: 434, topic: 'travel' },
+    { ru: "Платно", fr: "Payant", pairId: 435, topic: 'travel' },
+    { ru: "Скидка", fr: "Réduction", pairId: 436, topic: 'travel' }, // Rabais
+    { ru: "Камера хранения", fr: "Consigne", pairId: 437, topic: 'travel' },
+    { ru: "Зарядка (для телефона)", fr: "Chargeur", pairId: 438, topic: 'travel' },
+    { ru: "Адаптер", fr: "Adaptateur", pairId: 439, topic: 'travel' },
+    { ru: "Wi-Fi", fr: "Wi-Fi", pairId: 440, topic: 'travel' }, // Le wifi (m)
+    { ru: "Пароль", fr: "Mot de passe", pairId: 441, topic: 'travel' },
+    { ru: "Розетка", fr: "Prise de courant", pairId: 442, topic: 'travel' }, // Prise (short)
+    { ru: "Напряжение", fr: "Tension", pairId: 443, topic: 'travel' }, // Voltage
+    { ru: "Бассейн", fr: "Piscine", pairId: 444, topic: 'travel' },
+    { ru: "Тренажерный зал", fr: "Salle de sport", pairId: 445, topic: 'travel' }, // Gymnase
+    { ru: "Сауна", fr: "Sauna", pairId: 446, topic: 'travel' },
+    { ru: "Парковка", fr: "Parking", pairId: 447, topic: 'travel' }, // Stationnement (Canada)
+    { ru: "Лифт", fr: "Ascenseur", pairId: 448, topic: 'travel' },
+    { ru: "Лестница", fr: "Escalier", pairId: 449, topic: 'travel' },
+    { ru: "Этаж", fr: "Étage", pairId: 450, topic: 'travel' },
+    { ru: "Балкон", fr: "Balcon", pairId: 451, topic: 'travel' },
+    { ru: "Терраса", fr: "Terrasse", pairId: 452, topic: 'travel' },
+    { ru: "Вид (из окна)", fr: "Vue", pairId: 453, topic: 'travel' },
+    { ru: "Шумно", fr: "Bruyant", pairId: 454, topic: 'travel' },
+    { ru: "Тихо", fr: "Calme", pairId: 455, topic: 'travel' }, // Silencieux
+    { ru: "Чисто", fr: "Propre", pairId: 456, topic: 'travel' },
+    { ru: "Грязно", fr: "Sale", pairId: 457, topic: 'travel' },
+    { ru: "Удобно", fr: "Confortable", pairId: 458, topic: 'travel' }, // Pratique (convenient)
+    { ru: "Неудобно", fr: "Inconfortable", pairId: 459, topic: 'travel' },
+    { ru: "Кондиционер", fr: "Climatisation", pairId: 460, topic: 'travel' }, // Clim (informal)
+    { ru: "Отопление", fr: "Chauffage", pairId: 461, topic: 'travel' },
+    { ru: "Полотенце", fr: "Serviette", pairId: 462, topic: 'travel' }, // (de bain)
+    { ru: "Мыло", fr: "Savon", pairId: 463, topic: 'travel' },
+    { ru: "Шампунь", fr: "Shampooing", pairId: 464, topic: 'travel' },
+    { ru: "Туалетная бумага", fr: "Papier toilette", pairId: 465, topic: 'travel' }, // Papier hygiénique
+    { ru: "Фен", fr: "Sèche-cheveux", pairId: 466, topic: 'travel' },
+    { ru: "Утюг", fr: "Fer à repasser", pairId: 467, topic: 'travel' },
+    { ru: "Прачечная", fr: "Laverie", pairId: 468, topic: 'travel' }, // Buanderie (in a house/hotel)
+    { ru: "Завтрак включен", fr: "Petit déjeuner inclus", pairId: 469, topic: 'travel' },
+    { ru: "Маршрут", fr: "Itinéraire", pairId: 470, topic: 'travel' }, // Already used, good.
+    { ru: "Заповедник", fr: "Réserve naturelle", pairId: 471, topic: 'travel' },
+    { ru: "Национальный парк", fr: "Parc national", pairId: 472, topic: 'travel' },
+    { ru: "Руины", fr: "Ruines", pairId: 473, topic: 'travel' },
+    { ru: "Деревня", fr: "Village", pairId: 474, topic: 'travel' },
+    { ru: "Регион", fr: "Région", pairId: 475, topic: 'travel' },
+    { ru: "Провинция", fr: "Province", pairId: 476, topic: 'travel' },
+    { ru: "Столица", fr: "Capitale", pairId: 477, topic: 'travel' },
+    { ru: "Карманник", fr: "Pickpocket", pairId: 478, topic: 'travel' }, // Voleur à la tire
+    { ru: "Кража", fr: "Vol", pairId: 479, topic: 'travel' },
+    { ru: "Заявление (в полицию)", fr: "Déclaration", pairId: 480, topic: 'travel' }, // Plainte
+    { ru: "Потерянные вещи", fr: "Objets trouvés", pairId: 481, topic: 'travel' }, // (Office of) / Objets perdus
+    { ru: "Прививка", fr: "Vaccin", pairId: 482, topic: 'travel' },
+    { ru: "Солнечный ожог", fr: "Coup de soleil", pairId: 483, topic: 'travel' },
+    { ru: "Морская болезнь", fr: "Mal de mer", pairId: 484, topic: 'travel' },
+    { ru: "Высотная болезнь", fr: "Mal des montagnes", pairId: 485, topic: 'travel' },
+    { ru: "Пустыня", fr: "Désert", pairId: 486, topic: 'travel' },
+    { ru: "Джунгли", fr: "Jungle", pairId: 487, topic: 'travel' },
+    { ru: "Лес", fr: "Forêt", pairId: 488, topic: 'travel' }, // Bois (smaller woods)
+    { ru: "Водопад", fr: "Cascade", pairId: 489, topic: 'travel' }, // Chute d'eau
+    { ru: "Вулкан", fr: "Volcan", pairId: 490, topic: 'travel' },
+    { ru: "Пещера", fr: "Grotte", pairId: 491, topic: 'travel' }, // Caverne
+    { ru: "Долина", fr: "Vallée", pairId: 492, topic: 'travel' },
+    { ru: "Холм", fr: "Colline", pairId: 493, topic: 'travel' },
+    { ru: "Берег", fr: "Côte", pairId: 494, topic: 'travel' }, // Rivage (shore), Rive (bank)
+    { ru: "Местный транспорт", fr: "Transport local", pairId: 495, topic: 'travel' }, // Transports en commun
+    { ru: "Проездной", fr: "Titre de transport", pairId: 496, topic: 'travel' }, // Abonnement
+    { ru: "Без пересадок (прямой)", fr: "Direct", pairId: 497, topic: 'travel' },
+    { ru: "С пересадкой", fr: "Avec correspondance", pairId: 498, topic: 'travel' },
+    { ru: "Посадочный талон", fr: "Carte d'embarquement", pairId: 499, topic: 'travel' },
+    { ru: "Duty Free (магазин)", fr: "Boutique hors taxes", pairId: 500, topic: 'travel' }, // Duty free
+];
+
+const techFrenchWords = [
+    // 200 "Tech" words (pairId: 712-911)
+    { ru: "Интернет", fr: "Internet", pairId: 714, topic: 'tech' }, // Le Net (informal)
+    { ru: "Программа", fr: "Programme", pairId: 715, topic: 'tech' }, // Logiciel (software)
+    { ru: "Экран", fr: "Écran", pairId: 716, topic: 'tech' },
+    { ru: "Клавиатура", fr: "Clavier", pairId: 717, topic: 'tech' },
+    { ru: "Мышь (компьютерная)", fr: "Souris", pairId: 718, topic: 'tech' },
+    { ru: "Ноутбук", fr: "Ordinateur portable", pairId: 719, topic: 'tech' }, // Portable
+    { ru: "Планшет", fr: "Tablette", pairId: 720, topic: 'tech' },
+    { ru: "Смартфон", fr: "Smartphone", pairId: 721, topic: 'tech' }, // Téléphone intelligent
+    { ru: "Приложение", fr: "Application", pairId: 722, topic: 'tech' }, // Appli (informal)
+    { ru: "Файл", fr: "Fichier", pairId: 723, topic: 'tech' },
+    { ru: "Папка", fr: "Dossier", pairId: 724, topic: 'tech' },
+    { ru: "Данные", fr: "Données", pairId: 725, topic: 'tech' }, // (Plural)
+    { ru: "Сеть (компьютерная)", fr: "Réseau", pairId: 726, topic: 'tech' },
+    // Wi-Fi and Пароль already in travel, common for tech
+    { ru: "Пользователь", fr: "Utilisateur", pairId: 729, topic: 'tech' },
+    { ru: "Аккаунт", fr: "Compte", pairId: 730, topic: 'tech' },
+    { ru: "Логин", fr: "Identifiant", pairId: 731, topic: 'tech' }, // Nom d'utilisateur
+    { ru: "Электронная почта", fr: "Courrier électronique", pairId: 732, topic: 'tech' }, // E-mail, Courriel (Canada), Mél
+    { ru: "Сообщение", fr: "Message", pairId: 733, topic: 'tech' },
+    { ru: "Сайт", fr: "Site web", pairId: 734, topic: 'tech' }, // Site internet
+    { ru: "Ссылка", fr: "Lien", pairId: 735, topic: 'tech' },
+    { ru: "Скачать", fr: "Télécharger", pairId: 736, topic: 'tech' }, // (Download)
+    { ru: "Загрузить (на сервер)", fr: "Téléverser", pairId: 737, topic: 'tech' }, // Charger, Mettre en ligne
+    { ru: "Онлайн", fr: "En ligne", pairId: 738, topic: 'tech' },
+    { ru: "Офлайн", fr: "Hors ligne", pairId: 739, topic: 'tech' },
+    { ru: "Браузер", fr: "Navigateur", pairId: 740, topic: 'tech' }, // (web browser)
+    { ru: "Поисковик", fr: "Moteur de recherche", pairId: 741, topic: 'tech' },
+    { ru: "Социальная сеть", fr: "Réseau social", pairId: 742, topic: 'tech' },
+    { ru: "Профиль", fr: "Profil", pairId: 743, topic: 'tech' },
+    { ru: "Комментарий", fr: "Commentaire", pairId: 744, topic: 'tech' },
+    { ru: "Лайк", fr: "J'aime", pairId: 745, topic: 'tech' }, // Like (anglicism)
+    { ru: "Пост (в соцсети)", fr: "Publication", pairId: 746, topic: 'tech' }, // Post (anglicism)
+    { ru: "Видео", fr: "Vidéo", pairId: 747, topic: 'tech' },
+    { ru: "Аудио", fr: "Audio", pairId: 748, topic: 'tech' },
+    { ru: "Изображение", fr: "Image", pairId: 749, topic: 'tech' },
+    { ru: "Процессор", fr: "Processeur", pairId: 750, topic: 'tech' }, // CPU
+    { ru: "Память (ОЗУ)", fr: "Mémoire vive", pairId: 751, topic: 'tech' }, // RAM
+    { ru: "Жесткий диск", fr: "Disque dur", pairId: 752, topic: 'tech' },
+    { ru: "SSD-накопитель", fr: "SSD", pairId: 753, topic: 'tech' }, // Disque SSD, Lecteur à état solide
+    { ru: "Материнская плата", fr: "Carte mère", pairId: 754, topic: 'tech' },
+    { ru: "Видеокарта", fr: "Carte graphique", pairId: 755, topic: 'tech' },
+    { ru: "Монитор", fr: "Moniteur", pairId: 756, topic: 'tech' }, // Écran d'ordinateur
+    { ru: "Принтер", fr: "Imprimante", pairId: 757, topic: 'tech' },
+    { ru: "Сканер", fr: "Scanner", pairId: 758, topic: 'tech' }, // Numériseur
+    { ru: "Колонки (аудио)", fr: "Haut-parleurs", pairId: 759, topic: 'tech' }, // Enceintes
+    { ru: "Наушники", fr: "Écouteurs", pairId: 760, topic: 'tech' }, // Casque (headphones)
+    { ru: "Микрофон", fr: "Microphone", pairId: 761, topic: 'tech' }, // Micro
+    { ru: "Веб-камера", fr: "Webcam", pairId: 762, topic: 'tech' }, // Caméra web
+    { ru: "Батарея", fr: "Batterie", pairId: 763, topic: 'tech' },
+    { ru: "Зарядное устройство", fr: "Chargeur", pairId: 764, topic: 'tech' }, // Already in travel
+    { ru: "USB-кабель", fr: "Câble USB", pairId: 765, topic: 'tech' },
+    { ru: "Программное обеспечение", fr: "Logiciel", pairId: 766, topic: 'tech' },
+    { ru: "Аппаратное обеспечение", fr: "Matériel informatique", pairId: 767, topic: 'tech' }, // Hardware
+    { ru: "Операционная система", fr: "Système d'exploitation", pairId: 768, topic: 'tech' }, // SE, OS
+    { ru: "Windows", fr: "Windows", pairId: 769, topic: 'tech' },
+    { ru: "MacOS", fr: "MacOS", pairId: 770, topic: 'tech' },
+    { ru: "Linux", fr: "Linux", pairId: 771, topic: 'tech' },
+    { ru: "Android", fr: "Android", pairId: 772, topic: 'tech' },
+    { ru: "iOS", fr: "iOS", pairId: 773, topic: 'tech' },
+    { ru: "Кликнуть", fr: "Cliquer", pairId: 774, topic: 'tech' },
+    { ru: "Двойной клик", fr: "Double-clic", pairId: 775, topic: 'tech' },
+    { ru: "Нажать (клавишу)", fr: "Appuyer sur", pairId: 776, topic: 'tech' }, // Presser
+    { ru: "Сохранить", fr: "Enregistrer", pairId: 777, topic: 'tech' }, // Sauvegarder
+    { ru: "Открыть", fr: "Ouvrir", pairId: 778, topic: 'tech' },
+    { ru: "Закрыть", fr: "Fermer", pairId: 779, topic: 'tech' },
+    { ru: "Удалить", fr: "Supprimer", pairId: 780, topic: 'tech' }, // Effacer
+    { ru: "Копировать", fr: "Copier", pairId: 781, topic: 'tech' },
+    { ru: "Вставить", fr: "Coller", pairId: 782, topic: 'tech' },
+    { ru: "Вырезать", fr: "Couper", pairId: 783, topic: 'tech' },
+    { ru: "Отменить (действие)", fr: "Annuler", pairId: 784, topic: 'tech' }, // (Ctrl+Z)
+    { ru: "Повторить (действие)", fr: "Rétablir", pairId: 785, topic: 'tech' }, // (Ctrl+Y)
+    { ru: "Поиск", fr: "Recherche", pairId: 786, topic: 'tech' }, // (Noun), Rechercher (Verb)
+    { ru: "Настройки", fr: "Paramètres", pairId: 787, topic: 'tech' }, // Réglages, Configuration
+    { ru: "Обновление", fr: "Mise à jour", pairId: 788, topic: 'tech' },
+    { ru: "Установка", fr: "Installation", pairId: 789, topic: 'tech' },
+    { ru: "Ошибка", fr: "Erreur", pairId: 790, topic: 'tech' }, // Bogue (bug)
+    { ru: "Вирус (компьютерный)", fr: "Virus", pairId: 791, topic: 'tech' },
+    { ru: "Антивирус", fr: "Antivirus", pairId: 792, topic: 'tech' },
+    { ru: "Безопасность", fr: "Sécurité", pairId: 793, topic: 'tech' },
+    { ru: "Хакер", fr: "Hacker", pairId: 794, topic: 'tech' }, // Pirate informatique
+    { ru: "База данных", fr: "Base de données", pairId: 795, topic: 'tech' },
+    { ru: "Сервер", fr: "Serveur", pairId: 796, topic: 'tech' },
+    { ru: "Облако (хранилище)", fr: "Cloud", pairId: 797, topic: 'tech' }, // Nuage (informatique)
+    { ru: "Резервное копирование", fr: "Sauvegarde", pairId: 798, topic: 'tech' }, // Backup
+    { ru: "Программирование", fr: "Programmation", pairId: 799, topic: 'tech' },
+    { ru: "Код", fr: "Code", pairId: 800, topic: 'tech' },
+    { ru: "Разработчик", fr: "Développeur", pairId: 801, topic: 'tech' },
+    { ru: "Интерфейс", fr: "Interface", pairId: 802, topic: 'tech' },
+    { ru: "Алгоритм", fr: "Algorithme", pairId: 803, topic: 'tech' },
+    { ru: "Искусственный интеллект", fr: "Intelligence artificielle", pairId: 804, topic: 'tech' }, // IA
+    { ru: "Машинное обучение", fr: "Apprentissage automatique", pairId: 805, topic: 'tech' }, // Machine learning
+    { ru: "Робот", fr: "Robot", pairId: 806, topic: 'tech' },
+    { ru: "Дрон", fr: "Drone", pairId: 807, topic: 'tech' },
+    { ru: "Виртуальная реальность", fr: "Réalité virtuelle", pairId: 808, topic: 'tech' }, // RV
+    { ru: "Дополненная реальность", fr: "Réalité augmentée", pairId: 809, topic: 'tech' }, // RA
+    { ru: "3D-принтер", fr: "Imprimante 3D", pairId: 810, topic: 'tech' },
+    { ru: "Блокчейн", fr: "Blockchain", pairId: 811, topic: 'tech' }, // Chaîne de blocs
+    { ru: "Криптовалюта", fr: "Cryptomonnaie", pairId: 812, topic: 'tech' },
+    { ru: "Биткоин", fr: "Bitcoin", pairId: 813, topic: 'tech' },
+    { ru: "Подкаст", fr: "Podcast", pairId: 814, topic: 'tech' }, // Balado (Canada)
+    { ru: "Стриминг", fr: "Streaming", pairId: 815, topic: 'tech' }, // Diffusion en continu
+    { ru: "Блог", fr: "Blog", pairId: 816, topic: 'tech' }, // Blogue (Canada)
+    { ru: "Влог", fr: "Vlog", pairId: 817, topic: 'tech' }, // Vidéoblogue
+    { ru: "Форум", fr: "Forum", pairId: 818, topic: 'tech' },
+    { ru: "Чат", fr: "Chat", pairId: 819, topic: 'tech' }, // Clavardage (Canada)
+    { ru: "Видеоконференция", fr: "Visioconférence", pairId: 820, topic: 'tech' }, // Vidéoconférence
+    { ru: "Электронная книга", fr: "Livre numérique", pairId: 821, topic: 'tech' }, // Ebook, Livrel (Canada)
+    { ru: "Гаджет", fr: "Gadget", pairId: 822, topic: 'tech' },
+    { ru: "Носимое устройство", fr: "Appareil portable", pairId: 823, topic: 'tech' }, // Technologie portable, Wearable
+    { ru: "Умные часы", fr: "Montre connectée", pairId: 824, topic: 'tech' }, // Montre intelligente
+    { ru: "Фитнес-трекер", fr: "Traqueur d'activité", pairId: 825, topic: 'tech' }, // Bracelet connecté
+    { ru: "GPS-навигатор", fr: "Navigateur GPS", pairId: 826, topic: 'tech' }, // GPS
+    { ru: "Bluetooth", fr: "Bluetooth", pairId: 827, topic: 'tech' },
+    { ru: "NFC", fr: "NFC", pairId: 828, topic: 'tech' }, // Communication en champ proche (CCP)
+    { ru: "QR-код", fr: "Code QR", pairId: 829, topic: 'tech' },
+    { ru: "Технология", fr: "Technologie", pairId: 830, topic: 'tech' },
+    { ru: "Инновация", fr: "Innovation", pairId: 831, topic: 'tech' },
+    { ru: "Цифровой", fr: "Numérique", pairId: 832, topic: 'tech' }, // Digital (anglicism)
+    { ru: "Автоматизация", fr: "Automatisation", pairId: 833, topic: 'tech' },
+    { ru: "Подключиться (к сети)", fr: "Se connecter", pairId: 834, topic: 'tech' },
+    { ru: "Отключиться", fr: "Se déconnecter", pairId: 835, topic: 'tech' },
+    { ru: "Перезагрузить", fr: "Redémarrer", pairId: 836, topic: 'tech' },
+    { ru: "Выключить", fr: "Éteindre", pairId: 837, topic: 'tech' },
+    { ru: "Включить", fr: "Allumer", pairId: 838, topic: 'tech' },
+    { ru: "Режим полета", fr: "Mode avion", pairId: 839, topic: 'tech' },
+    { ru: "SIM-карта", fr: "Carte SIM", pairId: 840, topic: 'tech' },
+    { ru: "Мобильные данные", fr: "Données mobiles", pairId: 841, topic: 'tech' },
+    { ru: "Роуминг", fr: "Itinérance", pairId: 842, topic: 'tech' }, // Roaming (anglicism)
+    { ru: "Уведомление", fr: "Notification", pairId: 843, topic: 'tech' },
+    { ru: "Скриншот", fr: "Capture d'écran", pairId: 844, topic: 'tech' },
+    { ru: "Брандмауэр", fr: "Pare-feu", pairId: 845, topic: 'tech' }, // Firewall
+    { ru: "Шифрование", fr: "Chiffrement", pairId: 846, topic: 'tech' }, // Cryptage
+    { ru: "Дешифрование", fr: "Déchiffrement", pairId: 847, topic: 'tech' },
+    { ru: "Облачные вычисления", fr: "Cloud computing", pairId: 848, topic: 'tech' }, // Informatique en nuage
+    { ru: "Большие данные", fr: "Big Data", pairId: 849, topic: 'tech' }, // Mégadonnées, Données massives
+    { ru: "Интернет вещей", fr: "Internet des objets", pairId: 850, topic: 'tech' }, // IdO
+    { ru: "Домен (имя сайта)", fr: "Nom de domaine", pairId: 851, topic: 'tech' },
+    { ru: "Хостинг", fr: "Hébergement web", pairId: 852, topic: 'tech' },
+    { ru: "Плагин", fr: "Plugin", pairId: 853, topic: 'tech' }, // Module d'extension, Greffon
+    { ru: "Виджет", fr: "Widget", pairId: 854, topic: 'tech' },
+    { ru: "API (интерфейс)", fr: "API", pairId: 855, topic: 'tech' }, // Interface de programmation d'application
+    { ru: "Исходный код", fr: "Code source", pairId: 856, topic: 'tech' },
+    { ru: "Отладка", fr: "Débogage", pairId: 857, topic: 'tech' },
+    { ru: "Компилятор", fr: "Compilateur", pairId: 858, topic: 'tech' },
+    { ru: "Интерпретатор", fr: "Interpréteur", pairId: 859, topic: 'tech' },
+    { ru: "Фреймворк", fr: "Framework", pairId: 860, topic: 'tech' }, // Cadriciel (Canada)
+    { ru: "Библиотека (кода)", fr: "Bibliothèque", pairId: 861, topic: 'tech' }, // (de code)
+    { ru: "Мобильная разработка", fr: "Développement mobile", pairId: 862, topic: 'tech' },
+    { ru: "Веб-разработка", fr: "Développement web", pairId: 863, topic: 'tech' },
+    { ru: "Фронтенд", fr: "Frontend", pairId: 864, topic: 'tech' }, // Interface utilisateur
+    { ru: "Бэкенд", fr: "Backend", pairId: 865, topic: 'tech' }, // Arrière-plan, Infrastructure
+    { ru: "UI (пользовательский интерфейс)", fr: "UI", pairId: 866, topic: 'tech' }, // Interface utilisateur (IU)
+    { ru: "UX (пользовательский опыт)", fr: "UX", pairId: 867, topic: 'tech' }, // Expérience utilisateur (EU)
+    { ru: "Адаптивный дизайн", fr: "Design adaptatif", pairId: 868, topic: 'tech' }, // Conception réactive
+    { ru: "Разрешение экрана", fr: "Résolution d'écran", pairId: 869, topic: 'tech' },
+    { ru: "Пиксель", fr: "Pixel", pairId: 870, topic: 'tech' },
+    { ru: "Мегапиксель", fr: "Mégapixel", pairId: 871, topic: 'tech' },
+    { ru: "Скорость интернета", fr: "Vitesse Internet", pairId: 872, topic: 'tech' }, // Débit Internet
+    { ru: "Трафик (данных)", fr: "Trafic de données", pairId: 873, topic: 'tech' },
+    { ru: "Пропускная способность", fr: "Bande passante", pairId: 874, topic: 'tech' },
+    { ru: "IP-адрес", fr: "Adresse IP", pairId: 875, topic: 'tech' },
+    { ru: "Прокси-сервер", fr: "Serveur proxy", pairId: 876, topic: 'tech' }, // Proxy
+    { ru: "VPN", fr: "VPN", pairId: 877, topic: 'tech' }, // Réseau privé virtuel (RPV)
+    { ru: "Cookie (файл)", fr: "Cookie", pairId: 878, topic: 'tech' }, // Témoin de connexion
+    { ru: "Кэш", fr: "Cache", pairId: 879, topic: 'tech' }, // Antémémoire
+    { ru: "Спам", fr: "Spam", pairId: 880, topic: 'tech' }, // Pourriel (Canada)
+    { ru: "Фишинг", fr: "Hameçonnage", pairId: 881, topic: 'tech' }, // Phishing
+    { ru: "Вредоносное ПО", fr: "Logiciel malveillant", pairId: 882, topic: 'tech' }, // Malware
+    { ru: "Облачное хранилище", fr: "Stockage en cloud", pairId: 883, topic: 'tech' }, // Stockage en nuage
+    { ru: "Синхронизация", fr: "Synchronisation", pairId: 884, topic: 'tech' },
+    { ru: "Голосовой помощник", fr: "Assistant vocal", pairId: 885, topic: 'tech' },
+    { ru: "Распознавание речи", fr: "Reconnaissance vocale", pairId: 886, topic: 'tech' },
+    { ru: "Умный дом", fr: "Maison connectée", pairId: 887, topic: 'tech' }, // Domotique
+    { ru: "Датчик", fr: "Capteur", pairId: 888, topic: 'tech' },
+    { ru: "Микросхема", fr: "Puce électronique", pairId: 889, topic: 'tech' }, // Microcircuit
+    { ru: "Электроника", fr: "Électronique", pairId: 890, topic: 'tech' },
+    { ru: "Прошивка", fr: "Firmware", pairId: 891, topic: 'tech' }, // Microprogramme, Micrologiciel
+    { ru: "Драйвер (устройства)", fr: "Pilote", pairId: 892, topic: 'tech' }, // Driver
+    { ru: "Совместимость", fr: "Compatibilité", pairId: 893, topic: 'tech' },
+    { ru: "Порт (компьютера)", fr: "Port", pairId: 894, topic: 'tech' }, // (informatique)
+    { ru: "HDMI", fr: "HDMI", pairId: 895, topic: 'tech' },
+    { ru: "Ethernet", fr: "Ethernet", pairId: 896, topic: 'tech' },
+    { ru: "Роутер", fr: "Routeur", pairId: 897, topic: 'tech' },
+    { ru: "Модем", fr: "Modem", pairId: 898, topic: 'tech' },
+    { ru: "Оптическое волокно", fr: "Fibre optique", pairId: 899, topic: 'tech' },
+    { ru: "Спутниковый интернет", fr: "Internet par satellite", pairId: 900, topic: 'tech' },
+    { ru: "Мобильная связь", fr: "Communication mobile", pairId: 901, topic: 'tech' },
+    { ru: "5G (связь)", fr: "5G", pairId: 902, topic: 'tech' },
+    { ru: "Геолокация", fr: "Géolocalisation", pairId: 903, topic: 'tech' },
+    { ru: "IT-специалист", fr: "Spécialiste en TI", pairId: 904, topic: 'tech' }, // Informaticien
+    { ru: "Техподдержка", fr: "Support technique", pairId: 905, topic: 'tech' }, // Assistance technique
+    { ru: "Цифровая трансформация", fr: "Transformation numérique", pairId: 906, topic: 'tech' },
+    { ru: "Кибербезопасность", fr: "Cybersécurité", pairId: 907, topic: 'tech' },
+    { ru: "Аутентификация", fr: "Authentification", pairId: 908, topic: 'tech' },
+    { ru: "Авторизация", fr: "Autorisation", pairId: 909, topic: 'tech' },
+    { ru: "Облачный сервис", fr: "Service cloud", pairId: 910, topic: 'tech' }, // Service en nuage
+    { ru: "Резервная копия", fr: "Copie de sauvegarde", pairId: 911, topic: 'tech' }, // (Again)
+];
+
+const businessFrenchWords = [
+    // 200 "Business" words (pairId: 912-1111)
+    { ru: "Компания", fr: "Entreprise", pairId: 914, topic: 'business' }, // Société, Compagnie
+    { ru: "Контракт", fr: "Contrat", pairId: 915, topic: 'business' },
+    { ru: "Цена", fr: "Prix", pairId: 916, topic: 'business' },
+    { ru: "Бизнес", fr: "Affaires", pairId: 917, topic: 'business' }, // Commerce, Business (anglicism)
+    { ru: "Экономика", fr: "Économie", pairId: 918, topic: 'business' },
+    { ru: "Финансы", fr: "Finances", pairId: 919, topic: 'business' },
+    { ru: "Инвестиция", fr: "Investissement", pairId: 920, topic: 'business' },
+    { ru: "Прибыль", fr: "Bénéfice", pairId: 921, topic: 'business' }, // Profit, Gain
+    { ru: "Убыток", fr: "Perte", pairId: 922, topic: 'business' },
+    { ru: "Бюджет", fr: "Budget", pairId: 923, topic: 'business' },
+    { ru: "Налог", fr: "Impôt", pairId: 924, topic: 'business' }, // Taxe
+    { ru: "Клиент", fr: "Client", pairId: 925, topic: 'business' },
+    { ru: "Поставщик", fr: "Fournisseur", pairId: 926, topic: 'business' },
+    { ru: "Конкурент", fr: "Concurrent", pairId: 927, topic: 'business' }, // Compétiteur
+    { ru: "Продукт", fr: "Produit", pairId: 928, topic: 'business' },
+    { ru: "Услуга", fr: "Service", pairId: 929, topic: 'business' },
+    { ru: "Продажа", fr: "Vente", pairId: 930, topic: 'business' },
+    { ru: "Покупка", fr: "Achat", pairId: 931, topic: 'business' },
+    { ru: "Маркетинг", fr: "Marketing", pairId: 932, topic: 'business' },
+    { ru: "Реклама", fr: "Publicité", pairId: 933, topic: 'business' }, // Pub (informal)
+    { ru: "Бренд", fr: "Marque", pairId: 934, topic: 'business' },
+    { ru: "Менеджер", fr: "Manager", pairId: 935, topic: 'business' }, // Gérant, Responsable, Directeur
+    { ru: "Сотрудник", fr: "Employé", pairId: 936, topic: 'business' }, // Salarié, Collaborateur
+    { ru: "Директор", fr: "Directeur", pairId: 937, topic: 'business' },
+    { ru: "Начальник", fr: "Chef", pairId: 938, topic: 'business' }, // Supérieur
+    { ru: "Коллега", fr: "Collègue", pairId: 939, topic: 'business' },
+    { ru: "Офис", fr: "Bureau", pairId: 940, topic: 'business' },
+    { ru: "Совещание", fr: "Réunion", pairId: 941, topic: 'business' },
+    { ru: "Презентация", fr: "Présentation", pairId: 942, topic: 'business' },
+    { ru: "Отчет", fr: "Rapport", pairId: 943, topic: 'business' }, // Compte rendu
+    { ru: "Документ", fr: "Document", pairId: 944, topic: 'business' },
+    { ru: "Подпись", fr: "Signature", pairId: 945, topic: 'business' },
+    { ru: "Печать (штамп)", fr: "Cachet", pairId: 946, topic: 'business' }, // Tampon
+    { ru: "Счет-фактура", fr: "Facture", pairId: 947, topic: 'business' },
+    { ru: "Платеж", fr: "Paiement", pairId: 948, topic: 'business' }, // Versement
+    { ru: "Зарплата", fr: "Salaire", pairId: 949, topic: 'business' }, // Paie, Rémunération
+    { ru: "Премия", fr: "Prime", pairId: 950, topic: 'business' }, // Bonus
+    { ru: "Карьера", fr: "Carrière", pairId: 951, topic: 'business' },
+    { ru: "Профессия", fr: "Profession", pairId: 952, topic: 'business' }, // Métier
+    { ru: "Вакансия", fr: "Poste vacant", pairId: 953, topic: 'business' }, // Offre d'emploi
+    { ru: "Резюме", fr: "CV", pairId: 954, topic: 'business' }, // Curriculum vitae
+    { ru: "Собеседование", fr: "Entretien d'embauche", pairId: 955, topic: 'business' }, // Entrevue (Canada)
+    { ru: "Опыт (работы)", fr: "Expérience professionnelle", pairId: 956, topic: 'business' },
+    { ru: "Навык", fr: "Compétence", pairId: 957, topic: 'business' }, // Aptitude
+    { ru: "Цель", fr: "Objectif", pairId: 958, topic: 'business' }, // But
+    { ru: "План", fr: "Plan", pairId: 959, topic: 'business' },
+    { ru: "Стратегия", fr: "Stratégie", pairId: 960, topic: 'business' },
+    { ru: "Проект", fr: "Projet", pairId: 961, topic: 'business' },
+    { ru: "Задача", fr: "Tâche", pairId: 962, topic: 'business' },
+    { ru: "Срок (дедлайн)", fr: "Date limite", pairId: 963, topic: 'business' }, // Échéance, Deadline (anglicism)
+    { ru: "Качество", fr: "Qualité", pairId: 964, topic: 'business' },
+    { ru: "Количество", fr: "Quantité", pairId: 965, topic: 'business' },
+    { ru: "Производство", fr: "Production", pairId: 966, topic: 'business' }, // Fabrication
+    { ru: "Завод", fr: "Usine", pairId: 967, topic: 'business' },
+    { ru: "Склад", fr: "Entrepôt", pairId: 968, topic: 'business' }, // Magasin (storage)
+    { ru: "Логистика", fr: "Logistique", pairId: 969, topic: 'business' },
+    { ru: "Транспорт", fr: "Transport", pairId: 970, topic: 'business' },
+    { ru: "Доставка", fr: "Livraison", pairId: 971, topic: 'business' },
+    { ru: "Экспорт", fr: "Exportation", pairId: 972, topic: 'business' },
+    { ru: "Импорт", fr: "Importation", pairId: 973, topic: 'business' },
+    { ru: "Торговля", fr: "Commerce", pairId: 974, topic: 'business' },
+    { ru: "Оптовая торговля", fr: "Commerce de gros", pairId: 975, topic: 'business' },
+    { ru: "Розничная торговля", fr: "Commerce de détail", pairId: 976, topic: 'business' },
+    { ru: "Скидка", fr: "Réduction", pairId: 977, topic: 'business' }, // Remise, Rabais
+    { ru: "Акция (распродажа)", fr: "Promotion", pairId: 978, topic: 'business' }, // Solde
+    { ru: "Гарантия", fr: "Garantie", pairId: 979, topic: 'business' },
+    { ru: "Сертификат", fr: "Certificat", pairId: 980, topic: 'business' },
+    { ru: "Лицензия", fr: "Licence", pairId: 981, topic: 'business' }, // Permis
+    { ru: "Право", fr: "Droit", pairId: 982, topic: 'business' }, // (Legal right)
+    { ru: "Закон", fr: "Loi", pairId: 983, topic: 'business' },
+    { ru: "Юрист", fr: "Avocat", pairId: 984, topic: 'business' }, // Juriste
+    { ru: "Суд", fr: "Tribunal", pairId: 985, topic: 'business' }, // Cour
+    { ru: "Договор", fr: "Accord", pairId: 986, topic: 'business' }, // Convention
+    { ru: "Переговоры", fr: "Négociations", pairId: 987, topic: 'business' },
+    { ru: "Партнер", fr: "Partenaire", pairId: 988, topic: 'business' }, // Associé
+    { ru: "Инвестор", fr: "Investisseur", pairId: 989, topic: 'business' },
+    { ru: "Акционер", fr: "Actionnaire", pairId: 990, topic: 'business' },
+    { ru: "Акция (ценная бумага)", fr: "Action", pairId: 991, topic: 'business' }, // (Stock)
+    { ru: "Облигация", fr: "Obligation", pairId: 992, topic: 'business' }, // (Bond)
+    { ru: "Биржа", fr: "Bourse", pairId: 993, topic: 'business' }, // (Stock exchange)
+    { ru: "Кризис", fr: "Crise", pairId: 994, topic: 'business' },
+    { ru: "Инфляция", fr: "Inflation", pairId: 995, topic: 'business' },
+    { ru: "Дефляция", fr: "Déflation", pairId: 996, topic: 'business' },
+    { ru: "Безработица", fr: "Chômage", pairId: 997, topic: 'business' },
+    { ru: "Ставка (процентная)", fr: "Taux d'intérêt", pairId: 998, topic: 'business' },
+    { ru: "Кредит", fr: "Crédit", pairId: 999, topic: 'business' }, // Prêt, Emprunt
+    { ru: "Депозит", fr: "Dépôt", pairId: 1000, topic: 'business' },
+    { ru: "Ипотека", fr: "Hypothèque", pairId: 1001, topic: 'business' }, // Prêt hypothécaire
+    { ru: "Страхование", fr: "Assurance", pairId: 1002, topic: 'business' },
+    { ru: "Недвижимость", fr: "Immobilier", pairId: 1003, topic: 'business' }, // (Noun)
+    { ru: "Аренда (недвижимости)", fr: "Location", pairId: 1004, topic: 'business' },
+    { ru: "Франшиза", fr: "Franchise", pairId: 1005, topic: 'business' },
+    { ru: "Стартап", fr: "Start-up", pairId: 1006, topic: 'business' }, // Jeune pousse
+    { ru: "Инновация", fr: "Innovation", pairId: 1007, topic: 'business' },
+    { ru: "Технология", fr: "Technologie", pairId: 1008, topic: 'business' },
+    { ru: "Автоматизация", fr: "Automatisation", pairId: 1009, topic: 'business' },
+    { ru: "Эффективность", fr: "Efficacité", pairId: 1010, topic: 'business' },
+    { ru: "Производительность", fr: "Productivité", pairId: 1011, topic: 'business' }, // Rendement
+    { ru: "Ресурсы", fr: "Ressources", pairId: 1012, topic: 'business' },
+    { ru: "Персонал", fr: "Personnel", pairId: 1013, topic: 'business' }, // Ressources humaines (RH)
+    { ru: "Отдел", fr: "Département", pairId: 1014, topic: 'business' }, // Service
+    { ru: "Филиал", fr: "Succursale", pairId: 1015, topic: 'business' }, // Agence
+    { ru: "Штаб-квартира", fr: "Siège social", pairId: 1016, topic: 'business' },
+    { ru: "Корпорация", fr: "Société anonyme", pairId: 1017, topic: 'business' }, // Grande entreprise, Corporation (anglicism)
+    { ru: "Малый бизнес", fr: "Petite entreprise", pairId: 1018, topic: 'business' }, // PME (Petite et Moyenne Entreprise)
+    { ru: "Средний бизнес", fr: "Moyenne entreprise", pairId: 1019, topic: 'business' }, // (Part of PME)
+    { ru: "Крупный бизнес", fr: "Grande entreprise", pairId: 1020, topic: 'business' },
+    { ru: "Предприниматель", fr: "Entrepreneur", pairId: 1021, topic: 'business' },
+    { ru: "Владелец", fr: "Propriétaire", pairId: 1022, topic: 'business' }, // Patron
+    { ru: "Управление", fr: "Gestion", pairId: 1023, topic: 'business' }, // Management, Direction
+    { ru: "Лидерство", fr: "Leadership", pairId: 1024, topic: 'business' },
+    { ru: "Команда", fr: "Équipe", pairId: 1025, topic: 'business' },
+    { ru: "Сотрудничество", fr: "Collaboration", pairId: 1026, topic: 'business' }, // Coopération
+    { ru: "Коммуникация", fr: "Communication", pairId: 1027, topic: 'business' },
+    { ru: "Ответственность", fr: "Responsabilité", pairId: 1028, topic: 'business' },
+    { ru: "Обязанность", fr: "Obligation", pairId: 1029, topic: 'business' }, // Devoir
+    { ru: "График работы", fr: "Horaires de travail", pairId: 1030, topic: 'business' }, // Emploi du temps
+    { ru: "Перерыв", fr: "Pause", pairId: 1031, topic: 'business' },
+    { ru: "Сверхурочные", fr: "Heures supplémentaires", pairId: 1032, topic: 'business' }, // Heures sup
+    { ru: "Увольнение", fr: "Licenciement", pairId: 1033, topic: 'business' }, // Démission (resignation)
+    { ru: "Забастовка", fr: "Grève", pairId: 1034, topic: 'business' },
+    { ru: "Профсоюз", fr: "Syndicat", pairId: 1035, topic: 'business' },
+    { ru: "Анализ", fr: "Analyse", pairId: 1036, topic: 'business' },
+    { ru: "Данные (статистика)", fr: "Données", pairId: 1037, topic: 'business' }, // Statistiques
+    { ru: "Тенденция", fr: "Tendance", pairId: 1038, topic: 'business' },
+    { ru: "Прогноз", fr: "Prévision", pairId: 1039, topic: 'business' }, // Pronostic
+    { ru: "Риск", fr: "Risque", pairId: 1040, topic: 'business' },
+    { ru: "Возможность", fr: "Opportunité", pairId: 1041, topic: 'business' }, // Occasion
+    { ru: "Решение (проблемы)", fr: "Solution", pairId: 1042, topic: 'business' },
+    { ru: "Решение (принятие)", fr: "Décision", pairId: 1043, topic: 'business' },
+    { ru: "Консалтинг", fr: "Conseil", pairId: 1044, topic: 'business' }, // Consulting (anglicism)
+    { ru: "Аудит", fr: "Audit", pairId: 1045, topic: 'business' },
+    { ru: "Бухгалтерия", fr: "Comptabilité", pairId: 1046, topic: 'business' },
+    { ru: "Бухгалтер", fr: "Comptable", pairId: 1047, topic: 'business' }, // Expert-comptable (chartered)
+    { ru: "Баланс (финансовый)", fr: "Bilan", pairId: 1048, topic: 'business' },
+    { ru: "Актив", fr: "Actif", pairId: 1049, topic: 'business' }, // (Assets)
+    { ru: "Пассив", fr: "Passif", pairId: 1050, topic: 'business' }, // (Liabilities)
+    { ru: "Капитал", fr: "Capital", pairId: 1051, topic: 'business' },
+    { ru: "Оборот", fr: "Chiffre d'affaires", pairId: 1052, topic: 'business' },
+    { ru: "Рентабельность", fr: "Rentabilité", pairId: 1053, topic: 'business' },
+    { ru: "Ликвидность", fr: "Liquidité", pairId: 1054, topic: 'business' },
+    { ru: "Банкротство", fr: "Faillite", pairId: 1055, topic: 'business' }, // Dépôt de bilan
+    { ru: "Слияние (компаний)", fr: "Fusion", pairId: 1056, topic: 'business' },
+    { ru: "Поглощение (компании)", fr: "Acquisition", pairId: 1057, topic: 'business' }, // Rachat
+    { ru: "Государственный сектор", fr: "Secteur public", pairId: 1058, topic: 'business' },
+    { ru: "Частный сектор", fr: "Secteur privé", pairId: 1059, topic: 'business' },
+    { ru: "НКО (некоммерческая организация)", fr: "ONG", pairId: 1060, topic: 'business' }, // Organisation non gouvernementale, Association (à but non lucratif)
+    { ru: "Благотворительность", fr: "Charité", pairId: 1061, topic: 'business' }, // Œuvre de bienfaisance
+    { ru: "Волонтер", fr: "Bénévole", pairId: 1062, topic: 'business' }, // Volontaire
+    { ru: "Глобализация", fr: "Mondialisation", pairId: 1063, topic: 'business' }, // Globalisation (anglicism)
+    { ru: "Международный", fr: "International", pairId: 1064, topic: 'business' },
+    { ru: "Местный (рынок)", fr: "Local", pairId: 1065, topic: 'business' }, // Marché intérieur/national
+    { ru: "Тариф", fr: "Tarif", pairId: 1066, topic: 'business' },
+    { ru: "Пошлина", fr: "Droit de douane", pairId: 1067, topic: 'business' },
+    { ru: "Эмбарго", fr: "Embargo", pairId: 1068, topic: 'business' },
+    { ru: "Квота", fr: "Quota", pairId: 1069, topic: 'business' }, // Contingent
+    { ru: "Субсидия", fr: "Subvention", pairId: 1070, topic: 'business' },
+    { ru: "Инфраструктура", fr: "Infrastructure", pairId: 1071, topic: 'business' },
+    { ru: "Нефть", fr: "Pétrole", pairId: 1072, topic: 'business' },
+    { ru: "Газ", fr: "Gaz", pairId: 1073, topic: 'business' },
+    { ru: "Энергия", fr: "Énergie", pairId: 1074, topic: 'business' },
+    { ru: "Возобновляемая энергия", fr: "Énergie renouvelable", pairId: 1075, topic: 'business' },
+    { ru: "Экология", fr: "Écologie", pairId: 1076, topic: 'business' },
+    { ru: "Устойчивое развитие", fr: "Développement durable", pairId: 1077, topic: 'business' },
+    { ru: "Промышленность", fr: "Industrie", pairId: 1078, topic: 'business' },
+    { ru: "Сельское хозяйство", fr: "Agriculture", pairId: 1079, topic: 'business' },
+    { ru: "Строительство", fr: "Construction", pairId: 1080, topic: 'business' }, // BTP (Bâtiment et Travaux Publics)
+    { ru: "Образование", fr: "Éducation", pairId: 1081, topic: 'business' }, // Formation
+    { ru: "Здравоохранение", fr: "Santé", pairId: 1082, topic: 'business' }, // Système de santé
+    { ru: "Наука", fr: "Science", pairId: 1083, topic: 'business' },
+    { ru: "Исследование", fr: "Recherche", pairId: 1084, topic: 'business' },
+    { ru: "Развитие", fr: "Développement", pairId: 1085, topic: 'business' }, // (R&D - Recherche et Développement)
+    { ru: "Патент", fr: "Brevet", pairId: 1086, topic: 'business' },
+    { ru: "Авторское право", fr: "Droit d'auteur", pairId: 1087, topic: 'business' }, // Copyright (anglicism)
+    { ru: "Интеллектуальная собственность", fr: "Propriété intellectuelle", pairId: 1088, topic: 'business' },
+    { ru: "Конфиденциальность", fr: "Confidentialité", pairId: 1089, topic: 'business' },
+    { ru: "Защита данных", fr: "Protection des données", pairId: 1090, topic: 'business' },
+    { ru: "Рабочее место", fr: "Poste de travail", pairId: 1091, topic: 'business' }, // Lieu de travail
+    { ru: "Оборудование", fr: "Équipement", pairId: 1092, topic: 'business' }, // Matériel
+    { ru: "Материалы", fr: "Matériaux", pairId: 1093, topic: 'business' },
+    { ru: "Сырье", fr: "Matière première", pairId: 1094, topic: 'business' },
+    { ru: "Запас (товаров)", fr: "Stock", pairId: 1095, topic: 'business' }, // Inventaire
+    { ru: "Заказ (товара)", fr: "Commande", pairId: 1096, topic: 'business' },
+    { ru: "Тендер", fr: "Appel d'offres", pairId: 1097, topic: 'business' },
+    { ru: "Конкурс", fr: "Concours", pairId: 1098, topic: 'business' },
+    { ru: "Конференция", fr: "Conférence", pairId: 1099, topic: 'business' }, // Congrès
+    { ru: "Семинар", fr: "Séminaire", pairId: 1100, topic: 'business' },
+    { ru: "Тренинг", fr: "Formation", pairId: 1101, topic: 'business' }, // Stage de formation
+    { ru: "Делегат", fr: "Délégué", pairId: 1102, topic: 'business' },
+    { ru: "Участник", fr: "Participant", pairId: 1103, topic: 'business' },
+    { ru: "Спикер", fr: "Conférencier", pairId: 1104, topic: 'business' }, // Intervenant, Orateur
+    { ru: "Аудитория", fr: "Auditoire", pairId: 1105, topic: 'business' }, // Public
+    { ru: "Протокол (собрания)", fr: "Compte rendu de réunion", pairId: 1106, topic: 'business' }, // Procès-verbal (PV)
+    { ru: "Повестка дня", fr: "Ordre du jour", pairId: 1107, topic: 'business' },
+    { ru: "Перерыв на кофе", fr: "Pause café", pairId: 1108, topic: 'business' },
+    { ru: "Командировка", fr: "Voyage d'affaires", pairId: 1109, topic: 'business' }, // Déplacement professionnel
+    { ru: "Визитная карточка", fr: "Carte de visite", pairId: 1110, topic: 'business' },
+    { ru: "Рабочий процесс", fr: "Flux de travail", pairId: 1111, topic: 'business' }, // Workflow (anglicism)
+];
+
+
+const allWordPairsData = [...basicsFrenchWords, ...foodFrenchWords, ...travelFrenchWords, ...techFrenchWords, ...businessFrenchWords];
+// --- END OF WORD LISTS ---
+
+        function showGameEndModal(title, message) {
+            modalTitleEl.textContent = title;
+            modalMessageTextEl.innerHTML = message.replace(/\n/g, '<br>');
+            gameEndModal.classList.add('active');
+            lockBoard = true;
+        }
+
+        function hideGameEndModal() {
+            gameEndModal.classList.remove('active');
+        }
+
+        function showAboutModal() {
+            if (settingsDropdown.classList.contains('active')) {
+                settingsDropdown.classList.remove('active');
+            }
+            const aboutTextContent = `Игра для изучения французских слов из пяти сфер жизни.
+0.1.0 beta версия (может некорректно отображать шрифты и цвета на некоторых мобильных устройствах).
+
+Автор: VOVSN
+GitHub: <a href="https://github.com/VOVSn" target="_blank" rel="noopener noreferrer" class="modal-link">https://github.com/VOVSn</a>
+
+Это проект с открытым исходным кодом. Вы можете внести свой вклад в репозиторий на GitHub!`;
+            if (aboutModalMessageTextContentEl) {
+                aboutModalMessageTextContentEl.innerHTML = aboutTextContent.replace(/\n/g, '<br>');
+            }
+            if (aboutModal) {
+                aboutModal.classList.add('active');
+            }
+        }
+
+        function hideAboutModal() {
+            if (aboutModal) {
+                aboutModal.classList.remove('active');
+            }
+        }
+
+        function playSound(soundType) {
+            if (!soundEnabled) return;
+            if (!audioCtx) {
+                try {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                } catch (e) {
+                    console.error("Web Audio API is not supported in this browser.", e);
+                    soundEnabled = false;
+                    if(soundToggle) soundToggle.checked = false;
+                    return;
+                }
+            }
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+
+            let oscillator, gainNode;
+            const now = audioCtx.currentTime;
+            const baseVolume = 0.05;
+
+            switch (soundType) {
+                case 'flip':
+                    oscillator = audioCtx.createOscillator(); gainNode = audioCtx.createGain();
+                    oscillator.type = 'triangle'; oscillator.frequency.setValueAtTime(1000, now);
+                    gainNode.gain.setValueAtTime(baseVolume * 0.8, now); gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.1);
+                    oscillator.connect(gainNode); gainNode.connect(audioCtx.destination);
+                    oscillator.start(now); oscillator.stop(now + 0.1);
+                    break;
+                case 'match':
+                    const playNote = (freq, startTime, duration, vol = baseVolume) => {
+                        const osc = audioCtx.createOscillator(); const gn = audioCtx.createGain();
+                        osc.type = 'sine'; osc.frequency.setValueAtTime(freq, startTime);
+                        gn.gain.setValueAtTime(vol, startTime); gn.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+                        osc.connect(gn); gn.connect(audioCtx.destination);
+                        osc.start(startTime); osc.stop(startTime + duration);
+                    };
+                    playNote(600, now, 0.12); playNote(900, now + 0.08, 0.12);
+                    break;
+                case 'noMatch':
+                    oscillator = audioCtx.createOscillator(); gainNode = audioCtx.createGain();
+                    oscillator.type = 'square'; oscillator.frequency.setValueAtTime(150, now);
+                    gainNode.gain.setValueAtTime(baseVolume * 0.7, now); gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.2);
+                    oscillator.connect(gainNode); gainNode.connect(audioCtx.destination);
+                    oscillator.start(now); oscillator.stop(now + 0.2);
+                    break;
+                case 'win':
+                    const winNotes = [ { freq: 523.25, time: 0, duration: 0.15, vol: baseVolume }, { freq: 659.25, time: 0.1, duration: 0.15, vol: baseVolume }, { freq: 783.99, time: 0.2, duration: 0.2, vol: baseVolume * 1.2 }, { freq: 1046.50, time: 0.35, duration: 0.25, vol: baseVolume * 1.5 } ];
+                    winNotes.forEach(note => {
+                        const osc = audioCtx.createOscillator(); const gn = audioCtx.createGain();
+                        osc.type = 'triangle'; osc.frequency.setValueAtTime(note.freq, now + note.time);
+                        gn.gain.setValueAtTime(note.vol, now + note.time); gn.gain.exponentialRampToValueAtTime(0.0001, now + note.time + note.duration);
+                        osc.connect(gn); gn.connect(audioCtx.destination);
+                        osc.start(now + note.time); osc.stop(now + note.time + note.duration);
+                    });
+                    break;
+            }
+        }
+
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function createCardElement(wordData, isForeignCard) {
+            const card = document.createElement('div');
+            card.classList.add('memory-card');
+            card.dataset.pairId = wordData.pairId;
+            card.dataset.lang = isForeignCard ? 'fr' : 'ru'; // Use 'fr' for French
+
+            const cardInner = document.createElement('div');
+            cardInner.classList.add('card-inner');
+
+            const cardFront = document.createElement('div');
+            cardFront.classList.add('card-face', 'card-front');
+            const cardContent = document.createElement('div');
+            cardContent.classList.add('card-content');
+            
+            const text = isForeignCard ? wordData.fr : wordData.ru; // Get French word from wordData.fr
+            cardContent.textContent = text;
+
+            if (text.length > 25) {
+                 cardContent.classList.add('xx-small-text');
+            } else if (text.length > 20) {
+                cardContent.classList.add('x-small-text');
+            } else if (text.length > 15) {
+                cardContent.classList.add('small-text');
+            }
+
+            cardFront.appendChild(cardContent);
+
+            const cardBack = document.createElement('div');
+            cardBack.classList.add('card-face', 'card-back');
+            cardBack.textContent = '?';
+
+            cardInner.appendChild(cardFront);
+            cardInner.appendChild(cardBack);
+            card.appendChild(cardInner);
+
+            card.addEventListener('click', handleCardClick);
+            return card;
+        }
+
+
+        function updateGameSubtitles() {
+            gameSubtitleModeEl.textContent = gameMode === 'simple' ? "Сопоставьте видимые пары" : "Найдите и запомните пары";
+            if (gameActive || currentRound > 0) {
+                 if (selectedNumberOfRounds > 1) {
+                    gameSubtitleRoundEl.textContent = `Раунд ${currentRound}/${selectedNumberOfRounds}`;
+                } else {
+                    gameSubtitleRoundEl.textContent = "";
+                }
+            } else {
+                 gameSubtitleRoundEl.textContent = `Раунды: ${selectedNumberOfRounds}`;
+            }
+        }
+
+        function initGame() {
+            gameActive = false;
+            lockBoard = true;
+            boardHasBeenSetUpAtLeastOnce = false;
+
+            currentRound = 0;
+            wordsUsedInAllRounds.clear();
+            totalMovesAcrossAllRounds = 0;
+            totalTimeAcrossAllRounds = 0;
+
+            clearInterval(roundTimerInterval);
+            roundTimerInterval = null;
+
+            updateGameSubtitles();
+            proceedToNextRound();
+        }
+
+        function proceedToNextRound() {
+            currentRound++;
+            lockBoard = true;
+            gameActive = false;
+
+            if (currentRound > selectedNumberOfRounds) {
+                playSound('win');
+                let finalMessage, modalTitle;
+                if (selectedNumberOfRounds > 1) {
+                     modalTitle = `Все ${selectedNumberOfRounds} раундов завершены!`;
+                     finalMessage = `Общее количество ходов: ${totalMovesAcrossAllRounds}. \nОбщее время: ${formatTime(totalTimeAcrossAllRounds)}.`;
+                } else {
+                    modalTitle = "Игра завершена!";
+                    finalMessage = `Ходов: ${moves}. \nВремя: ${formatTime(roundSecondsElapsed)}.`;
+                }
+                gameSubtitleRoundEl.textContent = modalTitle;
+                showGameEndModal(modalTitle, finalMessage);
+                currentRound = 0;
+                gameBoard.innerHTML = `<p class="game-board-message">Игра завершена! Результаты в окне выше.</p>`;
+                updateStats();
+                timeValueEl.textContent = formatTime(0);
+                return;
+            }
+
+            updateGameSubtitles();
+            moves = 0;
+            matches = 0;
+            firstCard = null;
+            secondCard = null;
+
+            clearInterval(roundTimerInterval);
+            roundTimerInterval = null;
+            roundSecondsElapsed = 0;
+            timeValueEl.textContent = formatTime(roundSecondsElapsed);
+
+            updateStats();
+            setupBoardForCurrentRound();
+        }
+
+        function setupBoardForCurrentRound() {
+            gameBoard.innerHTML = '';
+
+            let availableConcepts = allWordPairsData
+                .filter(word => selectedTopics.includes(word.topic))
+                .filter(word => !wordsUsedInAllRounds.has(word.pairId.toString()));
+
+            if (availableConcepts.length === 0 && selectedTopics.length > 0 && boardHasBeenSetUpAtLeastOnce) {
+                 gameBoard.innerHTML = `<p class="game-board-message">Все слова из выбранных тем для текущей игры использованы. Начните новую игру или выберите другие темы.</p>`;
+                 currentTotalPairsInRound = 0;
+                 boardHasBeenSetUpAtLeastOnce = true;
+                 gameActive = false;
+                 lockBoard = true;
+                 updateStats();
+                  if (currentRound > 0 && selectedNumberOfRounds >=1) {
+                    showGameEndModal("Запас слов исчерпан!", "Вы использовали все доступные слова для выбранных тем в этой игре.\nИгра завершена.");
+                    gameSubtitleRoundEl.textContent = `Раунд ${currentRound-1 > 0 ? currentRound-1 : 1}/${selectedNumberOfRounds} - Нет слов`;
+                    currentRound = 0;
+                }
+                return;
+            } else if (availableConcepts.length < 1 && selectedTopics.length > 0) {
+                gameBoard.innerHTML = `<p class="game-board-message">Недостаточно уникальных слов для этого раунда.<br>Игра остановлена. Попробуйте выбрать больше тем или уменьшить количество раундов.</p>`;
+                currentTotalPairsInRound = 0;
+                gameSubtitleRoundEl.textContent += ` - Ошибка: нет слов`;
+                lockBoard = true;
+                gameActive = false;
+                clearInterval(roundTimerInterval); roundTimerInterval = null;
+                updateStats();
+                boardHasBeenSetUpAtLeastOnce = true;
+                return;
+            } else if (selectedTopics.length === 0) {
+                 gameBoard.innerHTML = `<p class="game-board-message">Пожалуйста, выберите хотя бы одну тему в настройках.</p>`;
+                 currentTotalPairsInRound = 0;
+                 updateStats();
+                 lockBoard = true;
+                 gameActive = false;
+                 boardHasBeenSetUpAtLeastOnce = true;
+                 return;
+            }
+
+            const shuffledConcepts = shuffle([...availableConcepts]);
+            currentTotalPairsInRound = Math.min(MAX_PAIRS_DISPLAYED, shuffledConcepts.length);
+
+
+            if (currentTotalPairsInRound === 0) {
+                const messageText = (wordsUsedInAllRounds.size > 0 && availableConcepts.length === 0) ?
+                     'Все слова из выбранных тем использованы! Игра завершена.' :
+                     'Недостаточно слов для начала игры по выбранным темам (нужна хотя бы 1 пара).';
+                gameBoard.innerHTML = `<p class="game-board-message">${messageText}</p>`;
+                updateStats();
+                lockBoard = true;
+                gameActive = false;
+                boardHasBeenSetUpAtLeastOnce = true;
+                if (currentRound > 0 && selectedNumberOfRounds > 1 && availableConcepts.length === 0 && wordsUsedInAllRounds.size > 0) {
+                    showGameEndModal("Запас слов исчерпан!", "Вы использовали все доступные слова для выбранных тем.\nИгра завершена.");
+                    gameSubtitleRoundEl.textContent = `Раунд ${currentRound-1 > 0 ? currentRound-1 : 1}/${selectedNumberOfRounds} - Нет слов`;
+                    currentRound = 0;
+                } else if (currentRound > 0 && selectedNumberOfRounds > 1) {
+                    gameSubtitleRoundEl.textContent += ` - Ошибка: нет слов`;
+                }
+                return;
+            }
+
+            const conceptsForThisRound = shuffledConcepts.slice(0, currentTotalPairsInRound);
+
+            let gameCardsData = [];
+            conceptsForThisRound.forEach(pair => {
+                gameCardsData.push({ ...pair, type: 'ru', id: `ru-${pair.pairId}` });
+                gameCardsData.push({ ...pair, type: 'fr', id: `fr-${pair.pairId}` }); // Use 'fr' for French
+            });
+
+            shuffle(gameCardsData);
+
+            gameCardsData.forEach(data => {
+                const cardElement = createCardElement(data, data.type === 'fr'); // Check for 'fr' type
+                gameBoard.appendChild(cardElement);
+            });
+
+            const allCards = gameBoard.querySelectorAll('.memory-card');
+            if (gameMode === 'simple') {
+                allCards.forEach(cardEl => cardEl.classList.remove('is-flipped'));
+            } else {
+                allCards.forEach(cardEl => cardEl.classList.add('is-flipped'));
+            }
+
+            updateStats();
+            gameActive = true;
+            lockBoard = false;
+            boardHasBeenSetUpAtLeastOnce = true;
+        }
+
+
+        function handleCardClick() {
+            if (lockBoard || !gameActive || this.classList.contains('matched') || this === firstCard) {
+                return;
+            }
+
+            if (gameMode === 'memory' && this.classList.contains('is-flipped')) {
+                playSound('flip');
+                this.classList.remove('is-flipped');
+            } else if (gameMode === 'simple' && !this.classList.contains('is-flipped')){
+                if (!firstCard) playSound('flip');
+            }
+
+            if (moves === 0 && matches === 0 && !roundTimerInterval && gameActive) {
+                startRoundTimer();
+            }
+
+            this.classList.add('selected');
+
+            if (!firstCard) {
+                firstCard = this;
+                return;
+            }
+
+            secondCard = this;
+            if (firstCard && secondCard) playSound('flip');
+
+            moves++;
+            totalMovesAcrossAllRounds++;
+            updateStats();
+            lockBoard = true;
+
+            checkForMatch();
+        }
+
+        function checkForMatch() {
+            const isMatch = firstCard.dataset.pairId === secondCard.dataset.pairId && firstCard.dataset.lang !== secondCard.dataset.lang;
+
+            if (isMatch) {
+                playSound('match');
+                matches++;
+                updateStats();
+                firstCard.classList.remove('selected');
+                secondCard.classList.remove('selected');
+                firstCard.classList.add('matched');
+                secondCard.classList.add('matched');
+                resetTurn();
+                checkRoundWin();
+            } else {
+                playSound('noMatch');
+                firstCard.classList.add('incorrect');
+                secondCard.classList.add('incorrect');
+                setTimeout(() => {
+                    firstCard.classList.remove('selected', 'incorrect');
+                    secondCard.classList.remove('selected', 'incorrect');
+                    if (gameMode === 'memory') {
+                        firstCard.classList.add('is-flipped');
+                        secondCard.classList.add('is-flipped');
+                    }
+                    resetTurn();
+                }, 1000);
+            }
+        }
+
+        function resetTurn() {
+            firstCard = null;
+            secondCard = null;
+            lockBoard = !(matches < currentTotalPairsInRound && gameActive);
+        }
+
+        function updateStats() {
+            movesValueEl.textContent = moves;
+            matchesValueEl.textContent = `${matches}/${currentTotalPairsInRound}`;
+        }
+
+        function startRoundTimer() {
+            roundSecondsElapsed = 0;
+            timeValueEl.textContent = formatTime(roundSecondsElapsed);
+            clearInterval(roundTimerInterval);
+            roundTimerInterval = setInterval(() => {
+                if (gameActive) {
+                    roundSecondsElapsed++;
+                    totalTimeAcrossAllRounds++;
+                    timeValueEl.textContent = formatTime(roundSecondsElapsed);
+                } else {
+                    clearInterval(roundTimerInterval);
+                }
+            }, 1000);
+        }
+
+        function formatTime(totalSeconds) {
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        function checkRoundWin() {
+            if (matches === currentTotalPairsInRound && currentTotalPairsInRound > 0) {
+                clearInterval(roundTimerInterval);
+                gameActive = false;
+                lockBoard = true;
+                playSound('win');
+
+                const cardsInRound = Array.from(gameBoard.querySelectorAll('.memory-card.matched'));
+                const pairIdsInThisRound = new Set(cardsInRound.map(card => card.dataset.pairId.toString()));
+                pairIdsInThisRound.forEach(pid => wordsUsedInAllRounds.add(pid));
+
+                setTimeout(() => {
+                    proceedToNextRound();
+                }, 1500);
+            }
+        }
+
+        function handleSettingsChangeAndRestart() {
+            if (settingsDropdown.classList.contains('active')) settingsDropdown.classList.remove('active');
+            if (topicDropdown.classList.contains('active')) {
+                topicDropdown.classList.remove('active');
+                topicSelectorButton.classList.remove('open');
+            }
+            initGame();
+        }
+
+
+        function populateTopicDropdown() {
+            topicDropdown.innerHTML = '';
+            Object.keys(topicsData).forEach(key => {
+                const label = document.createElement('label');
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.value = key;
+                checkbox.name = 'topic-checkbox';
+                checkbox.checked = selectedTopics.includes(key);
+                checkbox.addEventListener('change', handleTopicSelectionChange);
+
+                label.appendChild(checkbox);
+                label.appendChild(document.createTextNode(topicsData[key]));
+                topicDropdown.appendChild(label);
+            });
+        }
+
+        function updateSelectedTopicsDisplay() {
+            topicCountDisplay.textContent = selectedTopics.length;
+        }
+
+
+        function handleTopicSelectionChange() {
+            const checkboxes = topicDropdown.querySelectorAll('input[type="checkbox"][name="topic-checkbox"]');
+            selectedTopics = [];
+            checkboxes.forEach(cb => {
+                if (cb.checked) {
+                    selectedTopics.push(cb.value);
+                }
+            });
+
+            if (selectedTopics.length === 0) {
+                selectedTopics.push('basics');
+                const basicsCheckbox = topicDropdown.querySelector('input[value="basics"]');
+                if (basicsCheckbox) basicsCheckbox.checked = true;
+
+                showGameEndModal("Внимание", "Должна быть выбрана хотя бы одна тема.<br>По умолчанию выбрана 'Основы'.");
+                modalPlayAgainBtn.style.display = 'none';
+                modalCloseBtn.textContent = 'OK';
+
+                const tempCloseHandler = () => {
+                    hideGameEndModal();
+                    modalPlayAgainBtn.style.display = '';
+                    modalCloseBtn.textContent = 'Закрыть';
+                    modalCloseBtn.removeEventListener('click', tempCloseHandler);
+                    modalCloseBtn.addEventListener('click', originalModalCloseBtnHandler); 
+                };
+                modalCloseBtn.removeEventListener('click', originalModalCloseBtnHandler); 
+                modalCloseBtn.addEventListener('click', tempCloseHandler);
+            }
+            updateSelectedTopicsDisplay();
+            handleSettingsChangeAndRestart();
+        }
+
+        topicSelectorButton.addEventListener('click', (event) => {
+            event.stopPropagation();
+            topicDropdown.classList.toggle('active');
+            topicSelectorButton.classList.toggle('open');
+            if (settingsDropdown.classList.contains('active')) {
+                settingsDropdown.classList.remove('active');
+            }
+        });
+
+
+        newGameButton.addEventListener('click', initGame);
+
+        menuButton.addEventListener('click', (event) => {
+            event.stopPropagation();
+            settingsDropdown.classList.toggle('active');
+            if (topicDropdown.classList.contains('active')) {
+                topicDropdown.classList.remove('active');
+                topicSelectorButton.classList.remove('open');
+            }
+        });
+
+        document.addEventListener('click', (event) => {
+            if (settingsDropdown && !settingsDropdown.contains(event.target) && menuButton && !menuButton.contains(event.target)) {
+                settingsDropdown.classList.remove('active');
+            }
+            if (topicDropdown && !topicDropdown.contains(event.target) && topicSelectorButton && !topicSelectorButton.contains(event.target)) {
+                topicDropdown.classList.remove('active');
+                topicSelectorButton.classList.remove('open');
+            }
+        });
+
+        soundToggle.addEventListener('change', () => {
+            soundEnabled = soundToggle.checked;
+            if (soundEnabled && audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+        });
+
+        darkModeToggle.addEventListener('change', () => {
+            isDarkMode = darkModeToggle.checked;
+            document.body.classList.toggle('dark-mode', isDarkMode);
+            localStorage.setItem('darkMode', isDarkMode);
+        });
+
+        gameModeToggle.addEventListener('change', () => {
+            gameMode = gameModeToggle.checked ? 'memory' : 'simple';
+            gameModeLabel.textContent = gameMode === 'memory' ? 'Память' : 'Простой';
+            handleSettingsChangeAndRestart();
+        });
+
+        roundsSelect.addEventListener('change', (e) => {
+            const newNumRounds = parseInt(e.target.value);
+            if (newNumRounds === selectedNumberOfRounds) return;
+
+            selectedNumberOfRounds = newNumRounds;
+            if (gameActive || currentRound > 0 || boardHasBeenSetUpAtLeastOnce) {
+                initGame();
+            } else {
+                updateGameSubtitles();
+            }
+        });
+
+
+        const loadDarkModePreference = () => {
+            const savedDarkMode = localStorage.getItem('darkMode');
+            const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            isDarkMode = savedDarkMode !== null ? savedDarkMode === 'true' : systemPrefersDark;
+            document.body.classList.toggle('dark-mode', isDarkMode);
+            if (darkModeToggle) darkModeToggle.checked = isDarkMode;
+        };
+
+        let originalModalCloseBtnHandler; 
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadDarkModePreference();
+            populateTopicDropdown();
+            updateSelectedTopicsDisplay();
+
+            soundToggle.checked = soundEnabled;
+            gameModeToggle.checked = gameMode === 'memory';
+            gameModeLabel.textContent = gameMode === 'memory' ? 'Память' : 'Простой';
+            roundsSelect.value = selectedNumberOfRounds;
+
+            updateGameSubtitles();
+            gameBoard.innerHTML = `<p class="game-board-message">Нажмите "Новая игра", чтобы начать.</p>`;
+            movesValueEl.textContent = '0';
+            matchesValueEl.textContent = `0/${MAX_PAIRS_DISPLAYED}`;
+            timeValueEl.textContent = formatTime(0);
+            lockBoard = true;
+            gameActive = false;
+
+            modalPlayAgainBtn.addEventListener('click', () => {
+                hideGameEndModal();
+                initGame();
+            });
+
+            originalModalCloseBtnHandler = () => {
+                 hideGameEndModal();
+                if (boardHasBeenSetUpAtLeastOnce && currentRound === 0) { 
+                    gameBoard.innerHTML = `<p class="game-board-message">Игра завершена. Нажмите "Новая игра", чтобы сыграть еще раз.</p>`;
+                } else if (!boardHasBeenSetUpAtLeastOnce) { 
+                     gameBoard.innerHTML = `<p class="game-board-message">Нажмите "Новая игра", чтобы начать.</p>`;
+                }
+            };
+            modalCloseBtn.addEventListener('click', originalModalCloseBtnHandler);
+
+            gameEndModal.addEventListener('click', (event) => {
+                if (event.target === gameEndModal) {
+                    modalCloseBtn.click(); 
+                }
+            });
+
+            if (aboutButton) {
+                aboutButton.addEventListener('click', showAboutModal);
+            }
+            if (aboutModalCloseBtn) {
+                aboutModalCloseBtn.addEventListener('click', hideAboutModal);
+            }
+            if (aboutModal) {
+                aboutModal.addEventListener('click', (event) => {
+                    if (event.target === aboutModal) {
+                        hideAboutModal();
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

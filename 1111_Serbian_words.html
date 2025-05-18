@@ -1,0 +1,2391 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1111 Сербских слов - Игра на Сопоставление</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #e8e3d9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            transition: background-color 0.3s ease; /* Smooth transition for dark mode */
+        }
+
+        /* Main Game Container */
+        .game-app {
+            width: 800px;
+            height: 650px;
+            background: linear-gradient(145deg, #eae5db, #dcd7cd);
+            border-radius: 20px;
+            box-shadow:
+                15px 15px 35px #c4c0b7,
+                -15px -15px 35px #fcf7ed;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Game Header */
+        .game-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 20px; /* Adjusted padding */
+            background: linear-gradient(145deg, #eae5db, #e0dbd1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: relative;
+            z-index: 2;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+            gap: 10px; /* Gap between header items */
+        }
+
+        .game-info {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0; /* Prevent title from shrinking too much */
+        }
+         .game-info-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .game-title {
+            font-weight: bold;
+            font-size: 20px;
+            color: #5a5346;
+            transition: color 0.3s ease;
+        }
+
+        .game-subtitle { /* General class for subtitles */
+            font-size: 12px;
+            color: #847c6f;
+            margin-top: 2px;
+            transition: color 0.3s ease;
+        }
+        #game-subtitle-mode { /* Specific ID for mode subtitle */
+             /* Inherits .game-subtitle styles */
+        }
+        #game-subtitle-round { /* Specific ID for round subtitle */
+            font-weight: 500;
+            /* Inherits .game-subtitle styles */
+        }
+
+
+        /* Topic Selector */
+        .topic-selector-container {
+            position: relative;
+            flex-grow: 1; /* Allow it to take available space */
+            display: flex;
+            justify-content: center;
+            min-width: 130px; /* Minimum width for the button */
+        }
+
+        .topic-button {
+            padding: 8px 12px;
+            border-radius: 10px;
+            background: linear-gradient(145deg, #e8e3d9, #d9d4ca);
+            box-shadow: 3px 3px 7px #c4c0b7, -3px -3px 7px #fcf7ed;
+            border: 1px solid rgba(173, 157, 124, 0.15);
+            color: #5a5346;
+            font-weight: 500;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 5px;
+            min-width: 120px;
+            text-align: left;
+        }
+        .topic-button:active {
+            box-shadow: inset 2px 2px 4px #c4c0b7, inset -2px -2px 4px #fcf7ed;
+        }
+        .topic-button .dropdown-arrow {
+            font-size: 10px;
+            transition: transform 0.3s ease;
+        }
+        .topic-button.open .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .topic-dropdown-content {
+            display: none;
+            position: absolute;
+            top: calc(100% + 5px);
+            left: 50%;
+            transform: translateX(-50%);
+            width: 220px;
+            background: linear-gradient(145deg, #e8e3d9, #dcd7cd);
+            box-shadow:
+                6px 6px 15px #c4c0b7,
+                -6px -6px 15px #fcf7ed;
+            border-radius: 10px;
+            padding: 10px;
+            z-index: 11;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .topic-dropdown-content.active {
+            display: flex;
+        }
+        .topic-dropdown-content label {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            color: #5a5346;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+        }
+        .topic-dropdown-content label:hover {
+            background-color: rgba(173, 157, 124, 0.1);
+        }
+        .topic-dropdown-content input[type="checkbox"] {
+            margin-right: 8px;
+            accent-color: #847c6f;
+        }
+
+        /* Rounds Selector */
+        .rounds-selector-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0; /* Prevent shrinking */
+            margin: 0 5px; /* Spacing from neighbors */
+        }
+        .rounds-label {
+            font-size: 13px;
+            color: #5a5346;
+            font-weight: 500;
+            white-space: nowrap;
+             transition: color 0.3s ease;
+        }
+        .rounds-select-dropdown {
+            padding: 7px 10px;
+            border-radius: 10px;
+            background: linear-gradient(145deg, #e8e3d9, #d9d4ca);
+            box-shadow: 3px 3px 7px #c4c0b7, -3px -3px 7px #fcf7ed;
+            border: 1px solid rgba(173, 157, 124, 0.15);
+            color: #5a5346;
+            font-weight: 500;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            outline: none;
+            min-width: 50px; /* Ensure it has some width */
+            text-align: center;
+        }
+        .rounds-select-dropdown:focus {
+            box-shadow: inset 1px 1px 2px #c4c0b7, inset -1px -1px 2px #fcf7ed,
+                        3px 3px 7px #c4c0b7, -3px -3px 7px #fcf7ed;
+        }
+
+
+        /* Menu Button */
+        .menu-button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #eae5db, #dcd7cd);
+            box-shadow: 4px 4px 8px #c4c0b7, -4px -4px 8px #fcf7ed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #5a5346;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        .menu-button:active {
+            box-shadow: inset 3px 3px 6px #c4c0b7, inset -3px -3px 6px #fcf7ed;
+        }
+
+        /* Settings Dropdown Panel */
+        .settings-dropdown {
+            position: absolute;
+            top: 70px; /* Below header */
+            right: 20px; /* Adjusted for header padding */
+            width: 280px;
+            padding: 15px;
+            background: linear-gradient(145deg, #e8e3d9, #dcd7cd);
+            box-shadow:
+                8px 8px 20px #c4c0b7,
+                -8px -8px 20px #fcf7ed;
+            border-radius: 15px;
+            z-index: 10;
+            display: none;
+            flex-direction: column;
+            gap: 15px;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+        }
+        .settings-dropdown.active {
+            display: flex;
+        }
+
+        .settings-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .settings-label {
+            font-size: 14px;
+            color: #5a5346;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        .game-mode-label-text {
+            font-size: 12px;
+            color: #847c6f;
+            margin-left: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .settings-action-button {
+            padding: 8px 15px;
+            border-radius: 10px;
+            background: linear-gradient(145deg, #e8e3d9, #d9d4ca);
+            box-shadow: 3px 3px 7px #c4c0b7, -3px -3px 7px #fcf7ed;
+            border: 1px solid rgba(173, 157, 124, 0.15);
+            color: #5a5346;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+            text-align: center;
+            margin-top: 5px; /* Optional: adds a bit of space if it's the last item */
+        }
+        .settings-action-button:active {
+            box-shadow: inset 2px 2px 4px #c4c0b7, inset -2px -2px 4px #fcf7ed;
+        }
+
+
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+        }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: #dcd7cd;
+            box-shadow: inset 2px 2px 4px #cbc6bd, inset -2px -2px 4px #f5f0e5;
+            border-radius: 34px;
+            transition: .4s;
+        }
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px; width: 20px;
+            left: 3px; bottom: 3px;
+            background: linear-gradient(145deg, #f0ebe1, #e0dbd1);
+            border-radius: 50%;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+            transition: .4s;
+        }
+        input:checked + .toggle-slider { background: linear-gradient(145deg, #d5ccb8, #c6bdaa); }
+        input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+            background: linear-gradient(145deg, #d9cebc, #c8beac);
+        }
+
+        /* Game Board */
+        .game-board {
+            flex: 1;
+            padding: 20px 25px;
+            background: linear-gradient(125deg, #e6e1d7, #dbd6cc);
+            box-shadow: inset 5px 5px 15px #cbc6bd, inset -5px -5px 15px #f5f0e5;
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 15px;
+            overflow: auto;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+        }
+         .game-board-message {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            grid-column: 1 / -1; /* Span all columns */
+            grid-row: 1 / -1;    /* Span all rows */
+            height: 100%;
+            font-size: 16px;
+            color: #5a5346;
+            padding: 20px;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+
+        /* Game Card - Flipping Structure */
+        .memory-card {
+            position: relative;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: box-shadow 0.3s;
+            perspective: 1000px;
+        }
+        .memory-card:hover:not(.matched) {
+            box-shadow:
+                7px 7px 20px #c4c0b7,
+                -7px -7px 20px #fcf7ed;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .memory-card.is-flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow:
+                5px 5px 15px #cbc6bd,
+                -5px -5px 15px #f5f0e5;
+            border: 1px solid rgba(173, 157, 124, 0.1);
+            overflow: hidden;
+            transition: background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+        .card-face::before {
+            content: "";
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: linear-gradient(60deg, transparent 35%, rgba(255, 215, 0, 0.04) 45%, rgba(255, 215, 0, 0.08) 50%, rgba(255, 215, 0, 0.04) 55%, transparent 65%);
+            transform: rotate(30deg);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .card-front {
+            background: linear-gradient(145deg, #e8e3d9, #d9d4ca);
+        }
+
+        .card-back {
+            background: linear-gradient(145deg, #d5ccb8, #c6bdaa);
+            transform: rotateY(180deg);
+            color: #5a5346;
+            font-size: 32px;
+            font-weight: bold;
+            transition: color 0.3s ease, background 0.3s ease;
+        }
+
+        .card-content {
+            padding: 10px;
+            text-align: center;
+            word-break: break-word;
+            font-size: 18px;
+            color: #5a5346;
+            font-weight: bold;
+            transition: color 0.3s;
+            position: relative;
+            z-index: 2;
+        }
+        /* Adjust font size for longer words */
+        .card-content.small-text { font-size: 14px; }
+        .card-content.x-small-text { font-size: 12px; }
+        .card-content.xx-small-text { font-size: 10px; } /* For very long terms like BDP */
+
+
+        .memory-card.is-flipped:active .card-back {
+             box-shadow:
+                inset 3px 3px 6px #cbc6bd,
+                inset -3px -3px 6px #f5f0e5,
+                3px 3px 10px #cbc6bd,
+                -3px -3px 10px #f5f0e5;
+        }
+        .memory-card:not(.is-flipped):active .card-front {
+             box-shadow:
+                inset 3px 3px 6px #cbc6bd,
+                inset -3px -3px 6px #f5f0e5,
+                3px 3px 10px #cbc6bd,
+                -3px -3px 10px #f5f0e5;
+        }
+
+        .memory-card.selected .card-front {
+            background: linear-gradient(145deg, #dad2c5, #cbc3b6);
+            box-shadow:
+                inset 4px 4px 8px #b5ac9a,
+                inset -4px -4px 8px #e5dcc8,
+                3px 3px 10px #cbc6bd,
+                -3px -3px 10px #f5f0e5;
+            border: 1px solid #ad9d7c;
+        }
+
+        .memory-card.matched {
+            cursor: default;
+        }
+        .memory-card.matched .card-front {
+            opacity: 0.65;
+            background: linear-gradient(145deg, #d1c9bd, #c2b8a8);
+            box-shadow:
+                inset 3px 3px 6px #b9b2a5,
+                inset -3px -3px 6px #e9e2d5;
+        }
+        .memory-card.matched .card-front .card-content {
+            color: #756e60;
+        }
+
+        .memory-card.incorrect {
+            animation: shake 0.5s;
+        }
+        .memory-card.incorrect:not(.is-flipped) .card-front {
+            background: linear-gradient(145deg, #eddcd2, #e3cdc2);
+        }
+        .memory-card.incorrect.is-flipped .card-back {
+             background: linear-gradient(145deg, #eddcd2, #e3cdc2);
+        }
+
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+        }
+
+        /* Game Stats Area */
+        .game-stats {
+            padding: 15px 25px;
+            background: linear-gradient(145deg, #e8e3d9, #dcd7cd);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(173, 157, 124, 0.1);
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.03);
+            position: relative;
+            z-index: 1;
+            transition: background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+        .stat-item { display: flex; flex-direction: column; align-items: center; }
+        .stat-label { font-size: 12px; color: #847c6f; transition: color 0.3s ease; }
+        .stat-value { font-size: 16px; font-weight: bold; color: #5a5346; transition: color 0.3s ease; }
+
+        .new-game-button {
+            padding: 10px 20px;
+            border-radius: 15px;
+            background: linear-gradient(145deg, #d9cebc, #c8beac);
+            box-shadow: 4px 4px 8px #b5ac9a, -4px -4px 8px #e5dcc8;
+            border: 1px solid rgba(173, 157, 124, 0.2);
+            color: #5a5346;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        .new-game-button:active { box-shadow: inset 3px 3px 6px #b5ac9a, inset -3px -3px 6px #e5dcc8; }
+        .new-game-button::before {
+            content: ""; position: absolute; inset: -1px; border-radius: inherit;
+            background: linear-gradient(135deg, transparent 30%, rgba(255, 215, 0, 0.15) 50%, transparent 70%);
+            opacity: 0; transition: opacity 0.3s; z-index: -1; pointer-events: none;
+        }
+        .new-game-button:hover::before { opacity: 1; }
+
+        /* Custom Scrollbar */
+        .game-board::-webkit-scrollbar { width: 8px; }
+        .game-board::-webkit-scrollbar-track { background: transparent; margin: 5px 0; }
+        .game-board::-webkit-scrollbar-thumb { background-color: #c5bdab; border-radius: 10px; border: 2px solid transparent; transition: background-color 0.3s ease;}
+        .game-board::-webkit-scrollbar-thumb:hover { background-color: #b9b1a0; }
+
+        /* Golden shimmer effect for game-app */
+        .game-app::before {
+            content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(45deg, transparent 0%, rgba(255, 215, 0, 0.03) 25%, rgba(255, 215, 0, 0.06) 50%, rgba(255, 215, 0, 0.03) 75%, transparent 100%);
+            border-radius: 20px; z-index: 0; pointer-events: none;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(90, 83, 70, 0.65); /* Darker beige overlay */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+            padding: 20px;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.3s ease, visibility 0s linear 0s;
+        }
+
+        .modal-content-wrapper {
+            background: linear-gradient(145deg, #eae5db, #dcd7cd);
+            border-radius: 20px;
+            box-shadow:
+                15px 15px 35px #c4c0b7,
+                -15px -15px 35px #fcf7ed;
+            padding: 25px 30px;
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+            transform: scale(0.9);
+            transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+            color: #5a5346;
+        }
+        .modal-overlay.active .modal-content-wrapper {
+            transform: scale(1);
+        }
+
+        .modal-content-wrapper h3 {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #5a5346;
+             transition: color 0.3s ease;
+        }
+        .modal-content-wrapper p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            white-space: pre-line; /* To respect \n in message from JS */
+             transition: color 0.3s ease;
+        }
+        .modal-content-wrapper p .modal-link {
+            color: #4a4336; /* Darker than main text for emphasis */
+            text-decoration: underline;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        .modal-content-wrapper p .modal-link:hover {
+            color: #3a3326;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap; /* Allow buttons to wrap on smaller modal */
+        }
+        #modal-close-btn { /* Slightly less prominent style */
+            background: linear-gradient(145deg, #e8e3d9, #d9d4ca);
+            box-shadow: 3px 3px 7px #c4c0b7, -3px -3px 7px #fcf7ed;
+        }
+        #modal-close-btn:active {
+            box-shadow: inset 2px 2px 4px #c4c0b7, inset -2px -2px 4px #fcf7ed;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 850px) {
+            .game-app { width: 95%; height: 90vh; }
+            .game-board { grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(4, 1fr); }
+            .settings-dropdown { width: 250px; right: 15px; }
+            .topic-selector-container { min-width: 120px; }
+            .topic-button { font-size: 12px; padding: 8px 10px; min-width: 110px; }
+            .rounds-selector-container { margin: 0; }
+            .rounds-label { font-size: 12px; }
+            .rounds-select-dropdown { font-size: 12px; padding: 7px 8px; min-width: 40px; }
+            .game-header { padding: 10px 15px; gap: 5px;}
+        }
+        @media (max-width: 680px) { /* Header items wrap */
+            .game-header { flex-wrap: wrap; justify-content: space-between; padding: 10px 15px;}
+            .game-info { order: 1; width: calc(100% - 50px); /* Title takes most width, leaves space for menu btn */}
+            .menu-button { order: 2; width: 35px; height: 35px; font-size: 18px;}
+            .topic-selector-container { order: 3; width: calc(50% - 5px); margin-top: 10px; justify-content: flex-start; }
+            .rounds-selector-container { order: 4; width: calc(50% - 5px); margin-top: 10px; justify-content: flex-end; }
+        }
+
+        @media (max-width: 576px) {
+             /* .game-header inherited from 680px */
+            .game-info { width: calc(100% - 45px); }
+            .topic-selector-container { width: 100%; justify-content: center; }
+            .rounds-selector-container { width: 100%; margin-top: 8px; justify-content: center; }
+
+            .game-app { height: auto; min-height: 85vh; }
+            .game-board { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(6, 1fr); gap: 10px; padding: 15px; }
+            .game-stats { flex-wrap: wrap; gap: 10px; justify-content: center; padding: 10px 15px; }
+            .stat-item { flex: 0 0 40%; align-items: center; }
+            .new-game-button { flex-basis: 100%; margin-top: 10px; }
+            .game-title { font-size: 18px; }
+            .game-subtitle { font-size: 11px; }
+             #game-subtitle-round { font-size: 11px; }
+            .card-content { font-size: 14px; }
+            .card-content.small-text { font-size: 12px; }
+            .card-content.x-small-text { font-size: 11px; }
+            .card-content.xx-small-text { font-size: 10px;}
+            .settings-dropdown { top: 60px; width: calc(100% - 30px); right: 15px; left: 15px; }
+            .topic-dropdown-content { width: calc(100% - 30px); }
+            .modal-content-wrapper { padding: 20px; }
+            .modal-content-wrapper h3 { font-size: 20px; }
+            .modal-content-wrapper p { font-size: 14px; }
+            .modal-buttons .new-game-button { flex-basis: 100%; } /* Stack buttons on small screens */
+        }
+
+        /* Dark Mode Styles */
+        body.dark-mode {
+            background-color: #2c2c2c;
+        }
+
+        .dark-mode .game-app {
+            background: linear-gradient(145deg, #454545, #3b3b3b);
+            box-shadow:
+                15px 15px 35px #252525,
+                -15px -15px 35px #515151;
+        }
+        .dark-mode .game-app::before {
+             background: linear-gradient(45deg, transparent 0%, rgba(255, 255, 255, 0.02) 25%, rgba(255, 255, 255, 0.04) 50%, rgba(255, 255, 255, 0.02) 75%, transparent 100%);
+        }
+
+        .dark-mode .game-header {
+            background: linear-gradient(145deg, #424242, #383838);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        .dark-mode .game-title { color: #d1d1d1; }
+        .dark-mode .game-subtitle { color: #9e9e9e; }
+
+        .dark-mode .topic-button {
+            background: linear-gradient(145deg, #4f4f4f, #454545);
+            box-shadow: 3px 3px 7px #252525, -3px -3px 7px #515151;
+            border: 1px solid rgba(100, 100, 100, 0.15);
+            color: #d1d1d1;
+        }
+        .dark-mode .topic-button:active {
+            box-shadow: inset 2px 2px 4px #252525, inset -2px -2px 4px #515151;
+        }
+        .dark-mode .topic-dropdown-content {
+            background: linear-gradient(145deg, #404040, #363636);
+            box-shadow: 6px 6px 15px #222222, -6px -6px 15px #4e4e4e;
+        }
+        .dark-mode .topic-dropdown-content label {
+            color: #c0c0c0;
+        }
+        .dark-mode .topic-dropdown-content label:hover {
+            background-color: rgba(100, 100, 100, 0.1);
+        }
+        .dark-mode .topic-dropdown-content input[type="checkbox"] {
+            accent-color: #707070;
+        }
+
+        .dark-mode .rounds-label { color: #c0c0c0; }
+        .dark-mode .rounds-select-dropdown {
+            background: linear-gradient(145deg, #4f4f4f, #454545);
+            box-shadow: 3px 3px 7px #252525, -3px -3px 7px #515151;
+            border: 1px solid rgba(100, 100, 100, 0.15);
+            color: #d1d1d1;
+        }
+        .dark-mode .rounds-select-dropdown:focus {
+             box-shadow: inset 1px 1px 2px #252525, inset -1px -1px 2px #515151,
+                        3px 3px 7px #252525, -3px -3px 7px #515151;
+        }
+
+
+        .dark-mode .menu-button {
+            background: linear-gradient(145deg, #454545, #3b3b3b);
+            box-shadow: 4px 4px 8px #252525, -4px -4px 8px #515151;
+            color: #d1d1d1;
+        }
+        .dark-mode .menu-button:active {
+            box-shadow: inset 3px 3px 6px #252525, inset -3px -3px 6px #515151;
+        }
+
+        .dark-mode .settings-dropdown {
+            background: linear-gradient(145deg, #404040, #363636);
+            box-shadow:
+                8px 8px 20px #222222,
+                -8px -8px 20px #4e4e4e;
+        }
+        .dark-mode .settings-label { color: #c0c0c0; }
+        .dark-mode .game-mode-label-text { color: #909090; }
+        .dark-mode .settings-action-button {
+            background: linear-gradient(145deg, #4f4f4f, #454545);
+            box-shadow: 3px 3px 7px #252525, -3px -3px 7px #515151;
+            border: 1px solid rgba(100, 100, 100, 0.15);
+            color: #d1d1d1;
+        }
+        .dark-mode .settings-action-button:active {
+            box-shadow: inset 2px 2px 4px #252525, inset -2px -2px 4px #515151;
+        }
+
+        .dark-mode .toggle-slider {
+            background: #3a3a3a;
+            box-shadow: inset 2px 2px 4px #2d2d2d, inset -2px -2px 4px #474747;
+        }
+        .dark-mode .toggle-slider:before {
+            background: linear-gradient(145deg, #525252, #484848);
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        }
+        .dark-mode input:checked + .toggle-slider {
+            background: linear-gradient(145deg, #507a50, #406a40);
+        }
+        .dark-mode input:checked + .toggle-slider:before {
+            background: linear-gradient(145deg, #608a60, #507a50);
+        }
+
+        .dark-mode .game-board {
+            background: linear-gradient(125deg, #3f3f3f, #353535);
+            box-shadow: inset 5px 5px 15px #2a2a2a, inset -5px -5px 15px #4a4a4a;
+        }
+        .dark-mode .game-board::-webkit-scrollbar-thumb { background-color: #5a5a5a; }
+        .dark-mode .game-board::-webkit-scrollbar-thumb:hover { background-color: #6a6a6a; }
+        .dark-mode .game-board-message {
+            color: #c0c0c0;
+        }
+
+
+        .dark-mode .memory-card:hover:not(.matched) {
+            box-shadow:
+                7px 7px 20px #232323,
+                -7px -7px 20px #4f4f4f;
+        }
+
+        .dark-mode .card-face {
+            box-shadow:
+                5px 5px 15px #282828,
+                -5px -5px 15px #484848;
+            border: 1px solid rgba(100, 100, 100, 0.1);
+        }
+        .dark-mode .card-face::before {
+            background: linear-gradient(60deg, transparent 35%, rgba(255, 255, 255, 0.02) 45%, rgba(255, 255, 255, 0.04) 50%, rgba(255, 255, 255, 0.02) 55%, transparent 65%);
+        }
+        .dark-mode .card-front {
+            background: linear-gradient(145deg, #4f4f4f, #454545);
+        }
+        .dark-mode .card-back {
+            background: linear-gradient(145deg, #4a4a4a, #404040);
+            color: #c0c0c0;
+        }
+        .dark-mode .card-content {
+            color: #dcdcdc;
+        }
+
+        .dark-mode .memory-card.is-flipped:active .card-back {
+             box-shadow:
+                inset 3px 3px 6px #282828,
+                inset -3px -3px 6px #484848,
+                3px 3px 10px #282828,
+                -3px -3px 10px #484848;
+        }
+         .dark-mode .memory-card:not(.is-flipped):active .card-front {
+             box-shadow:
+                inset 3px 3px 6px #282828,
+                inset -3px -3px 6px #484848,
+                3px 3px 10px #282828,
+                -3px -3px 10px #484848;
+        }
+
+        .dark-mode .memory-card.selected .card-front {
+            background: linear-gradient(145deg, #4a4a4a, #404040);
+            box-shadow:
+                inset 4px 4px 8px #2d2d2d,
+                inset -4px -4px 8px #575757,
+                3px 3px 10px #282828,
+                -3px -3px 10px #484848;
+            border: 1px solid #707070;
+        }
+
+        .dark-mode .memory-card.matched .card-front {
+            opacity: 0.7;
+            background: linear-gradient(145deg, #3e3e3e, #343434);
+            box-shadow:
+                inset 3px 3px 6px #242424,
+                inset -3px -3px 6px #444444;
+        }
+        .dark-mode .memory-card.matched .card-front .card-content {
+            color: #888888;
+        }
+
+        .dark-mode .memory-card.incorrect:not(.is-flipped) .card-front {
+            background: linear-gradient(145deg, #5c4545, #523b3b);
+        }
+        .dark-mode .memory-card.incorrect.is-flipped .card-back {
+             background: linear-gradient(145deg, #5c4545, #523b3b);
+        }
+
+        .dark-mode .game-stats {
+            background: linear-gradient(145deg, #404040, #363636);
+            border-top: 1px solid rgba(100, 100, 100, 0.15);
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.15);
+        }
+        .dark-mode .stat-label { color: #a0a0a0; }
+        .dark-mode .stat-value { color: #dcdcdc; }
+
+        .dark-mode .new-game-button {
+            background: linear-gradient(145deg, #585858, #4e4e4e);
+            box-shadow: 4px 4px 8px #2a2a2a, -4px -4px 8px #626262;
+            border: 1px solid rgba(100, 100, 100, 0.2);
+            color: #dcdcdc;
+        }
+        .dark-mode .new-game-button:active {
+            box-shadow: inset 3px 3px 6px #2a2a2a, inset -3px -3px 6px #626262;
+        }
+        .dark-mode .new-game-button::before {
+            background: linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.06) 50%, transparent 70%);
+        }
+
+        /* Dark Mode Modal Styles */
+        .dark-mode .modal-overlay {
+            background-color: rgba(20, 20, 20, 0.75); /* Darker overlay for dark mode */
+        }
+        .dark-mode .modal-content-wrapper {
+            background: linear-gradient(145deg, #454545, #3b3b3b);
+            box-shadow:
+                15px 15px 35px #252525,
+                -15px -15px 35px #515151;
+            color: #d1d1d1;
+        }
+        .dark-mode .modal-content-wrapper h3 {
+            color: #d1d1d1;
+        }
+         .dark-mode .modal-content-wrapper p .modal-link {
+            color: #e1e1e1;
+        }
+        .dark-mode .modal-content-wrapper p .modal-link:hover {
+            color: #f1f1f1;
+        }
+        .dark-mode #modal-close-btn {
+            background: linear-gradient(145deg, #4f4f4f, #454545); /* Dark mode specific for close button */
+            box-shadow: 3px 3px 7px #252525, -3px -3px 7px #515151;
+            color: #d1d1d1;
+        }
+        .dark-mode #modal-close-btn:active {
+            box-shadow: inset 2px 2px 4px #252525, inset -2px -2px 4px #515151;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="game-app">
+        <div class="game-header">
+            <div class="game-info">
+                <div class="game-info-text">
+                    <div class="game-title">1111 Сербских слов</div>
+                    <div class="game-subtitle" id="game-subtitle-mode">Сопоставьте слова с переводом</div>
+                    <div class="game-subtitle" id="game-subtitle-round"></div>
+                </div>
+            </div>
+            <div class="topic-selector-container">
+                <button id="topic-selector-button" class="topic-button">
+                    Темы (<span id="topic-count-display">1</span>)
+                    <span class="dropdown-arrow">▼</span>
+                </button>
+                <div id="topic-dropdown" class="topic-dropdown-content">
+                    <!-- Checkboxes will be generated by JS -->
+                </div>
+            </div>
+             <div class="rounds-selector-container">
+                <label for="rounds-select" class="rounds-label">Раунды:</label>
+                <select id="rounds-select" class="rounds-select-dropdown">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            <div class="menu-button" id="menu-button" title="Настройки">
+                ⋮ <!-- Vertical ellipsis -->
+            </div>
+        </div>
+
+        <div class="settings-dropdown" id="settings-dropdown">
+            <div class="settings-row">
+                <div class="settings-label">Режим игры</div>
+                <div style="display: flex; align-items: center;">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="game-mode-toggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <span class="game-mode-label-text" id="game-mode-label">Простой</span>
+                </div>
+            </div>
+            <div class="settings-row">
+                <div class="settings-label">Звук</div>
+                <label class="toggle-switch">
+                    <input type="checkbox" checked id="sound-toggle">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="settings-row">
+                <div class="settings-label" id="script-toggle-label">Латиница</div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="cyrillic-toggle">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="settings-row">
+                <div class="settings-label">Темная тема</div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="dark-mode-toggle">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="settings-row"> <!-- Container for the full-width button -->
+                <button id="about-button" class="settings-action-button">О программе</button>
+            </div>
+        </div>
+
+        <div class="game-board"></div>
+
+        <div class="game-stats">
+            <div class="stat-item">
+                <div class="stat-label">Ходы</div>
+                <div class="stat-value" id="moves-value">0</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Пары</div>
+                <div class="stat-value" id="matches-value">0/0</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Время</div>
+                <div class="stat-value" id="time-value">00:00</div>
+            </div>
+            <button class="new-game-button" id="new-game-btn">Новая игра</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="game-end-modal">
+        <div class="modal-content-wrapper">
+            <h3 id="modal-title"></h3>
+            <p id="modal-message-text"></p>
+            <div class="modal-buttons">
+                <button id="modal-play-again-btn" class="new-game-button">Играть снова</button>
+                <button id="modal-close-btn" class="new-game-button">Закрыть</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="about-modal">
+        <div class="modal-content-wrapper">
+            <h3 id="about-modal-title">О программе</h3>
+            <p id="about-modal-message-text-content"></p> <!-- Changed ID to be unique -->
+            <div class="modal-buttons">
+                <button id="about-modal-close-btn" class="new-game-button">Закрыть</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const gameBoard = document.querySelector('.game-board');
+        const movesValueEl = document.getElementById('moves-value');
+        const matchesValueEl = document.getElementById('matches-value');
+        const timeValueEl = document.getElementById('time-value');
+        const newGameButton = document.getElementById('new-game-btn');
+
+        const menuButton = document.getElementById('menu-button');
+        const settingsDropdown = document.getElementById('settings-dropdown');
+        const soundToggle = document.getElementById('sound-toggle');
+        const cyrillicToggle = document.getElementById('cyrillic-toggle');
+        const scriptToggleLabel = document.getElementById('script-toggle-label');
+        const gameModeToggle = document.getElementById('game-mode-toggle');
+        const gameModeLabel = document.getElementById('game-mode-label');
+        const gameSubtitleModeEl = document.getElementById('game-subtitle-mode');
+        const gameSubtitleRoundEl = document.getElementById('game-subtitle-round');
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+
+        const topicSelectorButton = document.getElementById('topic-selector-button');
+        const topicDropdown = document.getElementById('topic-dropdown');
+        const topicCountDisplay = document.getElementById('topic-count-display');
+        const roundsSelect = document.getElementById('rounds-select');
+
+        // Game End Modal Elements
+        const gameEndModal = document.getElementById('game-end-modal');
+        const modalTitleEl = document.getElementById('modal-title');
+        const modalMessageTextEl = document.getElementById('modal-message-text');
+        const modalPlayAgainBtn = document.getElementById('modal-play-again-btn');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
+
+        // About Modal Elements
+        const aboutButton = document.getElementById('about-button');
+        const aboutModal = document.getElementById('about-modal');
+        // const aboutModalTitleEl = document.getElementById('about-modal-title'); // Title is static in HTML
+        const aboutModalMessageTextContentEl = document.getElementById('about-modal-message-text-content');
+        const aboutModalCloseBtn = document.getElementById('about-modal-close-btn');
+
+
+        let audioCtx;
+
+        let firstCard = null;
+        let secondCard = null;
+        let lockBoard = true;
+        let gameActive = false;
+        let boardHasBeenSetUpAtLeastOnce = false;
+
+        // Per-round stats
+        let moves = 0;
+        let matches = 0;
+        let roundTimerInterval;
+        let roundSecondsElapsed = 0;
+
+        // Multi-round game stats & state
+        let selectedNumberOfRounds = 1;
+        let currentRound = 0;
+        let wordsUsedInAllRounds = new Set();
+        let totalMovesAcrossAllRounds = 0;
+        let totalTimeAcrossAllRounds = 0;
+
+
+        const MAX_PAIRS_DISPLAYED = 6;
+        let currentTotalPairsInRound = 0;
+
+        let useCyrillic = false;
+        let soundEnabled = true;
+        let gameMode = 'simple';
+        let isDarkMode = false;
+
+        const topicsData = {
+            basics: "Основы",
+            food: "Еда/Рестораны",
+            travel: "Путешествия",
+            tech: "Техника/Компьютеры",
+            business: "Бизнес/Экономика"
+        };
+        let selectedTopics = ['basics'];
+
+        // --- WORD LISTS (EXPANDED TO 1111 words total) ---
+        // Basics: 311 words
+        // Food, Travel, Tech, Business: 200 words each
+
+        const basicsWords = [
+            // Original 100 words (pairId: 1-100)
+            { ru: "Привет", sr_latin: "Zdravo", sr_cyrillic: "Здраво", pairId: 1 }, { ru: "Спасибо", sr_latin: "Hvala", sr_cyrillic: "Хвала", pairId: 2 }, { ru: "Пожалуйста", sr_latin: "Molim", sr_cyrillic: "Молим", pairId: 3 }, { ru: "Да", sr_latin: "Da", sr_cyrillic: "Да", pairId: 4 }, { ru: "Нет", sr_latin: "Ne", sr_cyrillic: "Не", pairId: 5 }, { ru: "Доброе утро", sr_latin: "Dobro jutro", sr_cyrillic: "Добро јутро", pairId: 6 }, { ru: "Добрый день", sr_latin: "Dobar dan", sr_cyrillic: "Добар дан", pairId: 7 }, { ru: "Добрый вечер", sr_latin: "Dobro veče", sr_cyrillic: "Добро вече", pairId: 8 }, { ru: "До свидания", sr_latin: "Doviđenja", sr_cyrillic: "Довиђења", pairId: 9 }, { ru: "Как дела?", sr_latin: "Kako si?", sr_cyrillic: "Како си?", pairId: 10 }, { ru: "Хорошо", sr_latin: "Dobro", sr_cyrillic: "Добро", pairId: 11 }, { ru: "Плохо", sr_latin: "Loše", sr_cyrillic: "Лоше", pairId: 12 }, { ru: "Извините", sr_latin: "Izvini", sr_cyrillic: "Извини", pairId: 13 }, { ru: "Я не понимаю", sr_latin: "Ne razumem", sr_cyrillic: "Не разумем", pairId: 14 }, { ru: "Помощь", sr_latin: "Pomoć", sr_cyrillic: "Помоћ", pairId: 15 },
+            { ru: "Мама", sr_latin: "Mama", sr_cyrillic: "Мама", pairId: 16 }, { ru: "Папа", sr_latin: "Tata", sr_cyrillic: "Тата", pairId: 17 }, { ru: "Брат", sr_latin: "Brat", sr_cyrillic: "Брат", pairId: 18 }, { ru: "Сестра", sr_latin: "Sestra", sr_cyrillic: "Сестра", pairId: 19 }, { ru: "Сын", sr_latin: "Sin", sr_cyrillic: "Син", pairId: 20 }, { ru: "Дочь", sr_latin: "Ćerka", sr_cyrillic: "Ћерка", pairId: 21 }, { ru: "Муж", sr_latin: "Muž", sr_cyrillic: "Муж", pairId: 22 }, { ru: "Жена", sr_latin: "Žena", sr_cyrillic: "Жена", pairId: 23 }, { ru: "Ребенок", sr_latin: "Dete", sr_cyrillic: "Дете", pairId: 24 }, { ru: "Семья", sr_latin: "Porodica", sr_cyrillic: "Породица", pairId: 25 }, { ru: "Друг", sr_latin: "Prijatelj", sr_cyrillic: "Пријатељ", pairId: 26 }, { ru: "Подруга", sr_latin: "Prijateljica", sr_cyrillic: "Пријатељица", pairId: 27 }, { ru: "Бабушка", sr_latin: "Baba", sr_cyrillic: "Баба", pairId: 28 }, { ru: "Дедушка", sr_latin: "Deda", sr_cyrillic: "Деда", pairId: 29 }, { ru: "Человек", sr_latin: "Čovek", sr_cyrillic: "Човек", pairId: 30 },
+            { ru: "Вода", sr_latin: "Voda", sr_cyrillic: "Вода", pairId: 31 }, { ru: "Еда", sr_latin: "Hrana", sr_cyrillic: "Храна", pairId: 32 }, { ru: "Хлеб", sr_latin: "Hleb", sr_cyrillic: "Хлеб", pairId: 33 }, { ru: "Молоко", sr_latin: "Mleko", sr_cyrillic: "Млеко", pairId: 34 }, { ru: "Сыр", sr_latin: "Sir", sr_cyrillic: "Сир", pairId: 35 }, { ru: "Мясо", sr_latin: "Meso", sr_cyrillic: "Месо", pairId: 36 }, { ru: "Рыба", sr_latin: "Riba", sr_cyrillic: "Риба", pairId: 37 }, { ru: "Фрукты", sr_latin: "Voće", sr_cyrillic: "Воће", pairId: 38 }, { ru: "Овощи", sr_latin: "Povrće", sr_cyrillic: "Поврће", pairId: 39 }, { ru: "Кофе", sr_latin: "Kafa", sr_cyrillic: "Кафа", pairId: 40 }, { ru: "Чай", sr_latin: "Čaj", sr_cyrillic: "Чај", pairId: 41 }, { ru: "Сахар", sr_latin: "Šećer", sr_cyrillic: "Шећер", pairId: 42 }, { ru: "Соль", sr_latin: "So", sr_cyrillic: "Со", pairId: 43 }, { ru: "Завтрак", sr_latin: "Doručak", sr_cyrillic: "Доручак", pairId: 44 }, { ru: "Обед", sr_latin: "Ručak", sr_cyrillic: "Ручак", pairId: 45 }, { ru: "Ужин", sr_latin: "Večera", sr_cyrillic: "Вечера", pairId: 46 }, { ru: "Яблоко", sr_latin: "Jabuka", sr_cyrillic: "Јабука", pairId: 47 }, { ru: "Апельсин", sr_latin: "Pomorandža", sr_cyrillic: "Поморанџа", pairId: 48 }, { ru: "Картофель", sr_latin: "Krompir", sr_cyrillic: "Кромпир", pairId: 49 }, { ru: "Сок", sr_latin: "Sok", sr_cyrillic: "Сок", pairId: 50 },
+            { ru: "Дом", sr_latin: "Kuća", sr_cyrillic: "Кућа", pairId: 51 }, { ru: "Квартира", sr_latin: "Stan", sr_cyrillic: "Стан", pairId: 52 }, { ru: "Комната", sr_latin: "Soba", sr_cyrillic: "Соба", pairId: 53 }, { ru: "Кровать", sr_latin: "Krevet", sr_cyrillic: "Кревет", pairId: 54 }, { ru: "Стол", sr_latin: "Sto", sr_cyrillic: "Сто", pairId: 55 }, { ru: "Стул", sr_latin: "Stolica", sr_cyrillic: "Столица", pairId: 56 }, { ru: "Дверь", sr_latin: "Vrata", sr_cyrillic: "Врата", pairId: 57 }, { ru: "Окно", sr_latin: "Prozor", sr_cyrillic: "Прозор", pairId: 58 }, { ru: "Книга", sr_latin: "Knjiga", sr_cyrillic: "Књига", pairId: 59 }, { ru: "Телефон", sr_latin: "Telefon", sr_cyrillic: "Телефон", pairId: 60 }, { ru: "Компьютер", sr_latin: "Računar", sr_cyrillic: "Рачунар", pairId: 61 }, { ru: "Телевизор", sr_latin: "Televizor", sr_cyrillic: "Телевизор", pairId: 62 }, { ru: "Машина", sr_latin: "Auto", sr_cyrillic: "Ауто", pairId: 63 }, { ru: "Деньги", sr_latin: "Novac", sr_cyrillic: "Новац", pairId: 64 }, { ru: "Часы", sr_latin: "Sat", sr_cyrillic: "Сат", pairId: 65 }, { ru: "Ключ", sr_latin: "Ključ", sr_cyrillic: "Кључ", pairId: 66 }, { ru: "Сумка", sr_latin: "Torba", sr_cyrillic: "Торба", pairId: 67 }, { ru: "Одежда", sr_latin: "Odeća", sr_cyrillic: "Одећа", pairId: 68 }, { ru: "Обувь", sr_latin: "Obuća", sr_cyrillic: "Обућа", pairId: 69 }, { ru: "Свет", sr_latin: "Svetlo", sr_cyrillic: "Светло", pairId: 70 },
+            { ru: "Город", sr_latin: "Grad", sr_cyrillic: "Град", pairId: 71 }, { ru: "Улица", sr_latin: "Ulica", sr_cyrillic: "Улица", pairId: 72 }, { ru: "Магазин", sr_latin: "Prodavnica", sr_cyrillic: "Продавница", pairId: 73 }, { ru: "Рынок", sr_latin: "Pijaca", sr_cyrillic: "Пијаца", pairId: 74 }, { ru: "Школа", sr_latin: "Škola", sr_cyrillic: "Школа", pairId: 75 }, { ru: "Больница", sr_latin: "Bolnica", sr_cyrillic: "Болница", pairId: 76 }, { ru: "Аптека", sr_latin: "Apoteka", sr_cyrillic: "Апотека", pairId: 77 }, { ru: "Ресторан", sr_latin: "Restoran", sr_cyrillic: "Ресторан", pairId: 78 }, { ru: "Кафе", sr_latin: "Kafić", sr_cyrillic: "Кафић", pairId: 79 }, { ru: "Парк", sr_latin: "Park", sr_cyrillic: "Парк", pairId: 80 }, { ru: "Работа", sr_latin: "Posao", sr_cyrillic: "Посао", pairId: 81 }, { ru: "Банк", sr_latin: "Banka", sr_cyrillic: "Банка", pairId: 82 }, { ru: "Почта", sr_latin: "Pošta", sr_cyrillic: "Пошта", pairId: 83 }, { ru: "Отель", sr_latin: "Hotel", sr_cyrillic: "Хотел", pairId: 84 }, { ru: "Туалет", sr_latin: "Toalet", sr_cyrillic: "Тоалет", pairId: 85 },
+            { ru: "Быть", sr_latin: "Biti", sr_cyrillic: "Бити", pairId: 86 }, { ru: "Иметь", sr_latin: "Imati", sr_cyrillic: "Имати", pairId: 87 }, { ru: "Делать", sr_latin: "Raditi", sr_cyrillic: "Радити", pairId: 88 }, { ru: "Идти", sr_latin: "Ići", sr_cyrillic: "Ићи", pairId: 89 }, { ru: "Говорить", sr_latin: "Govoriti", sr_cyrillic: "Говорити", pairId: 90 }, { ru: "Видеть", sr_latin: "Videti", sr_cyrillic: "Видети", pairId: 91 }, { ru: "Слышать", sr_latin: "Čuti", sr_cyrillic: "Чути", pairId: 92 }, { ru: "Хотеть", sr_latin: "Hteti", sr_cyrillic: "Хтети", pairId: 93 }, { ru: "Мочь", sr_latin: "Moći", sr_cyrillic: "Моћи", pairId: 94 }, { ru: "Жить", sr_latin: "Živeti", sr_cyrillic: "Живети", pairId: 95 }, { ru: "Любить", sr_latin: "Voleti", sr_cyrillic: "Волети", pairId: 96 }, { ru: "Есть (кушать)", sr_latin: "Jesti", sr_cyrillic: "Јести", pairId: 97 }, { ru: "Пить", sr_latin: "Piti", sr_cyrillic: "Пити", pairId: 98 }, { ru: "Спать", sr_latin: "Spavati", sr_cyrillic: "Спавати", pairId: 99 }, { ru: "Читать", sr_latin: "Čitati", sr_cyrillic: "Читати", pairId: 100 },
+            // New 211 words for "Basics" (pairId: 501-711)
+            { ru: "Один", sr_latin: "Jedan", sr_cyrillic: "Један", pairId: 501 },
+            { ru: "Два", sr_latin: "Dva", sr_cyrillic: "Два", pairId: 502 },
+            { ru: "Три", sr_latin: "Tri", sr_cyrillic: "Три", pairId: 503 },
+            { ru: "Цвет", sr_latin: "Boja", sr_cyrillic: "Боја", pairId: 504 },
+            { ru: "Сегодня", sr_latin: "Danas", sr_cyrillic: "Данас", pairId: 505 },
+            { ru: "Вчера", sr_latin: "Juče", sr_cyrillic: "Јуче", pairId: 506 },
+            { ru: "Завтра", sr_latin: "Sutra", sr_cyrillic: "Сутра", pairId: 507 },
+            { ru: "Неделя", sr_latin: "Nedelja", sr_cyrillic: "Недеља", pairId: 508 },
+            { ru: "Месяц", sr_latin: "Mesec", sr_cyrillic: "Месец", pairId: 509 },
+            { ru: "Год", sr_latin: "Godina", sr_cyrillic: "Година", pairId: 510 },
+            { ru: "Время", sr_latin: "Vreme", sr_cyrillic: "Време", pairId: 511 },
+            { ru: "Час", sr_latin: "Sat", sr_cyrillic: "Сат", pairId: 512 }, // Hour, also Clock
+            { ru: "Минута", sr_latin: "Minut", sr_cyrillic: "Минут", pairId: 513 },
+            { ru: "Секунда", sr_latin: "Sekunda", sr_cyrillic: "Секунда", pairId: 514 },
+            { ru: "Утро", sr_latin: "Jutro", sr_cyrillic: "Јутро", pairId: 515 },
+            { ru: "День", sr_latin: "Dan", sr_cyrillic: "Дан", pairId: 516 },
+            { ru: "Вечер", sr_latin: "Veče", sr_cyrillic: "Вече", pairId: 517 },
+            { ru: "Ночь", sr_latin: "Noć", sr_cyrillic: "Ноћ", pairId: 518 },
+            { ru: "Понедельник", sr_latin: "Ponedeljak", sr_cyrillic: "Понедељак", pairId: 519 },
+            { ru: "Вторник", sr_latin: "Utorak", sr_cyrillic: "Уторак", pairId: 520 },
+            { ru: "Среда", sr_latin: "Sreda", sr_cyrillic: "Среда", pairId: 521 },
+            { ru: "Четверг", sr_latin: "Četvrtak", sr_cyrillic: "Четвртак", pairId: 522 },
+            { ru: "Пятница", sr_latin: "Petak", sr_cyrillic: "Петак", pairId: 523 },
+            { ru: "Суббота", sr_latin: "Subota", sr_cyrillic: "Субота", pairId: 524 },
+            { ru: "Воскресенье", sr_latin: "Nedelja", sr_cyrillic: "Недеља", pairId: 525 }, // Same as week
+            { ru: "Январь", sr_latin: "Januar", sr_cyrillic: "Јануар", pairId: 526 },
+            { ru: "Февраль", sr_latin: "Februar", sr_cyrillic: "Фебруар", pairId: 527 },
+            { ru: "Март", sr_latin: "Mart", sr_cyrillic: "Март", pairId: 528 },
+            { ru: "Апрель", sr_latin: "April", sr_cyrillic: "Април", pairId: 529 },
+            { ru: "Май", sr_latin: "Maj", sr_cyrillic: "Мај", pairId: 530 },
+            { ru: "Июнь", sr_latin: "Jun", sr_cyrillic: "Јун", pairId: 531 },
+            { ru: "Июль", sr_latin: "Jul", sr_cyrillic: "Јул", pairId: 532 },
+            { ru: "Август", sr_latin: "Avgust", sr_cyrillic: "Август", pairId: 533 },
+            { ru: "Сентябрь", sr_latin: "Septembar", sr_cyrillic: "Септембар", pairId: 534 },
+            { ru: "Октябрь", sr_latin: "Oktobar", sr_cyrillic: "Октобар", pairId: 535 },
+            { ru: "Ноябрь", sr_latin: "Novembar", sr_cyrillic: "Новембар", pairId: 536 },
+            { ru: "Декабрь", sr_latin: "Decembar", sr_cyrillic: "Децембар", pairId: 537 },
+            { ru: "Весна", sr_latin: "Proleće", sr_cyrillic: "Пролеће", pairId: 538 },
+            { ru: "Лето", sr_latin: "Leto", sr_cyrillic: "Лето", pairId: 539 },
+            { ru: "Осень", sr_latin: "Jesen", sr_cyrillic: "Јесен", pairId: 540 },
+            { ru: "Зима", sr_latin: "Zima", sr_cyrillic: "Зима", pairId: 541 },
+            { ru: "Погода", sr_latin: "Vreme", sr_cyrillic: "Време", pairId: 542 }, // Same as time
+            { ru: "Солнце", sr_latin: "Sunce", sr_cyrillic: "Сунце", pairId: 543 },
+            { ru: "Луна", sr_latin: "Mesec", sr_cyrillic: "Месец", pairId: 544 }, // Same as month
+            { ru: "Звезда", sr_latin: "Zvezda", sr_cyrillic: "Звезда", pairId: 545 },
+            { ru: "Небо", sr_latin: "Nebo", sr_cyrillic: "Небо", pairId: 546 },
+            { ru: "Облако", sr_latin: "Oblak", sr_cyrillic: "Облак", pairId: 547 },
+            { ru: "Дождь", sr_latin: "Kiša", sr_cyrillic: "Киша", pairId: 548 },
+            { ru: "Снег", sr_latin: "Sneg", sr_cyrillic: "Снег", pairId: 549 },
+            { ru: "Ветер", sr_latin: "Vetar", sr_cyrillic: "Ветар", pairId: 550 },
+            { ru: "Тепло", sr_latin: "Toplo", sr_cyrillic: "Топло", pairId: 551 },
+            { ru: "Холодно", sr_latin: "Hladno", sr_cyrillic: "Хладно", pairId: 552 },
+            { ru: "Горячо", sr_latin: "Vruće", sr_cyrillic: "Вруће", pairId: 553 },
+            { ru: "Красный", sr_latin: "Crven", sr_cyrillic: "Црвен", pairId: 554 },
+            { ru: "Синий", sr_latin: "Plav", sr_cyrillic: "Плав", pairId: 555 },
+            { ru: "Зеленый", sr_latin: "Zelen", sr_cyrillic: "Зелен", pairId: 556 },
+            { ru: "Желтый", sr_latin: "Žut", sr_cyrillic: "Жут", pairId: 557 },
+            { ru: "Черный", sr_latin: "Crn", sr_cyrillic: "Црн", pairId: 558 },
+            { ru: "Белый", sr_latin: "Beo", sr_cyrillic: "Бео", pairId: 559 },
+            { ru: "Серый", sr_latin: "Siv", sr_cyrillic: "Сив", pairId: 560 },
+            { ru: "Коричневый", sr_latin: "Smeđ", sr_cyrillic: "Смеђ", pairId: 561 }, // or Braon
+            { ru: "Оранжевый", sr_latin: "Narandžast", sr_cyrillic: "Наранџаст", pairId: 562 },
+            { ru: "Фиолетовый", sr_latin: "Ljubičast", sr_cyrillic: "Љубичаст", pairId: 563 },
+            { ru: "Розовый", sr_latin: "Roze", sr_cyrillic: "Розе", pairId: 564 },
+            { ru: "Большой", sr_latin: "Velik", sr_cyrillic: "Велик", pairId: 565 },
+            { ru: "Маленький", sr_latin: "Mali", sr_cyrillic: "Мали", pairId: 566 },
+            { ru: "Хороший", sr_latin: "Dobar", sr_cyrillic: "Добар", pairId: 567 },
+            { ru: "Плохой", sr_latin: "Loš", sr_cyrillic: "Лош", pairId: 568 },
+            { ru: "Новый", sr_latin: "Nov", sr_cyrillic: "Нов", pairId: 569 },
+            { ru: "Старый", sr_latin: "Star", sr_cyrillic: "Стар", pairId: 570 },
+            { ru: "Молодой", sr_latin: "Mlad", sr_cyrillic: "Млад", pairId: 571 },
+            { ru: "Красивый", sr_latin: "Lep", sr_cyrillic: "Леп", pairId: 572 },
+            { ru: "Быстрый", sr_latin: "Brz", sr_cyrillic: "Брз", pairId: 573 },
+            { ru: "Медленный", sr_latin: "Spor", sr_cyrillic: "Спор", pairId: 574 },
+            { ru: "Легкий (вес)", sr_latin: "Lak", sr_cyrillic: "Лак", pairId: 575 },
+            { ru: "Тяжелый", sr_latin: "Težak", sr_cyrillic: "Тежак", pairId: 576 },
+            { ru: "Легкий (сложность)", sr_latin: "Lagan", sr_cyrillic: "Лаган", pairId: 577 },
+            { ru: "Трудный", sr_latin: "Težak", sr_cyrillic: "Тежак", pairId: 578 }, // Same as heavy
+            { ru: "Я", sr_latin: "Ja", sr_cyrillic: "Ја", pairId: 579 },
+            { ru: "Ты", sr_latin: "Ti", sr_cyrillic: "Ти", pairId: 580 },
+            { ru: "Он", sr_latin: "On", sr_cyrillic: "Он", pairId: 581 },
+            { ru: "Она", sr_latin: "Ona", sr_cyrillic: "Она", pairId: 582 },
+            { ru: "Оно", sr_latin: "Ono", sr_cyrillic: "Оно", pairId: 583 },
+            { ru: "Мы", sr_latin: "Mi", sr_cyrillic: "Ми", pairId: 584 },
+            { ru: "Вы", sr_latin: "Vi", sr_cyrillic: "Ви", pairId: 585 },
+            { ru: "Они", sr_latin: "Oni", sr_cyrillic: "Они", pairId: 586 }, // Oni (m), One (f), Ona (n)
+            { ru: "Кто", sr_latin: "Ko", sr_cyrillic: "Ко", pairId: 587 },
+            { ru: "Что", sr_latin: "Šta", sr_cyrillic: "Шта", pairId: 588 },
+            { ru: "Где", sr_latin: "Gde", sr_cyrillic: "Где", pairId: 589 },
+            { ru: "Когда", sr_latin: "Kada", sr_cyrillic: "Када", pairId: 590 },
+            { ru: "Почему", sr_latin: "Zašto", sr_cyrillic: "Зашто", pairId: 591 },
+            { ru: "Как", sr_latin: "Kako", sr_cyrillic: "Како", pairId: 592 },
+            { ru: "Сколько", sr_latin: "Koliko", sr_cyrillic: "Колико", pairId: 593 },
+            { ru: "Этот", sr_latin: "Ovaj", sr_cyrillic: "Овај", pairId: 594 },
+            { ru: "Тот", sr_latin: "Taj", sr_cyrillic: "Тај", pairId: 595 },
+            { ru: "Здесь", sr_latin: "Ovde", sr_cyrillic: "Овде", pairId: 596 },
+            { ru: "Там", sr_latin: "Tamo", sr_cyrillic: "Тамо", pairId: 597 },
+            { ru: "Всегда", sr_latin: "Uvek", sr_cyrillic: "Увек", pairId: 598 },
+            { ru: "Иногда", sr_latin: "Ponekad", sr_cyrillic: "Понекад", pairId: 599 },
+            { ru: "Никогда", sr_latin: "Nikada", sr_cyrillic: "Никада", pairId: 600 },
+            { ru: "Очень", sr_latin: "Vrlo", sr_cyrillic: "Врло", pairId: 601 },
+            { ru: "Тоже", sr_latin: "Takođe", sr_cyrillic: "Такође", pairId: 602 },
+            { ru: "Или", sr_latin: "Ili", sr_cyrillic: "Или", pairId: 603 },
+            { ru: "И", sr_latin: "I", sr_cyrillic: "И", pairId: 604 },
+            { ru: "Но", sr_latin: "Ali", sr_cyrillic: "Али", pairId: 605 },
+            { ru: "Потому что", sr_latin: "Zato što", sr_cyrillic: "Зато што", pairId: 606 },
+            { ru: "Если", sr_latin: "Ako", sr_cyrillic: "Ако", pairId: 607 },
+            { ru: "Четыре", sr_latin: "Četiri", sr_cyrillic: "Четири", pairId: 608 },
+            { ru: "Пять", sr_latin: "Pet", sr_cyrillic: "Пет", pairId: 609 },
+            { ru: "Шесть", sr_latin: "Šest", sr_cyrillic: "Шест", pairId: 610 },
+            { ru: "Семь", sr_latin: "Sedam", sr_cyrillic: "Седам", pairId: 611 },
+            { ru: "Восемь", sr_latin: "Osam", sr_cyrillic: "Осам", pairId: 612 },
+            { ru: "Девять", sr_latin: "Devet", sr_cyrillic: "Девет", pairId: 613 },
+            { ru: "Десять", sr_latin: "Deset", sr_cyrillic: "Десет", pairId: 614 },
+            { ru: "Сто", sr_latin: "Sto", sr_cyrillic: "Сто", pairId: 615 },
+            { ru: "Тысяча", sr_latin: "Hiljada", sr_cyrillic: "Хиљада", pairId: 616 },
+            { ru: "Миллион", sr_latin: "Milion", sr_cyrillic: "Милион", pairId: 617 },
+            { ru: "Первый", sr_latin: "Prvi", sr_cyrillic: "Први", pairId: 618 },
+            { ru: "Последний", sr_latin: "Poslednji", sr_cyrillic: "Последњи", pairId: 619 },
+            { ru: "Голова", sr_latin: "Glava", sr_cyrillic: "Глава", pairId: 620 },
+            { ru: "Лицо", sr_latin: "Lice", sr_cyrillic: "Лице", pairId: 621 },
+            { ru: "Глаз", sr_latin: "Oko", sr_cyrillic: "Око", pairId: 622 },
+            { ru: "Ухо", sr_latin: "Uvo", sr_cyrillic: "Уво", pairId: 623 },
+            { ru: "Нос", sr_latin: "Nos", sr_cyrillic: "Нос", pairId: 624 },
+            { ru: "Рот", sr_latin: "Usta", sr_cyrillic: "Уста", pairId: 625 },
+            { ru: "Зуб", sr_latin: "Zub", sr_cyrillic: "Зуб", pairId: 626 },
+            { ru: "Язык (орган)", sr_latin: "Jezik", sr_cyrillic: "Језик", pairId: 627 },
+            { ru: "Рука (кисть)", sr_latin: "Šaka", sr_cyrillic: "Шака", pairId: 628 },
+            { ru: "Рука (от плеча)", sr_latin: "Ruka", sr_cyrillic: "Рука", pairId: 629 },
+            { ru: "Палец", sr_latin: "Prst", sr_cyrillic: "Прст", pairId: 630 },
+            { ru: "Нога", sr_latin: "Noga", sr_cyrillic: "Нога", pairId: 631 },
+            { ru: "Стопа", sr_latin: "Stopalo", sr_cyrillic: "Стопало", pairId: 632 },
+            { ru: "Сердце", sr_latin: "Srce", sr_cyrillic: "Срце", pairId: 633 },
+            { ru: "Кровь", sr_latin: "Krv", sr_cyrillic: "Крв", pairId: 634 },
+            { ru: "Мир (вселенная)", sr_latin: "Svet", sr_cyrillic: "Свет", pairId: 635 },
+            { ru: "Мир (покой)", sr_latin: "Mir", sr_cyrillic: "Мир", pairId: 636 },
+            { ru: "Война", sr_latin: "Rat", sr_cyrillic: "Рат", pairId: 637 },
+            { ru: "Жизнь", sr_latin: "Život", sr_cyrillic: "Живот", pairId: 638 },
+            { ru: "Смерть", sr_latin: "Smrt", sr_cyrillic: "Смрт", pairId: 639 },
+            { ru: "Любовь", sr_latin: "Ljubav", sr_cyrillic: "Љубав", pairId: 640 },
+            { ru: "Счастье", sr_latin: "Sreća", sr_cyrillic: "Срећа", pairId: 641 },
+            { ru: "Печаль", sr_latin: "Tuga", sr_cyrillic: "Туга", pairId: 642 },
+            { ru: "Страх", sr_latin: "Strah", sr_cyrillic: "Страх", pairId: 643 },
+            { ru: "Радость", sr_latin: "Radost", sr_cyrillic: "Радост", pairId: 644 },
+            { ru: "Надежда", sr_latin: "Nada", sr_cyrillic: "Нада", pairId: 645 },
+            { ru: "Мечта", sr_latin: "San", sr_cyrillic: "Сан", pairId: 646 }, // Dream, also Sleep
+            { ru: "Игра", sr_latin: "Igra", sr_cyrillic: "Игра", pairId: 647 },
+            { ru: "Музыка", sr_latin: "Muzika", sr_cyrillic: "Музика", pairId: 648 },
+            { ru: "Искусство", sr_latin: "Umetnost", sr_cyrillic: "Уметност", pairId: 649 },
+            { ru: "Наука", sr_latin: "Nauka", sr_cyrillic: "Наука", pairId: 650 },
+            { ru: "История", sr_latin: "Istorija", sr_cyrillic: "Историја", pairId: 651 },
+            { ru: "Закон", sr_latin: "Zakon", sr_cyrillic: "Закон", pairId: 652 }, // Already in business, but basic too
+            { ru: "Правило", sr_latin: "Pravilo", sr_cyrillic: "Правило", pairId: 653 },
+            { ru: "Вопрос", sr_latin: "Pitanje", sr_cyrillic: "Питање", pairId: 654 },
+            { ru: "Ответ", sr_latin: "Odgovor", sr_cyrillic: "Одговор", pairId: 655 },
+            { ru: "Начало", sr_latin: "Početak", sr_cyrillic: "Почетак", pairId: 656 },
+            { ru: "Конец", sr_latin: "Kraj", sr_cyrillic: "Крај", pairId: 657 },
+            { ru: "Середина", sr_latin: "Sredina", sr_cyrillic: "Средина", pairId: 658 },
+            { ru: "Сторона", sr_latin: "Strana", sr_cyrillic: "Страна", pairId: 659 },
+            { ru: "Часть", sr_latin: "Deo", sr_cyrillic: "Део", pairId: 660 },
+            { ru: "Целое", sr_latin: "Celina", sr_cyrillic: "Целина", pairId: 661 },
+            { ru: "Вещь", sr_latin: "Stvar", sr_cyrillic: "Ствар", pairId: 662 },
+            { ru: "Имя", sr_latin: "Ime", sr_cyrillic: "Име", pairId: 663 },
+            { ru: "Фамилия", sr_latin: "Prezime", sr_cyrillic: "Презиме", pairId: 664 },
+            { ru: "Адрес", sr_latin: "Adresa", sr_cyrillic: "Адреса", pairId: 665 },
+            { ru: "Номер телефона", sr_latin: "Broj telefona", sr_cyrillic: "Број телефона", pairId: 666 },
+            { ru: "Писать", sr_latin: "Pisati", sr_cyrillic: "Писати", pairId: 667 },
+            { ru: "Считать", sr_latin: "Brojati", sr_cyrillic: "Бројати", pairId: 668 }, // to count
+            { ru: "Рисовать", sr_latin: "Crtati", sr_cyrillic: "Цртати", pairId: 669 },
+            { ru: "Петь", sr_latin: "Pevati", sr_cyrillic: "Певати", pairId: 670 },
+            { ru: "Танцевать", sr_latin: "Plesati", sr_cyrillic: "Плесати", pairId: 671 },
+            { ru: "Бежать", sr_latin: "Trčati", sr_cyrillic: "Трчати", pairId: 672 },
+            { ru: "Сидеть", sr_latin: "Sedeti", sr_cyrillic: "Седети", pairId: 673 },
+            { ru: "Стоять", sr_latin: "Stajati", sr_cyrillic: "Стајати", pairId: 674 },
+            { ru: "Лежать", sr_latin: "Ležati", sr_cyrillic: "Лежати", pairId: 675 },
+            { ru: "Давать", sr_latin: "Davati", sr_cyrillic: "Давати", pairId: 676 },
+            { ru: "Брать", sr_latin: "Uzimati", sr_cyrillic: "Узимати", pairId: 677 },
+            { ru: "Находить", sr_latin: "Nalaziti", sr_cyrillic: "Налазити", pairId: 678 },
+            { ru: "Терять", sr_latin: "Gubiti", sr_cyrillic: "Губити", pairId: 679 },
+            { ru: "Открывать", sr_latin: "Otvarati", sr_cyrillic: "Отварати", pairId: 680 },
+            { ru: "Закрывать", sr_latin: "Zatvarati", sr_cyrillic: "Затварати", pairId: 681 },
+            { ru: "Знать", sr_latin: "Znati", sr_cyrillic: "Знати", pairId: 682 },
+            { ru: "Думать", sr_latin: "Misliti", sr_cyrillic: "Мислити", pairId: 683 },
+            { ru: "Понимать", sr_latin: "Razumeti", sr_cyrillic: "Разумети", pairId: 684 },
+            { ru: "Учить", sr_latin: "Učiti", sr_cyrillic: "Учити", pairId: 685 }, // to learn / to teach
+            { ru: "Играть", sr_latin: "Igrati se", sr_cyrillic: "Играти се", pairId: 686 }, // to play (children, games)
+            { ru: "Помогать", sr_latin: "Pomagati", sr_cyrillic: "Помагати", pairId: 687 },
+            { ru: "Ждать", sr_latin: "Čekati", sr_cyrillic: "Чекати", pairId: 688 },
+            { ru: "Путешествовать", sr_latin: "Putovati", sr_cyrillic: "Путовати", pairId: 689 },
+            { ru: "Воздух", sr_latin: "Vazduh", sr_cyrillic: "Ваздух", pairId: 690 },
+            { ru: "Земля (планета)", sr_latin: "Zemlja", sr_cyrillic: "Земља", pairId: 691 }, // Earth, also country, soil
+            { ru: "Огонь", sr_latin: "Vatra", sr_cyrillic: "Ватра", pairId: 692 },
+            { ru: "Лед", sr_latin: "Led", sr_cyrillic: "Лед", pairId: 693 },
+            { ru: "Камень", sr_latin: "Kamen", sr_cyrillic: "Камен", pairId: 694 },
+            { ru: "Дерево", sr_latin: "Drvo", sr_cyrillic: "Дрво", pairId: 695 },
+            { ru: "Цветок", sr_latin: "Cvet", sr_cyrillic: "Цвет", pairId: 696 },
+            { ru: "Трава", sr_latin: "Trava", sr_cyrillic: "Трава", pairId: 697 },
+            { ru: "Животное", sr_latin: "Životinja", sr_cyrillic: "Животиња", pairId: 698 },
+            { ru: "Собака", sr_latin: "Pas", sr_cyrillic: "Пас", pairId: 699 },
+            { ru: "Кошка", sr_latin: "Mačka", sr_cyrillic: "Мачка", pairId: 700 },
+            { ru: "Птица", sr_latin: "Ptica", sr_cyrillic: "Птица", pairId: 701 },
+            { ru: "Шум", sr_latin: "Buka", sr_cyrillic: "Бука", pairId: 702 },
+            { ru: "Тишина", sr_latin: "Tišina", sr_cyrillic: "Тишина", pairId: 703 },
+            { ru: "Место", sr_latin: "Mesto", sr_cyrillic: "Место", pairId: 704 },
+            { ru: "Направление", sr_latin: "Pravac", sr_cyrillic: "Правац", pairId: 705 },
+            { ru: "Скорость", sr_latin: "Brzina", sr_cyrillic: "Брзина", pairId: 706 },
+            { ru: "Размер", sr_latin: "Veličina", sr_cyrillic: "Величина", pairId: 707 },
+            { ru: "Форма", sr_latin: "Oblik", sr_cyrillic: "Облик", pairId: 708 },
+            { ru: "Качество", sr_latin: "Kvalitet", sr_cyrillic: "Квалитет", pairId: 709 }, // Also in Business
+            { ru: "Количество", sr_latin: "Količina", sr_cyrillic: "Количина", pairId: 710 },
+            { ru: "Нуль", sr_latin: "Nula", sr_cyrillic: "Нула", pairId: 711 },
+        ].map(word => ({ ...word, topic: 'basics' }));
+
+        const foodWords = [
+            // Original 100 words (pairId: 101-200)
+            { ru: "Вилка", sr_latin: "Viljuška", sr_cyrillic: "Виљушка", pairId: 101 }, { ru: "Ложка", sr_latin: "Kašika", sr_cyrillic: "Кашика", pairId: 102 }, { ru: "Нож", sr_latin: "Nož", sr_cyrillic: "Нож", pairId: 103 }, { ru: "Тарелка", sr_latin: "Tanjir", sr_cyrillic: "Тањир", pairId: 104 }, { ru: "Чашка", sr_latin: "Šolja", sr_cyrillic: "Шоља", pairId: 105 }, { ru: "Бокал", sr_latin: "Čaša", sr_cyrillic: "Чаша", pairId: 106 }, { ru: "Закуска", sr_latin: "Predjelo", sr_cyrillic: "Предјело", pairId: 107 }, { ru: "Суп", sr_latin: "Supa", sr_cyrillic: "Супа", pairId: 108 }, { ru: "Салат", sr_latin: "Salata", sr_cyrillic: "Салата", pairId: 109 }, { ru: "Основное блюдо", sr_latin: "Glavno jelo", sr_cyrillic: "Главно јело", pairId: 110 },
+            { ru: "Десерт", sr_latin: "Dezert", sr_cyrillic: "Дезерт", pairId: 111 }, { ru: "Напиток", sr_latin: "Piće", sr_cyrillic: "Пиће", pairId: 112 }, { ru: "Счет", sr_latin: "Račun", sr_cyrillic: "Рачун", pairId: 113 }, { ru: "Официант", sr_latin: "Konobar", sr_cyrillic: "Конобар", pairId: 114 }, { ru: "Меню", sr_latin: "Jelovnik", sr_cyrillic: "Јеловник", pairId: 115 }, { ru: "Говядина", sr_latin: "Govedina", sr_cyrillic: "Говедина", pairId: 116 }, { ru: "Свинина", sr_latin: "Svinjetina", sr_cyrillic: "Свињетина", pairId: 117 }, { ru: "Курица", sr_latin: "Piletina", sr_cyrillic: "Пилетина", pairId: 118 }, { ru: "Рис", sr_latin: "Pirinač", sr_cyrillic: "Пиринач", pairId: 119 }, { ru: "Макароны", sr_latin: "Testenina", sr_cyrillic: "Тестенина", pairId: 120 },
+            { ru: "Овощной", sr_latin: "Povrtni", sr_cyrillic: "Повртни", pairId: 121 }, { ru: "Фруктовый", sr_latin: "Voćni", sr_cyrillic: "Воћни", pairId: 122 }, { ru: "Сладкий", sr_latin: "Sladak", sr_cyrillic: "Сладак", pairId: 123 }, { ru: "Соленый", sr_latin: "Slan", sr_cyrillic: "Слан", pairId: 124 }, { ru: "Острый", sr_latin: "Ljut", sr_cyrillic: "Љут", pairId: 125 }, { ru: "Кислый", sr_latin: "Kiseo", sr_cyrillic: "Кисео", pairId: 126 }, { ru: "Горький", sr_latin: "Gorak", sr_cyrillic: "Горак", pairId: 127 }, { ru: "Свежий", sr_latin: "Svež", sr_cyrillic: "Свеж", pairId: 128 }, { ru: "Жареный", sr_latin: "Pržen", sr_cyrillic: "Пржен", pairId: 129 }, { ru: "Вареный", sr_latin: "Kuvan", sr_cyrillic: "Куван", pairId: 130 },
+            { ru: "Печеный", sr_latin: "Pečen", sr_cyrillic: "Печен", pairId: 131 }, { ru: "Гриль", sr_latin: "Sa roštilja", sr_cyrillic: "Са роштиља", pairId: 132 }, { ru: "Вино", sr_latin: "Vino", sr_cyrillic: "Вино", pairId: 133 }, { ru: "Пиво", sr_latin: "Pivo", sr_cyrillic: "Пиво", pairId: 134 }, { ru: "Коктейль", sr_latin: "Koktel", sr_cyrillic: "Коктел", pairId: 135 }, { ru: "Мороженое", sr_latin: "Sladoled", sr_cyrillic: "Сладолед", pairId: 136 }, { ru: "Торт", sr_latin: "Torta", sr_cyrillic: "Торта", pairId: 137 }, { ru: "Кофе с молоком", sr_latin: "Kafa sa mlekom", sr_cyrillic: "Кафа са млеком", pairId: 138 }, { ru: "Эспрессо", sr_latin: "Espreso", sr_cyrillic: "Еспресо", pairId: 139 }, { ru: "Капучино", sr_latin: "Kapućino", sr_cyrillic: "Капућино", pairId: 140 },
+            { ru: "Лимонад", sr_latin: "Limunada", sr_cyrillic: "Лимунада", pairId: 141 }, { ru: "Минеральная вода", sr_latin: "Mineralna voda", sr_cyrillic: "Минерална вода", pairId: 142 }, { ru: "Столик на двоих", sr_latin: "Sto za dvoje", sr_cyrillic: "Сто за двоје", pairId: 143 }, { ru: "Я хотел бы заказать", sr_latin: "Želeo bih da naručim", sr_cyrillic: "Желео бих да наручим", pairId: 144 }, { ru: "Очень вкусно", sr_latin: "Vrlo ukusno", sr_cyrillic: "Врло укусно", pairId: 145 }, { ru: "Приятного аппетита", sr_latin: "Prijatno", sr_cyrillic: "Пријатно", pairId: 146 }, { ru: "Салфетка", sr_latin: "Salveta", sr_cyrillic: "Салвета", pairId: 147 }, { ru: "Перец", sr_latin: "Biber", sr_cyrillic: "Бибер", pairId: 148 }, { ru: "Масло", sr_latin: "Ulje", sr_cyrillic: "Уље", pairId: 149 }, { ru: "Уксус", sr_latin: "Sirće", sr_cyrillic: "Сирће", pairId: 150 },
+            { ru: "Гарнир", sr_latin: "Prilog", sr_cyrillic: "Прилог", pairId: 151 }, { ru: "Картофель фри", sr_latin: "Pomfrit", sr_cyrillic: "Помфрит", pairId: 152 }, { ru: "Пюре", sr_latin: "Pire", sr_cyrillic: "Пире", pairId: 153 }, { ru: "Грибной", sr_latin: "Pečurke", sr_cyrillic: "Печурке", pairId: 154 }, { ru: "Лук", sr_latin: "Luk", sr_cyrillic: "Лук", pairId: 155 }, { ru: "Чеснок", sr_latin: "Beli luk", sr_cyrillic: "Бели лук", pairId: 156 }, { ru: "Помидор", sr_latin: "Paradajz", sr_cyrillic: "Парадајз", pairId: 157 }, { ru: "Огурец", sr_latin: "Krastavac", sr_cyrillic: "Краставац", pairId: 158 }, { ru: "Морепродукты", sr_latin: "Morski plodovi", sr_cyrillic: "Морски плодови", pairId: 159 }, { ru: "Креветки", sr_latin: "Škampi", sr_cyrillic: "Шкампи", pairId: 160 },
+            { ru: "Кальмар", sr_latin: "Lignje", sr_cyrillic: "Лигње", pairId: 161 }, { ru: "Мидии", sr_latin: "Dagnje", sr_cyrillic: "Дагње", pairId: 162 }, { ru: "Хлебная корзина", sr_latin: "Korpa sa hlebom", sr_cyrillic: "Корпа са хлебом", pairId: 163 }, { ru: "Без газа", sr_latin: "Negazirana", sr_cyrillic: "Негазирана", pairId: 164 }, { ru: "С газом", sr_latin: "Gazirana", sr_cyrillic: "Газирана", pairId: 165 }, { ru: "Сухое вино", sr_latin: "Suvo vino", sr_cyrillic: "Суво вино", pairId: 166 }, { ru: "Полусладкое вино", sr_latin: "Poluslatko vino", sr_cyrillic: "Полуслатко вино", pairId: 167 }, { ru: "Красное вино", sr_latin: "Crno vino", sr_cyrillic: "Црно вино", pairId: 168 }, { ru: "Белое вино", sr_latin: "Belo vino", sr_cyrillic: "Бело вино", pairId: 169 }, { ru: "Розовое вино", sr_latin: "Roze vino", sr_cyrillic: "Розе вино", pairId: 170 },
+            { ru: "Блюдо дня", sr_latin: "Jelo dana", sr_cyrillic: "Јело дана", pairId: 171 }, { ru: "Вегетарианское блюдо", sr_latin: "Vegetarijansko jelo", sr_cyrillic: "Вегетаријанско јело", pairId: 172 }, { ru: "Безглютеновое", sr_latin: "Bez glutena", sr_cyrillic: "Без глутена", pairId: 173 }, { ru: "Аллергия на", sr_latin: "Alergičan sam na", sr_cyrillic: "Алергичан сам на", pairId: 174 }, { ru: "Чаевые", sr_latin: "Bakšiš", sr_cyrillic: "Бакшиш", pairId: 175 }, { ru: "Забронировать столик", sr_latin: "Rezervisati sto", sr_cyrillic: "Резервисати сто", pairId: 176 }, { ru: "Еда на вынос", sr_latin: "Hrana za poneti", sr_cyrillic: "Храна за понети", pairId: 177 }, { ru: "Завтракать", sr_latin: "Doručkovati", sr_cyrillic: "Доручковати", pairId: 178 }, { ru: "Обедать", sr_latin: "Ručati", sr_cyrillic: "Ручати", pairId: 179 }, { ru: "Ужинать", sr_latin: "Večerati", sr_cyrillic: "Вечерати", pairId: 180 },
+            { ru: "Голодный", sr_latin: "Gladan", sr_cyrillic: "Гладан", pairId: 181 }, { ru: "Сытый", sr_latin: "Sit", sr_cyrillic: "Сит", pairId: 182 }, { ru: "Хочу пить", sr_latin: "Žedan sam", sr_cyrillic: "Жедан сам", pairId: 183 }, { ru: "Горячий", sr_latin: "Vruć", sr_cyrillic: "Врућ", pairId: 184 }, { ru: "Холодный", sr_latin: "Hladan", sr_cyrillic: "Хладан", pairId: 185 }, { ru: "Мед", sr_latin: "Med", sr_cyrillic: "Мед", pairId: 186 }, { ru: "Джем", sr_latin: "Džem", sr_cyrillic: "Џем", pairId: 187 }, { ru: "Яйца", sr_latin: "Jaja", sr_cyrillic: "Јаја", pairId: 188 }, { ru: "Омлет", sr_latin: "Omlet", sr_cyrillic: "Омлет", pairId: 189 }, { ru: "Бутерброд", sr_latin: "Sendvič", sr_cyrillic: "Сендвич", pairId: 190 },
+            { ru: "Пицца", sr_latin: "Pica", sr_cyrillic: "Пица", pairId: 191 }, { ru: "Суши", sr_latin: "Suši", sr_cyrillic: "Суши", pairId: 192 }, { ru: "Пекарня", sr_latin: "Pekara", sr_cyrillic: "Пекара", pairId: 193 }, { ru: "Кондитерская", sr_latin: "Poslastičarnica", sr_cyrillic: "Посластичарница", pairId: 194 }, { ru: "Кофеварка", sr_latin: "Aparat za kafu", sr_cyrillic: "Апарат за кафу", pairId: 195 }, { ru: "Чайник", sr_latin: "Čajnik", sr_cyrillic: "Чајник", pairId: 196 }, { ru: "Бокал вина", sr_latin: "Čaša vina", sr_cyrillic: "Чаша вина", pairId: 197 }, { ru: "Бутылка воды", sr_latin: "Flaša vode", sr_cyrillic: "Флаша воде", pairId: 198 }, { ru: "Местное пиво", sr_latin: "Domaće pivo", sr_cyrillic: "Домаће пиво", pairId: 199 }, { ru: "Фирменное блюдо", sr_latin: "Specijalitet kuće", sr_cyrillic: "Специјалитет куће", pairId: 200 },
+            // New 100 words for "Food" (pairId: 712-811)
+            { ru: "Виноград", sr_latin: "Grožđe", sr_cyrillic: "Грожђе", pairId: 712 },
+            { ru: "Слива", sr_latin: "Šljiva", sr_cyrillic: "Шљива", pairId: 713 },
+            { ru: "Инжир", sr_latin: "Smokva", sr_cyrillic: "Смоква", pairId: 714 },
+            { ru: "Баранина", sr_latin: "Jagnjetina", sr_cyrillic: "Јагњетина", pairId: 715 },
+            { ru: "Телятина", sr_latin: "Teletina", sr_cyrillic: "Телетина", pairId: 716 },
+            { ru: "Клубника", sr_latin: "Jagoda", sr_cyrillic: "Јагода", pairId: 717 },
+            { ru: "Малина", sr_latin: "Malina", sr_cyrillic: "Малина", pairId: 718 },
+            { ru: "Вишня", sr_latin: "Višnja", sr_cyrillic: "Вишња", pairId: 719 },
+            { ru: "Черешня", sr_latin: "Trešnja", sr_cyrillic: "Трешња", pairId: 720 },
+            { ru: "Персик", sr_latin: "Breskva", sr_cyrillic: "Бресква", pairId: 721 },
+            { ru: "Абрикос", sr_latin: "Kajsija", sr_cyrillic: "Кајсија", pairId: 722 },
+            { ru: "Груша", sr_latin: "Kruška", sr_cyrillic: "Крушка", pairId: 723 },
+            { ru: "Лимон", sr_latin: "Limun", sr_cyrillic: "Лимун", pairId: 724 },
+            { ru: "Банан", sr_latin: "Banana", sr_cyrillic: "Банана", pairId: 725 },
+            { ru: "Арбуз", sr_latin: "Lubenica", sr_cyrillic: "Лубеница", pairId: 726 },
+            { ru: "Дыня", sr_latin: "Dinja", sr_cyrillic: "Диња", pairId: 727 },
+            { ru: "Морковь", sr_latin: "Šargarepa", sr_cyrillic: "Шаргарепа", pairId: 728 },
+            { ru: "Капуста", sr_latin: "Kupus", sr_cyrillic: "Купус", pairId: 729 },
+            { ru: "Баклажан", sr_latin: "Plavi patlidžan", sr_cyrillic: "Плави патлиџан", pairId: 730 },
+            { ru: "Перец (овощ)", sr_latin: "Paprika", sr_cyrillic: "Паприка", pairId: 731 },
+            { ru: "Тыква", sr_latin: "Bundeva", sr_cyrillic: "Бундева", pairId: 732 },
+            { ru: "Горох", sr_latin: "Grašak", sr_cyrillic: "Грашак", pairId: 733 },
+            { ru: "Фасоль", sr_latin: "Pasulj", sr_cyrillic: "Пасуљ", pairId: 734 },
+            { ru: "Кукуруза", sr_latin: "Kukuruz", sr_cyrillic: "Кукуруз", pairId: 735 },
+            { ru: "Шпинат", sr_latin: "Spanać", sr_cyrillic: "Спанаћ", pairId: 736 },
+            { ru: "Петрушка", sr_latin: "Peršun", sr_cyrillic: "Першун", pairId: 737 },
+            { ru: "Укроп", sr_latin: "Mirođija", sr_cyrillic: "Мирођија", pairId: 738 },
+            { ru: "Базилик", sr_latin: "Bosiljak", sr_cyrillic: "Босиљак", pairId: 739 },
+            { ru: "Мята", sr_latin: "Nana", sr_cyrillic: "Нана", pairId: 740 }, // also Menta
+            { ru: "Розмарин", sr_latin: "Ruzmarin", sr_cyrillic: "Рузмарин", pairId: 741 },
+            { ru: "Тимьян", sr_latin: "Majčina dušica", sr_cyrillic: "Мајчина душица", pairId: 742 },
+            { ru: "Корица", sr_latin: "Cimet", sr_cyrillic: "Цимет", pairId: 743 },
+            { ru: "Имбирь", sr_latin: "Đumbir", sr_cyrillic: "Ђумбир", pairId: 744 },
+            { ru: "Мука", sr_latin: "Brašno", sr_cyrillic: "Брашно", pairId: 745 },
+            { ru: "Крупа", sr_latin: "Griz", sr_cyrillic: "Гриз", pairId: 746 }, // Semolina, can mean grits
+            { ru: "Гречка", sr_latin: "Heljda", sr_cyrillic: "Хељда", pairId: 747 },
+            { ru: "Овсянка", sr_latin: "Ovsena kaša", sr_cyrillic: "Овсена каша", pairId: 748 },
+            { ru: "Йогурт", sr_latin: "Jogurt", sr_cyrillic: "Јогурт", pairId: 749 },
+            { ru: "Сметана", sr_latin: "Pavlaka", sr_cyrillic: "Павлака", pairId: 750 },
+            { ru: "Творог", sr_latin: "Sitan sir", sr_cyrillic: "Ситан сир", pairId: 751 }, // Cottage cheese
+            { ru: "Сливки", sr_latin: "Kajmak", sr_cyrillic: "Кајмак", pairId: 752 }, // Or Slatka pavlaka for whipping cream
+            { ru: "Колбаса", sr_latin: "Kobasica", sr_cyrillic: "Кобасица", pairId: 753 },
+            { ru: "Сосиска", sr_latin: "Viršla", sr_cyrillic: "Виршла", pairId: 754 },
+            { ru: "Ветчина", sr_latin: "Šunka", sr_cyrillic: "Шунка", pairId: 755 },
+            { ru: "Бекон", sr_latin: "Slanina", sr_cyrillic: "Сланина", pairId: 756 },
+            { ru: "Лосось", sr_latin: "Losos", sr_cyrillic: "Лосос", pairId: 757 },
+            { ru: "Тунец", sr_latin: "Tunjevina", sr_cyrillic: "Туњевина", pairId: 758 },
+            { ru: "Форель", sr_latin: "Pastrmka", sr_cyrillic: "Пастрмка", pairId: 759 },
+            { ru: "Карп", sr_latin: "Šaran", sr_cyrillic: "Шаран", pairId: 760 },
+            { ru: "Устрицы", sr_latin: "Ostrige", sr_cyrillic: "Остриге", pairId: 761 },
+            { ru: "Орехи", sr_latin: "Orašasti plodovi", sr_cyrillic: "Орашасти плодови", pairId: 762 },
+            { ru: "Миндаль", sr_latin: "Badem", sr_cyrillic: "Бадем", pairId: 763 },
+            { ru: "Грецкий орех", sr_latin: "Orah", sr_cyrillic: "Орах", pairId: 764 },
+            { ru: "Фисташки", sr_latin: "Pistaći", sr_cyrillic: "Пистаћи", pairId: 765 },
+            { ru: "Кешью", sr_latin: "Indijski orah", sr_cyrillic: "Индијски орах", pairId: 766 },
+            { ru: "Шоколад", sr_latin: "Čokolada", sr_cyrillic: "Чоколада", pairId: 767 },
+            { ru: "Конфеты", sr_latin: "Bombone", sr_cyrillic: "Бомбоне", pairId: 768 },
+            { ru: "Печенье", sr_latin: "Keks", sr_cyrillic: "Кекс", pairId: 769 },
+            { ru: "Варенье", sr_latin: "Slatko", sr_cyrillic: "Слатко", pairId: 770 }, // Specific Serbian preserve, Džem is jam
+            { ru: "Блин", sr_latin: "Palačinka", sr_cyrillic: "Палачинка", pairId: 771 },
+            { ru: "Вафли", sr_latin: "Vafli", sr_cyrillic: "Вафли", pairId: 772 }, // Or Napolitanke
+            { ru: "Попкорн", sr_latin: "Kokice", sr_cyrillic: "Кокице", pairId: 773 },
+            { ru: "Чипсы", sr_latin: "Čips", sr_cyrillic: "Чипс", pairId: 774 },
+            { ru: "Горчица", sr_latin: "Senf", sr_cyrillic: "Сенф", pairId: 775 },
+            { ru: "Кетчуп", sr_latin: "Kečap", sr_cyrillic: "Кечап", pairId: 776 },
+            { ru: "Майонез", sr_latin: "Majonez", sr_cyrillic: "Мајонез", pairId: 777 },
+            { ru: "Соус", sr_latin: "Sos", sr_cyrillic: "Сос", pairId: 778 }, // Umak
+            { ru: "Бульон", sr_latin: "Bujon", sr_cyrillic: "Бујон", pairId: 779 }, // Or Supa
+            { ru: "Каша", sr_latin: "Kaša", sr_cyrillic: "Каша", pairId: 780 },
+            { ru: "Котлета", sr_latin: "Ćufta", sr_cyrillic: "Ћуфта", pairId: 781 }, // Meatball, Pljeskavica (burger patty)
+            { ru: "Шашлык", sr_latin: "Ražnjići", sr_cyrillic: "Ражњићи", pairId: 782 },
+            { ru: "Фарш", sr_latin: "Mleveno meso", sr_cyrillic: "Млевено месо", pairId: 783 },
+            { ru: "Стейк", sr_latin: "Stek", sr_cyrillic: "Стек", pairId: 784 }, // Biftek
+            { ru: "Тушеный", sr_latin: "Dinstan", sr_cyrillic: "Динстан", pairId: 785 },
+            { ru: "Копченый", sr_latin: "Dimljen", sr_cyrillic: "Димљен", pairId: 786 },
+            { ru: "Маринованный", sr_latin: "Mariniran", sr_cyrillic: "Мариниран", pairId: 787 }, // Kiseli (pickled)
+            { ru: "Сырой", sr_latin: "Sirov", sr_cyrillic: "Сиров", pairId: 788 },
+            { ru: "Порция", sr_latin: "Porcija", sr_cyrillic: "Порција", pairId: 789 },
+            { ru: "Рецепт", sr_latin: "Recept", sr_cyrillic: "Рецепт", pairId: 790 },
+            { ru: "Ингредиент", sr_latin: "Sastojak", sr_cyrillic: "Састојак", pairId: 791 },
+            { ru: "Повар", sr_latin: "Kuvar", sr_cyrillic: "Кувар", pairId: 792 },
+            { ru: "Кухня (место)", sr_latin: "Kuhinja", sr_cyrillic: "Кухиња", pairId: 793 },
+            { ru: "Столовая", sr_latin: "Trpezarija", sr_cyrillic: "Трпезарија", pairId: 794 },
+            { ru: "Скатерть", sr_latin: "Stolnjak", sr_cyrillic: "Столњак", pairId: 795 },
+            { ru: "Поднос", sr_latin: "Poslužavnik", sr_cyrillic: "Послужавник", pairId: 796 },
+            { ru: "Кастрюля", sr_latin: "Šerpa", sr_cyrillic: "Шерпа", pairId: 797 },
+            { ru: "Сковорода", sr_latin: "Tiganj", sr_cyrillic: "Тигањ", pairId: 798 },
+            { ru: "Духовка", sr_latin: "Rerna", sr_cyrillic: "Рерна", pairId: 799 },
+            { ru: "Микроволновка", sr_latin: "Mikrotalasna pećnica", sr_cyrillic: "Микроталасна пећница", pairId: 800 },
+            { ru: "Холодильник", sr_latin: "Frižider", sr_cyrillic: "Фрижидер", pairId: 801 },
+            { ru: "Морозильник", sr_latin: "Zamrzivač", sr_cyrillic: "Замрзивач", pairId: 802 },
+            { ru: "Посудомоечная машина", sr_latin: "Mašina za sudove", sr_cyrillic: "Машина за судове", pairId: 803 },
+            { ru: "Кран (водяной)", sr_latin: "Česma", sr_cyrillic: "Чесма", pairId: 804 }, // Slavina
+            { ru: "Напитки (алкогольные)", sr_latin: "Alkoholna pića", sr_cyrillic: "Алкохолна пића", pairId: 805 },
+            { ru: "Безалкогольные напитки", sr_latin: "Bezalkoholna pića", sr_cyrillic: "Безалкохолна пића", pairId: 806 },
+            { ru: "Ракия", sr_latin: "Rakija", sr_cyrillic: "Ракија", pairId: 807 },
+            { ru: "Водка", sr_latin: "Vodka", sr_cyrillic: "Вотка", pairId: 808 },
+            { ru: "Виски", sr_latin: "Viski", sr_cyrillic: "Виски", pairId: 809 },
+            { ru: "Шампанское", sr_latin: "Šampanjac", sr_cyrillic: "Шампањац", pairId: 810 },
+            { ru: "Закусывать", sr_latin: "Mezetiti", sr_cyrillic: "Мезетити", pairId: 811 },
+        ].map(word => ({ ...word, topic: 'food' }));
+
+        const travelWords = [
+            // Original 100 words (pairId: 201-300)
+            { ru: "Вокзал", sr_latin: "Stanica", sr_cyrillic: "Станица", pairId: 201 }, { ru: "Самолет", sr_latin: "Avion", sr_cyrillic: "Авион", pairId: 202 }, { ru: "Паспорт", sr_latin: "Pasoš", sr_cyrillic: "Пасош", pairId: 203 }, { ru: "Пляж", sr_latin: "Plaža", sr_cyrillic: "Плажа", pairId: 204 }, { ru: "Море", sr_latin: "More", sr_cyrillic: "Море", pairId: 205 }, { ru: "Экскурсия", sr_latin: "Izlet", sr_cyrillic: "Излет", pairId: 206 }, { ru: "Билет", sr_latin: "Karta", sr_cyrillic: "Карта", pairId: 207 }, { ru: "Аэропорт", sr_latin: "Aerodrom", sr_cyrillic: "Аеродром", pairId: 208 }, { ru: "Поезд", sr_latin: "Voz", sr_cyrillic: "Воз", pairId: 209 }, { ru: "Автобус", sr_latin: "Autobus", sr_cyrillic: "Аутобус", pairId: 210 },
+            { ru: "Такси", sr_latin: "Taksi", sr_cyrillic: "Такси", pairId: 211 }, { ru: "Гостиница", sr_latin: "Hotel", sr_cyrillic: "Хотел", pairId: 212 }, { ru: "Номер (в отеле)", sr_latin: "Soba", sr_cyrillic: "Соба", pairId: 213 }, { ru: "Бронирование", sr_latin: "Rezervacija", sr_cyrillic: "Резервација", pairId: 214 }, { ru: "Багаж", sr_latin: "Prtljag", sr_cyrillic: "Пртљаг", pairId: 215 }, { ru: "Карта (геогр.)", sr_latin: "Mapa", sr_cyrillic: "Мапа", pairId: 216 }, { ru: "Путеводитель", sr_latin: "Vodič", sr_cyrillic: "Водич", pairId: 217 }, { ru: "Виза", sr_latin: "Viza", sr_cyrillic: "Виза", pairId: 218 }, { ru: "Таможня", sr_latin: "Carina", sr_cyrillic: "Царина", pairId: 219 }, { ru: "Граница", sr_latin: "Granica", sr_cyrillic: "Граница", pairId: 220 },
+            { ru: "Валюта", sr_latin: "Valuta", sr_cyrillic: "Валута", pairId: 221 }, { ru: "Обмен валюты", sr_latin: "Menjačnica", sr_cyrillic: "Мењачница", pairId: 222 }, { ru: "Турист", sr_latin: "Turista", sr_cyrillic: "Туриста", pairId: 223 }, { ru: "Достопримечательность", sr_latin: "Znamenitost", sr_cyrillic: "Знаменитост", pairId: 224 }, { ru: "Музей", sr_latin: "Muzej", sr_cyrillic: "Музеј", pairId: 225 }, { ru: "Памятник", sr_latin: "Spomenik", sr_cyrillic: "Споменик", pairId: 226 }, { ru: "Центр города", sr_latin: "Centar grada", sr_cyrillic: "Центар града", pairId: 227 }, { ru: "Остановка (автобуса)", sr_latin: "Stajalište", sr_cyrillic: "Стајалиште", pairId: 228 }, { ru: "Отправление", sr_latin: "Polazak", sr_cyrillic: "Полазак", pairId: 229 }, { ru: "Прибытие", sr_latin: "Dolazak", sr_cyrillic: "Долазак", pairId: 230 },
+            { ru: "Расписание", sr_latin: "Red vožnje", sr_cyrillic: "Ред вожње", pairId: 231 }, { ru: "Задержка (рейса)", sr_latin: "Kašnjenje", sr_cyrillic: "Кашњење", pairId: 232 }, { ru: "Рейс", sr_latin: "Let", sr_cyrillic: "Лет", pairId: 233 }, { ru: "Место у окна", sr_latin: "Mesto do prozora", sr_cyrillic: "Место до прозора", pairId: 234 }, { ru: "Место у прохода", sr_latin: "Mesto do prolaza", sr_cyrillic: "Место до пролаза", pairId: 235 }, { ru: "Платформа (на вокзале)", sr_latin: "Peron", sr_cyrillic: "Перон", pairId: 236 }, { ru: "Камера хранения", sr_latin: "Gardaroba", sr_cyrillic: "Гардароба", pairId: 237 }, { ru: "Прокат автомобилей", sr_latin: "Iznajmljivanje automobila", sr_cyrillic: "Изнајмљивање аутомобила", pairId: 238 }, { ru: "Страховка", sr_latin: "Osiguranje", sr_cyrillic: "Осигурање", pairId: 239 }, { ru: "Посольство", sr_latin: "Ambasada", sr_cyrillic: "Амбасада", pairId: 240 },
+            { ru: "Консульство", sr_latin: "Konzulat", sr_cyrillic: "Конзулат", pairId: 241 }, { ru: "Информация (бюро)", sr_latin: "Informacije", sr_cyrillic: "Информације", pairId: 242 }, { ru: "Бесплатно", sr_latin: "Besplatno", sr_cyrillic: "Бесплатно", pairId: 243 }, { ru: "Вход", sr_latin: "Ulaz", sr_cyrillic: "Улаз", pairId: 244 }, { ru: "Выход", sr_latin: "Izlaz", sr_cyrillic: "Излаз", pairId: 245 }, { ru: "Запрещено", sr_latin: "Zabranjeno", sr_cyrillic: "Забрањено", pairId: 246 }, { ru: "Разрешено", sr_latin: "Dozvoljeno", sr_cyrillic: "Дозвољено", pairId: 247 }, { ru: "Налево", sr_latin: "Levo", sr_cyrillic: "Лево", pairId: 248 }, { ru: "Направо", sr_latin: "Desno", sr_cyrillic: "Десно", pairId: 249 }, { ru: "Прямо", sr_latin: "Pravo", sr_cyrillic: "Право", pairId: 250 },
+            { ru: "Далеко", sr_latin: "Daleko", sr_cyrillic: "Далеко", pairId: 251 }, { ru: "Близко", sr_latin: "Blizu", sr_cyrillic: "Близу", pairId: 252 }, { ru: "Здесь", sr_latin: "Ovde", sr_cyrillic: "Овде", pairId: 253 }, { ru: "Там", sr_latin: "Tamo", sr_cyrillic: "Тамо", pairId: 254 }, { ru: "Сколько стоит?", sr_latin: "Koliko košta?", sr_cyrillic: "Колико кошта?", pairId: 255 }, { ru: "Где находится...?", sr_latin: "Gde je...?", sr_cyrillic: "Где је...?", pairId: 256 }, { ru: "Сувенир", sr_latin: "Suvenir", sr_cyrillic: "Сувенир", pairId: 257 }, { ru: "Фотография", sr_latin: "Fotografija", sr_cyrillic: "Фотографија", pairId: 258 }, { ru: "Загорать", sr_latin: "Sunčati se", sr_cyrillic: "Сунчати се", pairId: 259 }, { ru: "Плавать", sr_latin: "Plivati", sr_cyrillic: "Пливати", pairId: 260 },
+            { ru: "Гора", sr_latin: "Planina", sr_cyrillic: "Планина", pairId: 261 }, { ru: "Озеро", sr_latin: "Jezero", sr_cyrillic: "Језеро", pairId: 262 }, { ru: "Река", sr_latin: "Reka", sr_cyrillic: "Река", pairId: 263 }, { ru: "Лес", sr_latin: "Šuma", sr_cyrillic: "Шума", pairId: 264 }, { ru: "Остров", sr_latin: "Ostrvo", sr_cyrillic: "Острво", pairId: 265 }, { ru: "Круиз", sr_latin: "Krstarenje", sr_cyrillic: "Крстарење", pairId: 266 }, { ru: "Паром", sr_latin: "Trajekt", sr_cyrillic: "Трајект", pairId: 267 }, { ru: "Причал", sr_latin: "Pristanište", sr_cyrillic: "Пристаниште", pairId: 268 }, { ru: "Аренда велосипедов", sr_latin: "Iznajmljivanje bicikala", sr_cyrillic: "Изнајмљивање бицикала", pairId: 269 }, { ru: "Пешеходная тропа", sr_latin: "Pešačka staza", sr_cyrillic: "Пешачка стаза", pairId: 270 },
+            { ru: "Заповедник", sr_latin: "Rezervat prirode", sr_cyrillic: "Резерват природе", pairId: 271 }, { ru: "Кемпинг", sr_latin: "Kampovanje", sr_cyrillic: "Камповање", pairId: 272 }, { ru: "Палатка", sr_latin: "Šator", sr_cyrillic: "Шатор", pairId: 273 }, { ru: "Рюкзак", sr_latin: "Ranac", sr_cyrillic: "Ранац", pairId: 274 }, { ru: "Аптечка", sr_latin: "Prva pomoć", sr_cyrillic: "Прва помоћ", pairId: 275 }, { ru: "Солнцезащитный крем", sr_latin: "Krema za sunčanje", sr_cyrillic: "Крема за сунчање", pairId: 276 }, { ru: "Очки (солнечные)", sr_latin: "Naočare za sunce", sr_cyrillic: "Наочаре за сунце", pairId: 277 }, { ru: "Купальник", sr_latin: "Kupaći kostim", sr_cyrillic: "Купаћи костим", pairId: 278 }, { ru: "Полотенце", sr_latin: "Peškir", sr_cyrillic: "Пешкир", pairId: 279 }, { ru: "Местный житель", sr_latin: "Lokalac", sr_cyrillic: "Локалац", pairId: 280 },
+            { ru: "Традиция", sr_latin: "Tradicija", sr_cyrillic: "Традиција", pairId: 281 }, { ru: "Фестиваль", sr_latin: "Festival", sr_cyrillic: "Фестивал", pairId: 282 }, { ru: "Язык", sr_latin: "Jezik", sr_cyrillic: "Језик", pairId: 283 }, { ru: "Разговорник", sr_latin: "Razgovornik", sr_cyrillic: "Разговорник", pairId: 284 }, { ru: "Переводчик", sr_latin: "Prevodilac", sr_cyrillic: "Преводилац", pairId: 285 }, { ru: "Регистрация (в отеле)", sr_latin: "Prijava", sr_cyrillic: "Пријава", pairId: 286 }, { ru: "Выезд (из отеля)", sr_latin: "Odjava", sr_cyrillic: "Одјава", pairId: 287 }, { ru: "Одноместный номер", sr_latin: "Jednokrevetna soba", sr_cyrillic: "Једнокреветна соба", pairId: 288 }, { ru: "Двухместный номер", sr_latin: "Dvokrevetna soba", sr_cyrillic: "Двокреветна соба", pairId: 289 }, { ru: "Сейф", sr_latin: "Sef", sr_cyrillic: "Сеф", pairId: 290 },
+            { ru: "Кондиционер", sr_latin: "Klima uređaj", sr_cyrillic: "Клима уређај", pairId: 291 }, { ru: "Wi-Fi", sr_latin: "Wi-Fi", sr_cyrillic: "Wi-Fi", pairId: 292 }, { ru: "Парковка", sr_latin: "Parking", sr_cyrillic: "Паркинг", pairId: 293 }, { ru: "Бассейн", sr_latin: "Bazen", sr_cyrillic: "Базен", pairId: 294 }, { ru: "Завтрак включен", sr_latin: "Doručak uključen", sr_cyrillic: "Доручак укључен", pairId: 295 }, { ru: "Обслуживание номеров", sr_latin: "Sobna usluga", sr_cyrillic: "Собна услуга", pairId: 296 }, { ru: "Потерял дорогу", sr_latin: "Izgubio sam put", sr_cyrillic: "Изгубио сам пут", pairId: 297 }, { ru: "Срочно", sr_latin: "Hitno", sr_cyrillic: "Хитно", pairId: 298 }, { ru: "Полиция", sr_latin: "Policija", sr_cyrillic: "Полиција", pairId: 299 }, { ru: "Скорая помощь", sr_latin: "Hitna pomoć", sr_cyrillic: "Хитна помоћ", pairId: 300 },
+            // New 100 words for "Travel" (pairId: 812-911)
+            { ru: "Чемодан", sr_latin: "Kofer", sr_cyrillic: "Кофер", pairId: 812 },
+            { ru: "Путешествие", sr_latin: "Putovanje", sr_cyrillic: "Путовање", pairId: 813 },
+            { ru: "Отпуск", sr_latin: "Odmor", sr_cyrillic: "Одмор", pairId: 814 },
+            { ru: "Посадочный талон", sr_latin: "Karta za ukrcavanje", sr_cyrillic: "Карта за укрцавање", pairId: 815 },
+            { ru: "Природа", sr_latin: "Priroda", sr_cyrillic: "Природа", pairId: 816 },
+            { ru: "Авиакомпания", sr_latin: "Avio-kompanija", sr_cyrillic: "Авио-компанија", pairId: 817 },
+            { ru: "Терминал", sr_latin: "Terminal", sr_cyrillic: "Терминал", pairId: 818 },
+            { ru: "Выход на посадку", sr_latin: "Izlaz (gejt)", sr_cyrillic: "Излаз (гејт)", pairId: 819 },
+            { ru: "Ручная кладь", sr_latin: "Ručni prtljag", sr_cyrillic: "Ручни пртљаг", pairId: 820 },
+            { ru: "Сдаваемый багаж", sr_latin: "Predati prtljag", sr_cyrillic: "Предати пртљаг", pairId: 821 },
+            { ru: "Пересадка", sr_latin: "Presedanje", sr_cyrillic: "Преседање", pairId: 822 },
+            { ru: "Без пересадок (прямой рейс)", sr_latin: "Direktan let", sr_cyrillic: "Директан лет", pairId: 823 },
+            { ru: "Транзит", sr_latin: "Tranzit", sr_cyrillic: "Транзит", pairId: 824 },
+            { ru: "Паспортный контроль", sr_latin: "Pasoška kontrola", sr_cyrillic: "Пасошка контрола", pairId: 825 },
+            { ru: "Дьюти-фри", sr_latin: "Fri-šop", sr_cyrillic: "Фри-шоп", pairId: 826 }, // Duty-free
+            { ru: "Объявление (в аэропорту)", sr_latin: "Obaveštenje", sr_cyrillic: "Обавештење", pairId: 827 },
+            { ru: "Задержка багажа", sr_latin: "Kašnjenje prtljaga", sr_cyrillic: "Кашњење пртљага", pairId: 828 },
+            { ru: "Потерянный багаж", sr_latin: "Izgubljen prtljag", sr_cyrillic: "Изгубљен пртљаг", pairId: 829 },
+            { ru: "Морской порт", sr_latin: "Luka", sr_cyrillic: "Лука", pairId: 830 },
+            { ru: "Корабль", sr_latin: "Brod", sr_cyrillic: "Брод", pairId: 831 },
+            { ru: "Лодка", sr_latin: "Čamac", sr_cyrillic: "Чамац", pairId: 832 },
+            { ru: "Яхта", sr_latin: "Jahta", sr_cyrillic: "Јахта", pairId: 833 },
+            { ru: "Каюта", sr_latin: "Kabina", sr_cyrillic: "Кабина", pairId: 834 },
+            { ru: "Палуба", sr_latin: "Paluba", sr_cyrillic: "Палуба", pairId: 835 },
+            { ru: "Спасательный жилет", sr_latin: "Pojas za spasavanje", sr_cyrillic: "Појас за спасавање", pairId: 836 },
+            { ru: "Железная дорога", sr_latin: "Železnica", sr_cyrillic: "Железница", pairId: 837 },
+            { ru: "Купе (в поезде)", sr_latin: "Kupe", sr_cyrillic: "Купе", pairId: 838 },
+            { ru: "Плацкарт", sr_latin: "Ležaj", sr_cyrillic: "Лежај", pairId: 839 }, // Berth
+            { ru: "Проводник", sr_latin: "Kondukter", sr_cyrillic: "Кондуктер", pairId: 840 },
+            { ru: "Автовокзал", sr_latin: "Autobuska stanica", sr_cyrillic: "Аутобуска станица", pairId: 841 },
+            { ru: "Маршрут", sr_latin: "Ruta", sr_cyrillic: "Рута", pairId: 842 },
+            { ru: "Остановка (в пути)", sr_latin: "Pauza", sr_cyrillic: "Пауза", pairId: 843 }, // Break
+            { ru: "Дорога", sr_latin: "Put", sr_cyrillic: "Пут", pairId: 844 },
+            { ru: "Шоссе", sr_latin: "Autoput", sr_cyrillic: "Аутопут", pairId: 845 },
+            { ru: "Пробка (на дороге)", sr_latin: "Gužva", sr_cyrillic: "Гужва", pairId: 846 },
+            { ru: "Пешеход", sr_latin: "Pešak", sr_cyrillic: "Пешак", pairId: 847 },
+            { ru: "Тротуар", sr_latin: "Trotoar", sr_cyrillic: "Тротоар", pairId: 848 },
+            { ru: "Перекресток", sr_latin: "Raskrsnica", sr_cyrillic: "Раскрсница", pairId: 849 },
+            { ru: "Светофор", sr_latin: "Semafor", sr_cyrillic: "Семафор", pairId: 850 },
+            { ru: "Знак (дорожный)", sr_latin: "Saobraćajni znak", sr_cyrillic: "Саобраћајни знак", pairId: 851 },
+            { ru: "Велосипед", sr_latin: "Bicikl", sr_cyrillic: "Бицикл", pairId: 852 },
+            { ru: "Мотоцикл", sr_latin: "Motocikl", sr_cyrillic: "Мотоцикл", pairId: 853 },
+            { ru: "Общественный транспорт", sr_latin: "Javni prevoz", sr_cyrillic: "Јавни превоз", pairId: 854 },
+            { ru: "Метро", sr_latin: "Metro", sr_cyrillic: "Метро", pairId: 855 },
+            { ru: "Трамвай", sr_latin: "Tramvaj", sr_cyrillic: "Трамвај", pairId: 856 },
+            { ru: "Троллейбус", sr_latin: "Trolejbus", sr_cyrillic: "Тролејбус", pairId: 857 },
+            { ru: "Комната с видом на море", sr_latin: "Soba sa pogledom na more", sr_cyrillic: "Соба са погледом на море", pairId: 858 },
+            { ru: "Все включено", sr_latin: "Sve uključeno", sr_cyrillic: "Све укључено", pairId: 859 }, // All inclusive
+            { ru: "Полупансион", sr_latin: "Polupansion", sr_cyrillic: "Полупансион", pairId: 860 },
+            { ru: "Полный пансион", sr_latin: "Pun pansion", sr_cyrillic: "Пун пансион", pairId: 861 },
+            { ru: "Ресепшн", sr_latin: "Recepcija", sr_cyrillic: "Рецепција", pairId: 862 },
+            { ru: "Горничная", sr_latin: "Sobarica", sr_cyrillic: "Собарица", pairId: 863 },
+            { ru: "Чаевые (в отеле)", sr_latin: "Napojnica", sr_cyrillic: "Напојница", pairId: 864 }, // Bakšiš is more common
+            { ru: "Экскурсовод", sr_latin: "Turistički vodič", sr_cyrillic: "Туристички водич", pairId: 865 },
+            { ru: "Группа (туристов)", sr_latin: "Grupa", sr_cyrillic: "Група", pairId: 866 },
+            { ru: "Индивидуальный тур", sr_latin: "Individualna tura", sr_cyrillic: "Индивидуална тура", pairId: 867 },
+            { ru: "Фотоаппарат", sr_latin: "Foto-aparat", sr_cyrillic: "Фото-апарат", pairId: 868 },
+            { ru: "Снимать фото", sr_latin: "Fotografisati", sr_cyrillic: "Фотографисати", pairId: 869 },
+            { ru: "Видеокамера", sr_latin: "Video kamera", sr_cyrillic: "Видео камера", pairId: 870 },
+            { ru: "Снимать видео", sr_latin: "Snimati video", sr_cyrillic: "Снимати видео", pairId: 871 },
+            { ru: "Покупки", sr_latin: "Kupovina", sr_cyrillic: "Куповина", pairId: 872 },
+            { ru: "Подарок", sr_latin: "Poklon", sr_cyrillic: "Поклон", pairId: 873 },
+            { ru: "Местная кухня", sr_latin: "Lokalna kuhinja", sr_cyrillic: "Локална кухиња", pairId: 874 },
+            { ru: "Ваучер", sr_latin: "Vaučer", sr_cyrillic: "Ваучер", pairId: 875 },
+            { ru: "Страна", sr_latin: "Zemlja", sr_cyrillic: "Земља", pairId: 876 },
+            { ru: "Столица", sr_latin: "Glavni grad", sr_cyrillic: "Главни град", pairId: 877 },
+            { ru: "Регион", sr_latin: "Region", sr_cyrillic: "Регион", pairId: 878 },
+            { ru: "Деревня", sr_latin: "Selo", sr_cyrillic: "Село", pairId: 879 },
+            { ru: "Побережье", sr_latin: "Obala", sr_cyrillic: "Обала", pairId: 880 },
+            { ru: "Залив", sr_latin: "Zaliv", sr_cyrillic: "Залив", pairId: 881 },
+            { ru: "Полуостров", sr_latin: "Poluostrvo", sr_cyrillic: "Полуострво", pairId: 882 },
+            { ru: "Маяк", sr_latin: "Svetionik", sr_cyrillic: "Светионик", pairId: 883 },
+            { ru: "Крепость", sr_latin: "Tvrđava", sr_cyrillic: "Тврђава", pairId: 884 },
+            { ru: "Замок", sr_latin: "Zamak", sr_cyrillic: "Замак", pairId: 885 }, // Dvorac
+            { ru: "Дворец", sr_latin: "Palata", sr_cyrillic: "Палата", pairId: 886 },
+            { ru: "Церковь", sr_latin: "Crkva", sr_cyrillic: "Црква", pairId: 887 },
+            { ru: "Мечеть", sr_latin: "Džamija", sr_cyrillic: "Џамија", pairId: 888 },
+            { ru: "Синагога", sr_latin: "Sinagoga", sr_cyrillic: "Синагога", pairId: 889 },
+            { ru: "Храм", sr_latin: "Hram", sr_cyrillic: "Храм", pairId: 890 },
+            { ru: "Кафедральный собор", sr_latin: "Katedrala", sr_cyrillic: "Катедрала", pairId: 891 },
+            { ru: "Площадь (городская)", sr_latin: "Trg", sr_cyrillic: "Трг", pairId: 892 },
+            { ru: "Фонтан", sr_latin: "Fontana", sr_cyrillic: "Фонтана", pairId: 893 },
+            { ru: "Мост", sr_latin: "Most", sr_cyrillic: "Мост", pairId: 894 },
+            { ru: "Тоннель", sr_latin: "Tunel", sr_cyrillic: "Тунел", pairId: 895 },
+            { ru: "Аквапарк", sr_latin: "Akva park", sr_cyrillic: "Аква парк", pairId: 896 },
+            { ru: "Зоопарк", sr_latin: "Zoološki vrt", sr_cyrillic: "Зоолошки врт", pairId: 897 },
+            { ru: "Ботанический сад", sr_latin: "Botanička bašta", sr_cyrillic: "Ботаничка башта", pairId: 898 },
+            { ru: "Галерея (искусств)", sr_latin: "Galerija", sr_cyrillic: "Галерија", pairId: 899 },
+            { ru: "Театр", sr_latin: "Pozorište", sr_cyrillic: "Позориште", pairId: 900 },
+            { ru: "Кинотеатр", sr_latin: "Bioskop", sr_cyrillic: "Биоскоп", pairId: 901 },
+            { ru: "Концерт", sr_latin: "Koncert", sr_cyrillic: "Концерт", pairId: 902 },
+            { ru: "Выставка", sr_latin: "Izložba", sr_cyrillic: "Изложба", pairId: 903 },
+            { ru: "Аренда авто", sr_latin: "Rentakar", sr_cyrillic: "Рентакар", pairId: 904 },
+            { ru: "Водительские права", sr_latin: "Vozačka dozvola", sr_cyrillic: "Возачка дозвола", pairId: 905 },
+            { ru: "Бензин", sr_latin: "Benzin", sr_cyrillic: "Бензин", pairId: 906 },
+            { ru: "Заправка (АЗС)", sr_latin: "Benzinska pumpa", sr_cyrillic: "Бензинска пумпа", pairId: 907 },
+            { ru: "Штраф", sr_latin: "Kazna", sr_cyrillic: "Казна", pairId: 908 },
+            { ru: "Авария", sr_latin: "Saobraćajna nesreća", sr_cyrillic: "Саобраћајна несрећа", pairId: 909 },
+            { ru: "Попутчик", sr_latin: "Saputnik", sr_cyrillic: "Сапутник", pairId: 910 },
+            { ru: "Развлечение", sr_latin: "Zabava", sr_cyrillic: "Забава", pairId: 911 },
+        ].map(word => ({ ...word, topic: 'travel' }));
+
+        const techWords = [
+            // Original 100 words (pairId: 301-400)
+            { ru: "Мышь (комп.)", sr_latin: "Miš", sr_cyrillic: "Миш", pairId: 301 }, { ru: "Экран", sr_latin: "Ekran", sr_cyrillic: "Екран", pairId: 302 }, { ru: "Принтер", sr_latin: "Štampač", sr_cyrillic: "Штампач", pairId: 303 }, { ru: "Сайт", sr_latin: "Sajt", sr_cyrillic: "Сајт", pairId: 304 }, { ru: "Пароль", sr_latin: "Lozinka", sr_cyrillic: "Лозинка", pairId: 305 }, { ru: "Батарея", sr_latin: "Baterija", sr_cyrillic: "Батерија", pairId: 306 }, { ru: "Клавиатура", sr_latin: "Tastatura", sr_cyrillic: "Тастатура", pairId: 307 }, { ru: "Ноутбук", sr_latin: "Laptop", sr_cyrillic: "Лаптоп", pairId: 308 }, { ru: "Планшет", sr_latin: "Tablet", sr_cyrillic: "Таблет", pairId: 309 }, { ru: "Смартфон", sr_latin: "Pametni telefon", sr_cyrillic: "Паметни телефон", pairId: 310 },
+            { ru: "Интернет", sr_latin: "Internet", sr_cyrillic: "Интернет", pairId: 311 }, { ru: "Электронная почта", sr_latin: "E-pošta", sr_cyrillic: "Е-пошта", pairId: 312 }, { ru: "Файл", sr_latin: "Fajl", sr_cyrillic: "Фајл", pairId: 313 }, { ru: "Папка", sr_latin: "Folder", sr_cyrillic: "Фолдер", pairId: 314 }, { ru: "Программа", sr_latin: "Program", sr_cyrillic: "Програм", pairId: 315 }, { ru: "Приложение", sr_latin: "Aplikacija", sr_cyrillic: "Апликација", pairId: 316 }, { ru: "Скачать", sr_latin: "Preuzeti", sr_cyrillic: "Преузети", pairId: 317 }, { ru: "Загрузить (на сервер)", sr_latin: "Otpremiti", sr_cyrillic: "Отпремити", pairId: 318 }, { ru: "Сохранить", sr_latin: "Sačuvati", sr_cyrillic: "Сачувати", pairId: 319 }, { ru: "Удалить", sr_latin: "Obrisati", sr_cyrillic: "Обрисати", pairId: 320 },
+            { ru: "Копировать", sr_latin: "Kopirati", sr_cyrillic: "Копирати", pairId: 321 }, { ru: "Вставить", sr_latin: "Nalepiti", sr_cyrillic: "Налепити", pairId: 322 }, { ru: "Настройки", sr_latin: "Podešavanja", sr_cyrillic: "Подешавања", pairId: 323 }, { ru: "Обновление", sr_latin: "Ažuriranje", sr_cyrillic: "Ажурирање", pairId: 324 }, { ru: "Вирус", sr_latin: "Virus", sr_cyrillic: "Вирус", pairId: 325 }, { ru: "Антивирус", sr_latin: "Antivirus", sr_cyrillic: "Антивирус", pairId: 326 }, { ru: "Сеть (комп.)", sr_latin: "Mreža", sr_cyrillic: "Мрежа", pairId: 327 }, { ru: "Беспроводной", sr_latin: "Bežični", sr_cyrillic: "Бежични", pairId: 328 }, { ru: "Кабель", sr_latin: "Kabl", sr_cyrillic: "Кабл", pairId: 329 }, { ru: "Зарядное устройство", sr_latin: "Punjač", sr_cyrillic: "Пуњач", pairId: 330 },
+            { ru: "Наушники", sr_latin: "Slušalice", sr_cyrillic: "Слушалице", pairId: 331 }, { ru: "Микрофон", sr_latin: "Mikrofon", sr_cyrillic: "Микрофон", pairId: 332 }, { ru: "Веб-камера", sr_latin: "Veb kamera", sr_cyrillic: "Веб камера", pairId: 333 }, { ru: "Колонки (аудио)", sr_latin: "Zvučnici", sr_cyrillic: "Звучници", pairId: 334 }, { ru: "Жесткий диск", sr_latin: "Hard disk", sr_cyrillic: "Хард диск", pairId: 335 }, { ru: "Флешка", sr_latin: "USB fleš", sr_cyrillic: "УСБ флеш", pairId: 336 }, { ru: "Операционная система", sr_latin: "Operativni sistem", sr_cyrillic: "Оперативни систем", pairId: 337 }, { ru: "Браузер", sr_latin: "Pretraživač", sr_cyrillic: "Претраживач", pairId: 338 }, { ru: "Ссылка", sr_latin: "Link", sr_cyrillic: "Линк", pairId: 339 }, { ru: "Кликнуть", sr_latin: "Kliknuti", sr_cyrillic: "Кликнути", pairId: 340 },
+            { ru: "Социальная сеть", sr_latin: "Društvena mreža", sr_cyrillic: "Друштвена мрежа", pairId: 341 }, { ru: "Сообщение", sr_latin: "Poruka", sr_cyrillic: "Порука", pairId: 342 }, { ru: "Аккаунт", sr_latin: "Nalog", sr_cyrillic: "Налог", pairId: 343 }, { ru: "Логин", sr_latin: "Korisničko ime", sr_cyrillic: "Корисничко име", pairId: 344 }, { ru: "Поиск", sr_latin: "Pretraga", sr_cyrillic: "Претрага", pairId: 345 }, { ru: "Ошибка", sr_latin: "Greška", sr_cyrillic: "Грешка", pairId: 346 }, { ru: "Подключиться", sr_latin: "Povezati se", sr_cyrillic: "Повезати се", pairId: 347 }, { ru: "Отключиться", sr_latin: "Prekinuti vezu", sr_cyrillic: "Прекинути везу", pairId: 348 }, { ru: "База данных", sr_latin: "Baza podataka", sr_cyrillic: "База података", pairId: 349 }, { ru: "Сервер", sr_latin: "Server", sr_cyrillic: "Сервер", pairId: 350 },
+            { ru: "Программирование", sr_latin: "Programiranje", sr_cyrillic: "Програмирање", pairId: 351 }, { ru: "Код", sr_latin: "Kod", sr_cyrillic: "Код", pairId: 352 }, { ru: "Разработчик", sr_latin: "Programer", sr_cyrillic: "Програмер", pairId: 353 }, { ru: "Искусственный интеллект", sr_latin: "Veštačka inteligencija", sr_cyrillic: "Вештачка интелигенција", pairId: 354 }, { ru: "Робот", sr_latin: "Robot", sr_cyrillic: "Робот", pairId: 355 }, { ru: "Дрон", sr_latin: "Dron", sr_cyrillic: "Дрон", pairId: 356 }, { ru: "Облачное хранилище", sr_latin: "Skladištenje u oblaku", sr_cyrillic: "Складиштење у облаку", pairId: 357 }, { ru: "Резервное копирование", sr_latin: "Rezervna kopija", sr_cyrillic: "Резервна копија", pairId: 358 }, { ru: "Шифрование", sr_latin: "Šifrovanje", sr_cyrillic: "Шифровање", pairId: 359 }, { ru: "Цифровой", sr_latin: "Digitalni", sr_cyrillic: "Дигитални", pairId: 360 },
+            { ru: "Виртуальная реальность", sr_latin: "Virtuelna realnost", sr_cyrillic: "Виртуелна реалност", pairId: 361 }, { ru: "Дополненная реальность", sr_latin: "Proširena realnost", sr_cyrillic: "Проширена реалност", pairId: 362 }, { ru: "Курсор", sr_latin: "Kursor", sr_cyrillic: "Курсор", pairId: 363 }, { ru: "Меню (комп.)", sr_latin: "Meni", sr_cyrillic: "Мени", pairId: 364 }, { ru: "Иконка", sr_latin: "Ikonica", sr_cyrillic: "Иконица", pairId: 365 }, { ru: "Рабочий стол", sr_latin: "Radna površina", sr_cyrillic: "Радна површина", pairId: 366 }, { ru: "Процессор", sr_latin: "Procesor", sr_cyrillic: "Процесор", pairId: 367 }, { ru: "Оперативная память", sr_latin: "RAM memorija", sr_cyrillic: "РАМ меморија", pairId: 368 }, { ru: "Видеокарта", sr_latin: "Grafička kartica", sr_cyrillic: "Графичка картица", pairId: 369 }, { ru: "Материнская плата", sr_latin: "Matična ploča", sr_cyrillic: "Матична плоча", pairId: 370 },
+            { ru: "Блок питания", sr_latin: "Napajanje", sr_cyrillic: "Напајање", pairId: 371 }, { ru: "Сканер", sr_latin: "Skener", sr_cyrillic: "Скенер", pairId: 372 }, { ru: "Проектор", sr_latin: "Projektor", sr_cyrillic: "Пројектор", pairId: 373 }, { ru: "Модем", sr_latin: "Modem", sr_cyrillic: "Модем", pairId: 374 }, { ru: "Маршрутизатор (роутер)", sr_latin: "Ruter", sr_cyrillic: "Рутер", pairId: 375 }, { ru: "Брандмауэр", sr_latin: "Zaštitni zid", sr_cyrillic: "Заштитни зид", pairId: 376 }, { ru: "Куки (cookie)", sr_latin: "Kolačić", sr_cyrillic: "Колачић", pairId: 377 }, { ru: "Кэш", sr_latin: "Keš memorija", sr_cyrillic: "Кеш меморија", pairId: 378 }, { ru: "Плагин", sr_latin: "Dodatak", sr_cyrillic: "Додатак", pairId: 379 }, { ru: "Виджет", sr_latin: "Vidžet", sr_cyrillic: "Виџет", pairId: 380 },
+            { ru: "Интерфейс", sr_latin: "Interfejs", sr_cyrillic: "Интерфејс", pairId: 381 }, { ru: "Пользователь", sr_latin: "Korisnik", sr_cyrillic: "Корисник", pairId: 382 }, { ru: "Администратор", sr_latin: "Administrator", sr_cyrillic: "Администратор", pairId: 383 }, { ru: "Бета-версия", sr_latin: "Beta verzija", sr_cyrillic: "Бета верзија", pairId: 384 }, { ru: "Релиз", sr_latin: "Izdanje", sr_cyrillic: "Издање", pairId: 385 }, { ru: "Отладка (дебаг)", sr_latin: "Otklanjanje grešaka", sr_cyrillic: "Отклањање грешака", pairId: 386 }, { ru: "Скриншот", sr_latin: "Snimak ekrana", sr_cyrillic: "Снимак екрана", pairId: 387 }, { ru: "Подкаст", sr_latin: "Podkast", sr_cyrillic: "Подкаст", pairId: 388 }, { ru: "Блог", sr_latin: "Blog", sr_cyrillic: "Блог", pairId: 389 }, { ru: "Форум", sr_latin: "Forum", sr_cyrillic: "Форум", pairId: 390 },
+            { ru: "Чат", sr_latin: "Ćaskanje", sr_cyrillic: "Ћаскање", pairId: 391 }, { ru: "Смайлик", sr_latin: "Smajli", sr_cyrillic: "Смајли", pairId: 392 }, { ru: "Аватар", sr_latin: "Avatar", sr_cyrillic: "Аватар", pairId: 393 }, { ru: "Хэштег", sr_latin: "Haštag", sr_cyrillic: "Хаштаг", pairId: 394 }, { ru: "Гаджет", sr_latin: "Gedžet", sr_cyrillic: "Геџет", pairId: 395 }, { ru: "Носимое устройство", sr_latin: "Nosivi uređaj", sr_cyrillic: "Носиви уређај", pairId: 396 }, { ru: "Умный дом", sr_latin: "Pametna kuća", sr_cyrillic: "Паметна кућа", pairId: 397 }, { ru: "Интернет вещей", sr_latin: "Internet stvari", sr_cyrillic: "Интернет ствари", pairId: 398 }, { ru: "Техподдержка", sr_latin: "Tehnička podrška", sr_cyrillic: "Техничка подршка", pairId: 399 }, { ru: "Кликбейт", sr_latin: "Klikbejt", sr_cyrillic: "Кликбејт", pairId: 400 },
+            // New 100 words for "Tech" (pairId: 912-1011)
+            { ru: "Алгоритм", sr_latin: "Algoritam", sr_cyrillic: "Алгоритам", pairId: 912 },
+            { ru: "Блокчейн", sr_latin: "Blokčejn", sr_cyrillic: "Блокчејн", pairId: 913 },
+            { ru: "Облако (техн.)", sr_latin: "Oblak (klaud)", sr_cyrillic: "Облак (клауд)", pairId: 914 },
+            { ru: "Кибербезопасность", sr_latin: "Sajber bezbednost", sr_cyrillic: "Сајбер безбедност", pairId: 915 },
+            { ru: "Прошивка", sr_latin: "Firmver", sr_cyrillic: "Фирмвер", pairId: 916 },
+            { ru: "Данные", sr_latin: "Podaci", sr_cyrillic: "Подаци", pairId: 917 },
+            { ru: "Машинное обучение", sr_latin: "Mašinsko učenje", sr_cyrillic: "Машинско учење", pairId: 918 },
+            { ru: "Нейронная сеть", sr_latin: "Neuronska mreža", sr_cyrillic: "Неуронска мрежа", pairId: 919 },
+            { ru: "Большие данные", sr_latin: "Veliki podaci", sr_cyrillic: "Велики подаци", pairId: 920 }, // Big Data
+            { ru: "API (интерфейс приложения)", sr_latin: "API (Aplikacioni programski interfejs)", sr_cyrillic: "АПИ (Апликациони програмски интерфејс)", pairId: 921 },
+            { ru: "SDK (комплект разработки)", sr_latin: "SDK (Razvojni komplet)", sr_cyrillic: "СДК (Развојни комплет)", pairId: 922 },
+            { ru: "Исходный код", sr_latin: "Izvorni kod", sr_cyrillic: "Изворни код", pairId: 923 },
+            { ru: "Компилятор", sr_latin: "Kompajler", sr_cyrillic: "Компајлер", pairId: 924 },
+            { ru: "Интерпретатор", sr_latin: "Interpreter", sr_cyrillic: "Интерпретер", pairId: 925 },
+            { ru: "Фреймворк", sr_latin: "Okvir (frejmvork)", sr_cyrillic: "Оквир (фрејмворк)", pairId: 926 },
+            { ru: "Библиотека (прогр.)", sr_latin: "Biblioteka (programska)", sr_cyrillic: "Библиотека (програмска)", pairId: 927 },
+            { ru: "Открытый исходный код", sr_latin: "Otvoreni kod", sr_cyrillic: "Отворени код", pairId: 928 }, // Open Source
+            { ru: "Программное обеспечение", sr_latin: "Softver", sr_cyrillic: "Софтвер", pairId: 929 },
+            { ru: "Аппаратное обеспечение", sr_latin: "Hardver", sr_cyrillic: "Хардвер", pairId: 930 },
+            { ru: "Драйвер", sr_latin: "Drajver", sr_cyrillic: "Драјвер", pairId: 931 },
+            { ru: "Пиксель", sr_latin: "Piksel", sr_cyrillic: "Пиксел", pairId: 932 },
+            { ru: "Разрешение (экрана)", sr_latin: "Rezolucija (ekrana)", sr_cyrillic: "Резолуција (екрана)", pairId: 933 },
+            { ru: "Сенсорный экран", sr_latin: "Ekran osetljiv na dodir", sr_cyrillic: "Екран осетљив на додир", pairId: 934 },
+            { ru: "Графический интерфейс", sr_latin: "Grafički interfejs", sr_cyrillic: "Графички интерфејс", pairId: 935 },
+            { ru: "Командная строка", sr_latin: "Komandna linija", sr_cyrillic: "Командна линија", pairId: 936 },
+            { ru: "Резервное копирование данных", sr_latin: "Bekap podataka", sr_cyrillic: "Бекап података", pairId: 937 },
+            { ru: "Восстановление данных", sr_latin: "Oporavak podataka", sr_cyrillic: "Опоравак података", pairId: 938 },
+            { ru: "Хакер", sr_latin: "Haker", sr_cyrillic: "Хакер", pairId: 939 },
+            { ru: "Вредоносное ПО", sr_latin: "Malver", sr_cyrillic: "Малвер", pairId: 940 },
+            { ru: "Фишинг", sr_latin: "Fišing", sr_cyrillic: "Фишинг", pairId: 941 },
+            { ru: "Спам", sr_latin: "Spam", sr_cyrillic: "Спам", pairId: 942 },
+            { ru: "Двухфакторная аутентификация", sr_latin: "Dvofaktorska autentifikacija", sr_cyrillic: "Двофакторска аутентификација", pairId: 943 },
+            { ru: "VPN (виртуальная частная сеть)", sr_latin: "VPN (Virtuelna privatna mreža)", sr_cyrillic: "ВПН (Виртуелна приватна мрежа)", pairId: 944 },
+            { ru: "Прокси-сервер", sr_latin: "Proksi server", sr_cyrillic: "Прокси сервер", pairId: 945 },
+            { ru: "Доменное имя", sr_latin: "Naziv domena", sr_cyrillic: "Назив домена", pairId: 946 },
+            { ru: "Хостинг", sr_latin: "Hosting", sr_cyrillic: "Хостинг", pairId: 947 },
+            { ru: "Веб-разработка", sr_latin: "Veb razvoj", sr_cyrillic: "Веб развој", pairId: 948 },
+            { ru: "Мобильная разработка", sr_latin: "Mobilni razvoj", sr_cyrillic: "Мобилни развој", pairId: 949 },
+            { ru: "Фронтенд", sr_latin: "Frontend", sr_cyrillic: "Фронтенд", pairId: 950 },
+            { ru: "Бэкенд", sr_latin: "Bekend", sr_cyrillic: "Бекенд", pairId: 951 },
+            { ru: "Баг (ошибка в программе)", sr_latin: "Bag (greška)", sr_cyrillic: "Баг (грешка)", pairId: 952 },
+            { ru: "Тестирование (ПО)", sr_latin: "Testiranje (softvera)", sr_cyrillic: "Тестирање (софтвера)", pairId: 953 },
+            { ru: "Пользовательский опыт (UX)", sr_latin: "Korisničko iskustvo (UX)", sr_cyrillic: "Корисничко искуство (УX)", pairId: 954 },
+            { ru: "Пользовательский интерфейс (UI)", sr_latin: "Korisnički interfejs (UI)", sr_cyrillic: "Кориснички интерфејс (УИ)", pairId: 955 },
+            { ru: "Подписка (сервис)", sr_latin: "Pretplata (servis)", sr_cyrillic: "Претплата (сервис)", pairId: 956 },
+            { ru: "Уведомление", sr_latin: "Notifikacija", sr_cyrillic: "Нотификација", pairId: 957 },
+            { ru: "Электронная книга", sr_latin: "E-knjiga", sr_cyrillic: "Е-књига", pairId: 958 },
+            { ru: "Аудиокнига", sr_latin: "Audio knjiga", sr_cyrillic: "Аудио књига", pairId: 959 },
+            { ru: "Стриминг", sr_latin: "Striming", sr_cyrillic: "Стриминг", pairId: 960 },
+            { ru: "Совместимость", sr_latin: "Kompatibilnost", sr_cyrillic: "Компатибилност", pairId: 961 },
+            { ru: "Беспроводная зарядка", sr_latin: "Bežično punjenje", sr_cyrillic: "Бежично пуњење", pairId: 962 },
+            { ru: "Bluetooth", sr_latin: "Blutut", sr_cyrillic: "Блутут", pairId: 963 },
+            { ru: "GPS (Глобальная система позиционирования)", sr_latin: "GPS (Globalni sistem pozicioniranja)", sr_cyrillic: "ГПС (Глобални систем позиционирања)", pairId: 964 },
+            { ru: "NFC (коммуникация ближнего поля)", sr_latin: "NFC (Komunikacija bliskog polja)", sr_cyrillic: "НФЦ (Комуникација блиског поља)", pairId: 965 },
+            { ru: "QR-код", sr_latin: "QR kod", sr_cyrillic: "КР код", pairId: 966 },
+            { ru: "Облачные вычисления", sr_latin: "Računarstvo u oblaku", sr_cyrillic: "Рачунарство у облаку", pairId: 967 },
+            { ru: "Криптовалюта", sr_latin: "Kriptovaluta", sr_cyrillic: "Криптовалута", pairId: 968 },
+            { ru: "Майнинг (криптовалют)", sr_latin: "Rudarenje (kriptovaluta)", sr_cyrillic: "Рударење (криптовалута)", pairId: 969 },
+            { ru: "Смарт-часы", sr_latin: "Pametni sat", sr_cyrillic: "Паметни сат", pairId: 970 },
+            { ru: "Фитнес-трекер", sr_latin: "Fitnes treker", sr_cyrillic: "Фитнес трекер", pairId: 971 },
+            { ru: "3D-принтер", sr_latin: "3D štampač", sr_cyrillic: "3Д штампач", pairId: 972 },
+            { ru: "Голосовой помощник", sr_latin: "Glasovni asistent", sr_cyrillic: "Гласовни асистент", pairId: 973 },
+            { ru: "Автономный (самоуправляемый)", sr_latin: "Autonomni", sr_cyrillic: "Аутономни", pairId: 974 },
+            { ru: "Датчик", sr_latin: "Senzor", sr_cyrillic: "Сензор", pairId: 975 },
+            { ru: "Пропускная способность (сети)", sr_latin: "Protok (mreže)", sr_cyrillic: "Проток (мреже)", pairId: 976 }, // Bandwidth
+            { ru: "Задержка (сети)", sr_latin: "Latencija (mreže)", sr_cyrillic: "Латенција (мреже)", pairId: 977 }, // Latency
+            { ru: "Пиратство (ПО)", sr_latin: "Piraterija (softvera)", sr_cyrillic: "Пиратерија (софтвера)", pairId: 978 },
+            { ru: "Цифровая подпись", sr_latin: "Digitalni potpis", sr_cyrillic: "Дигитални потпис", pairId: 979 },
+            { ru: "Электронная коммерция", sr_latin: "E-trgovina", sr_cyrillic: "Е-трговина", pairId: 980 },
+            { ru: "Онлайн-банкинг", sr_latin: "Onlajn bankarstvo", sr_cyrillic: "Онлајн банкарство", pairId: 981 },
+            { ru: "Фрилансер", sr_latin: "Frilenser", sr_cyrillic: "Фриленсер", pairId: 982 },
+            { ru: "Удаленная работа", sr_latin: "Rad na daljinu", sr_cyrillic: "Рад на даљину", pairId: 983 },
+            { ru: "Видеоконференция", sr_latin: "Video konferencija", sr_cyrillic: "Видео конференција", pairId: 984 },
+            { ru: "Обмен файлами", sr_latin: "Deljenje fajlova", sr_cyrillic: "Дељење фајлова", pairId: 985 },
+            { ru: "Архивировать (файл)", sr_latin: "Arhivirati (fajl)", sr_cyrillic: "Архивирати (фајл)", pairId: 986 },
+            { ru: "Разархивировать", sr_latin: "Raspakovati", sr_cyrillic: "Распаковати", pairId: 987 },
+            { ru: "Горячая клавиша", sr_latin: "Prečica na tastaturi", sr_cyrillic: "Пречица на тастатури", pairId: 988 },
+            { ru: "Спящий режим", sr_latin: "Režim spavanja", sr_cyrillic: "Режим спавања", pairId: 989 }, // Sleep mode
+            { ru: "Перезагрузка", sr_latin: "Ponovno pokretanje", sr_cyrillic: "Поновно покретање", pairId: 990 }, // Restart
+            { ru: "Выключить (компьютер)", sr_latin: "Isključiti (računar)", sr_cyrillic: "Искључити (рачунар)", pairId: 991 },
+            { ru: "IT-специалист", sr_latin: "IT stručnjak", sr_cyrillic: "ИТ стручњак", pairId: 992 },
+            { ru: "Системный администратор", sr_latin: "Sistemski administrator", sr_cyrillic: "Системски администратор", pairId: 993 },
+            { ru: "Веб-дизайнер", sr_latin: "Veb dizajner", sr_cyrillic: "Веб дизајнер", pairId: 994 },
+            { ru: "Аналитик данных", sr_latin: "Analitičar podataka", sr_cyrillic: "Аналитичар података", pairId: 995 },
+            { ru: "Инженер ПО", sr_latin: "Softverski inženjer", sr_cyrillic: "Софтверски инжењер", pairId: 996 },
+            { ru: "Киборг", sr_latin: "Kiborg", sr_cyrillic: "Киборг", pairId: 997 },
+            { ru: "Нанотехнология", sr_latin: "Nanotehnologija", sr_cyrillic: "Нанотехнологија", pairId: 998 },
+            { ru: "Биоинформатика", sr_latin: "Bioinformatika", sr_cyrillic: "Биоинформатика", pairId: 999 },
+            { ru: "Квантовый компьютер", sr_latin: "Kvantni računar", sr_cyrillic: "Квантни рачунар", pairId: 1000 },
+            { ru: "Спутник", sr_latin: "Satelit", sr_cyrillic: "Сателит", pairId: 1001 },
+            { ru: "Монитор", sr_latin: "Monitor", sr_cyrillic: "Монитор", pairId: 1002 },
+            { ru: "USB-порт", sr_latin: "USB port", sr_cyrillic: "УСБ порт", pairId: 1003 },
+            { ru: "HDMI-кабель", sr_latin: "HDMI kabl", sr_cyrillic: "ХДМИ кабл", pairId: 1004 },
+            { ru: "Тачпад", sr_latin: "Tačped", sr_cyrillic: "Тачпед", pairId: 1005 },
+            { ru: "Программный сбой", sr_latin: "Softverski kvar", sr_cyrillic: "Софтверски квар", pairId: 1006 },
+            { ru: "Установка (ПО)", sr_latin: "Instalacija (softvera)", sr_cyrillic: "Инсталација (софтвера)", pairId: 1007 },
+            { ru: "Деинсталляция", sr_latin: "Deinstalacija", sr_cyrillic: "Деинсталација", pairId: 1008 },
+            { ru: "Лицензия (ПО)", sr_latin: "Licenca (softvera)", sr_cyrillic: "Лиценца (софтвера)", pairId: 1009 },
+            { ru: "Обновлять (ПО)", sr_latin: "Ažurirati (softver)", sr_cyrillic: "Ажурирати (софтвер)", pairId: 1010 },
+            { ru: "Эмулятор", sr_latin: "Emulator", sr_cyrillic: "Емулатор", pairId: 1011 },
+        ].map(word => ({ ...word, topic: 'tech' }));
+
+        const businessWords = [
+            // Original 100 words (pairId: 401-500)
+            { ru: "Бизнес", sr_latin: "Biznis", sr_cyrillic: "Бизнис", pairId: 401 }, { ru: "Экономика", sr_latin: "Ekonomija", sr_cyrillic: "Економија", pairId: 402 }, { ru: "Рынок", sr_latin: "Tržište", sr_cyrillic: "Тржиште", pairId: 403 }, { ru: "Компания", sr_latin: "Kompanija", sr_cyrillic: "Компанија", pairId: 404 }, { ru: "Фирма", sr_latin: "Firma", sr_cyrillic: "Фирма", pairId: 405 }, { ru: "Предприятие", sr_latin: "Preduzeće", sr_cyrillic: "Предузеће", pairId: 406 }, { ru: "Предприниматель", sr_latin: "Preduzetnik", sr_cyrillic: "Предузетник", pairId: 407 }, { ru: "Инвестиция", sr_latin: "Investicija", sr_cyrillic: "Инвестиција", pairId: 408 }, { ru: "Инвестор", sr_latin: "Investitor", sr_cyrillic: "Инвеститор", pairId: 409 }, { ru: "Акция (ценная бумага)", sr_latin: "Akcija", sr_cyrillic: "Акција", pairId: 410 },
+            { ru: "Облигация", sr_latin: "Obveznica", sr_cyrillic: "Обвезница", pairId: 411 }, { ru: "Прибыль", sr_latin: "Profit", sr_cyrillic: "Профит", pairId: 412 }, { ru: "Убыток", sr_latin: "Gubitak", sr_cyrillic: "Губитак", pairId: 413 }, { ru: "Доход", sr_latin: "Prihod", sr_cyrillic: "Приход", pairId: 414 }, { ru: "Расход", sr_latin: "Rashod", sr_cyrillic: "Расход", pairId: 415 }, { ru: "Бюджет", sr_latin: "Budžet", sr_cyrillic: "Буџет", pairId: 416 }, { ru: "Налог", sr_latin: "Porez", sr_cyrillic: "Порез", pairId: 417 }, { ru: "Финансы", sr_latin: "Finansije", sr_cyrillic: "Финансије", pairId: 418 }, { ru: "Банкротство", sr_latin: "Bankrot", sr_cyrillic: "Банкрот", pairId: 419 }, { ru: "Кредит", sr_latin: "Kredit", sr_cyrillic: "Кредит", pairId: 420 },
+            { ru: "Депозит", sr_latin: "Depozit", sr_cyrillic: "Депозит", pairId: 421 }, { ru: "Процентная ставка", sr_latin: "Kamatna stopa", sr_cyrillic: "Каматна стопа", pairId: 422 }, { ru: "Инфляция", sr_latin: "Inflacija", sr_cyrillic: "Инфлација", pairId: 423 }, { ru: "Дефляция", sr_latin: "Deflacija", sr_cyrillic: "Дефлација", pairId: 424 }, { ru: "ВВП", sr_latin: "BDP", sr_cyrillic: "БДП", pairId: 425 }, /* Bruto domaći proizvod */ { ru: "Экспорт", sr_latin: "Izvoz", sr_cyrillic: "Извоз", pairId: 426 }, { ru: "Импорт", sr_latin: "Uvoz", sr_cyrillic: "Увоз", pairId: 427 }, { ru: "Торговля", sr_latin: "Trgovina", sr_cyrillic: "Трговина", pairId: 428 }, { ru: "Клиент", sr_latin: "Klijent", sr_cyrillic: "Клијент", pairId: 429 }, { ru: "Поставщик", sr_latin: "Dobavljač", sr_cyrillic: "Добављач", pairId: 430 },
+            { ru: "Конкуренция", sr_latin: "Konkurencija", sr_cyrillic: "Конкуренција", pairId: 431 }, { ru: "Конкурент", sr_latin: "Konkurent", sr_cyrillic: "Конкурент", pairId: 432 }, { ru: "Маркетинг", sr_latin: "Marketing", sr_cyrillic: "Маркетинг", pairId: 433 }, { ru: "Реклама", sr_latin: "Reklama", sr_cyrillic: "Реклама", pairId: 434 }, { ru: "Бренд", sr_latin: "Brend", sr_cyrillic: "Бренд", pairId: 435 }, { ru: "Продажи", sr_latin: "Prodaja", sr_cyrillic: "Продаја", pairId: 436 }, { ru: "Менеджмент", sr_latin: "Menadžment", sr_cyrillic: "Менаџмент", pairId: 437 }, { ru: "Менеджер", sr_latin: "Menadžer", sr_cyrillic: "Менаџер", pairId: 438 }, { ru: "Сотрудник", sr_latin: "Zaposleni", sr_cyrillic: "Запослени", pairId: 439 }, { ru: "Зарплата", sr_latin: "Plata", sr_cyrillic: "Плата", pairId: 440 },
+            { ru: "Договор", sr_latin: "Ugovor", sr_cyrillic: "Уговор", pairId: 441 }, { ru: "Контракт", sr_latin: "Kontrakt", sr_cyrillic: "Контракт", pairId: 442 }, { ru: "Отчет", sr_latin: "Izveštaj", sr_cyrillic: "Извештај", pairId: 443 }, { ru: "Анализ", sr_latin: "Analiza", sr_cyrillic: "Анализа", pairId: 444 }, { ru: "Стратегия", sr_latin: "Strategija", sr_cyrillic: "Стратегија", pairId: 445 }, { ru: "План", sr_latin: "Plan", sr_cyrillic: "План", pairId: 446 }, { ru: "Проект", sr_latin: "Projekat", sr_cyrillic: "Пројекат", pairId: 447 }, { ru: "Риск", sr_latin: "Rizik", sr_cyrillic: "Ризик", pairId: 448 }, { ru: "Качество", sr_latin: "Kvalitet", sr_cyrillic: "Квалитет", pairId: 449 }, { ru: "Производство", sr_latin: "Proizvodnja", sr_cyrillic: "Производња", pairId: 450 },
+            { ru: "Продукт", sr_latin: "Proizvod", sr_cyrillic: "Производ", pairId: 451 }, { ru: "Услуга", sr_latin: "Usluga", sr_cyrillic: "Услуга", pairId: 452 }, { ru: "Спрос", sr_latin: "Potražnja", sr_cyrillic: "Потражња", pairId: 453 }, { ru: "Предложение (экон.)", sr_latin: "Ponuda", sr_cyrillic: "Понуда", pairId: 454 }, { ru: "Цена", sr_latin: "Cena", sr_cyrillic: "Цена", pairId: 455 }, { ru: "Скидка", sr_latin: "Popust", sr_cyrillic: "Попуст", pairId: 456 }, { ru: "Оптовая торговля", sr_latin: "Veleprodaja", sr_cyrillic: "Велепродаја", pairId: 457 }, { ru: "Розничная торговля", sr_latin: "Maloprodaja", sr_cyrillic: "Малопродаја", pairId: 458 }, { ru: "Франшиза", sr_latin: "Franšiza", sr_cyrillic: "Франшиза", pairId: 459 }, { ru: "Лицензия", sr_latin: "Licenca", sr_cyrillic: "Лиценца", pairId: 460 },
+            { ru: "Патент", sr_latin: "Patent", sr_cyrillic: "Патент", pairId: 461 }, { ru: "Авторское право", sr_latin: "Autorsko pravo", sr_cyrillic: "Ауторско право", pairId: 462 }, { ru: "Переговоры", sr_latin: "Pregovori", sr_cyrillic: "Преговори", pairId: 463 }, { ru: "Сделка", sr_latin: "Transakcija", sr_cyrillic: "Трансакција", pairId: 464 }, { ru: "Партнер", sr_latin: "Partner", sr_cyrillic: "Партнер", pairId: 465 }, { ru: "Директор", sr_latin: "Direktor", sr_cyrillic: "Директор", pairId: 466 }, { ru: "Акционер", sr_latin: "Akcionar", sr_cyrillic: "Акционар", pairId: 467 }, { ru: "Собрание", sr_latin: "Sastanak", sr_cyrillic: "Састанак", pairId: 468 }, { ru: "Офис", sr_latin: "Kancelarija", sr_cyrillic: "Канцеларија", pairId: 469 }, { ru: "Склад", sr_latin: "Skladište", sr_cyrillic: "Складиште", pairId: 470 },
+            { ru: "Логистика", sr_latin: "Logistika", sr_cyrillic: "Логистика", pairId: 471 }, { ru: "Транспорт", sr_latin: "Transport", sr_cyrillic: "Транспорт", pairId: 472 }, { ru: "Страхование", sr_latin: "Osiguranje", sr_cyrillic: "Осигурање", pairId: 473 }, { ru: "Бухгалтерия", sr_latin: "Knjigovodstvo", sr_cyrillic: "Књиговодство", pairId: 474 }, { ru: "Бухгалтер", sr_latin: "Knjigovođa", sr_cyrillic: "Књиговођа", pairId: 475 }, { ru: "Аудит", sr_latin: "Revizija", sr_cyrillic: "Ревизија", pairId: 476 }, { ru: "Консалтинг", sr_latin: "Konsalting", sr_cyrillic: "Консалтинг", pairId: 477 }, { ru: "Стартап", sr_latin: "Startap", sr_cyrillic: "Стартап", pairId: 478 }, { ru: "Инновация", sr_latin: "Inovacija", sr_cyrillic: "Иновација", pairId: 479 }, { ru: "Технология", sr_latin: "Tehnologija", sr_cyrillic: "Технологија", pairId: 480 },
+            { ru: "Капитал", sr_latin: "Kapital", sr_cyrillic: "Капитал", pairId: 481 }, { ru: "Дивиденды", sr_latin: "Dividende", sr_cyrillic: "Дивиденде", pairId: 482 }, { ru: "Закон", sr_latin: "Zakon", sr_cyrillic: "Закон", pairId: 483 }, { ru: "Юрист", sr_latin: "Pravnik", sr_cyrillic: "Правник", pairId: 484 }, { ru: "Недвижимость", sr_latin: "Nekretnine", sr_cyrillic: "Некретнине", pairId: 485 }, { ru: "Аренда", sr_latin: "Zakup", sr_cyrillic: "Закуп", pairId: 486 }, { ru: "Глобализация", sr_latin: "Globalizacija", sr_cyrillic: "Глобализација", pairId: 487 }, { ru: "Кризис", sr_latin: "Kriza", sr_cyrillic: "Криза", pairId: 488 }, { ru: "Безработица", sr_latin: "Nezaposlenost", sr_cyrillic: "Незапосленост", pairId: 489 }, { ru: "Забастовка", sr_latin: "Štrajk", sr_cyrillic: "Штрајк", pairId: 490 },
+            { ru: "Профсоюз", sr_latin: "Sindikat", sr_cyrillic: "Синдикат", pairId: 491 }, { ru: "Эффективность", sr_latin: "Efikasnost", sr_cyrillic: "Ефикасност", pairId: 492 }, { ru: "Производительность", sr_latin: "Produktivnost", sr_cyrillic: "Продуктивност", pairId: 493 }, { ru: "Ресурсы", sr_latin: "Resursi", sr_cyrillic: "Ресурси", pairId: 494 }, { ru: "Цель", sr_latin: "Cilj", sr_cyrillic: "Циљ", pairId: 495 }, { ru: "Задача", sr_latin: "Zadatak", sr_cyrillic: "Задатак", pairId: 496 }, { ru: "Срок", sr_latin: "Rok", sr_cyrillic: "Рок", pairId: 497 }, { ru: "Отдел", sr_latin: "Odeljenje", sr_cyrillic: "Одељење", pairId: 498 }, { ru: "Филиал", sr_latin: "Filijala", sr_cyrillic: "Филијала", pairId: 499 }, { ru: "Штаб-квартира", sr_latin: "Sedište", sr_cyrillic: "Седиште", pairId: 500 },
+            // New 100 words for "Business" (pairId: 1012-1111)
+            { ru: "Валютный курс", sr_latin: "Devizni kurs", sr_cyrillic: "Девизни курс", pairId: 1012 },
+            { ru: "Биржа", sr_latin: "Berza", sr_cyrillic: "Берза", pairId: 1013 },
+            { ru: "Брокер", sr_latin: "Broker", sr_cyrillic: "Брокер", pairId: 1014 },
+            { ru: "Контрагент", sr_latin: "Ugovorna strana", sr_cyrillic: "Уговорна страна", pairId: 1015 },
+            { ru: "Коммерческий", sr_latin: "Komercijalni", sr_cyrillic: "Комерцијални", pairId: 1016 },
+            { ru: "Тендер", sr_latin: "Tender", sr_cyrillic: "Тендер", pairId: 1017 },
+            { ru: "Аутсорсинг", sr_latin: "Autsorsing", sr_cyrillic: "Аутсорсинг", pairId: 1018 },
+            { ru: "Лояльность клиентов", sr_latin: "Lojalnost klijenata", sr_cyrillic: "Лојалност клијената", pairId: 1019 },
+            { ru: "Целевая аудитория", sr_latin: "Ciljna grupa", sr_cyrillic: "Циљна група", pairId: 1020 },
+            { ru: "Бизнес-план", sr_latin: "Biznis plan", sr_cyrillic: "Бизнис план", pairId: 1021 },
+            { ru: "Рентабельность", sr_latin: "Rentabilnost", sr_cyrillic: "Рентабилност", pairId: 1022 },
+            { ru: "Ликвидность", sr_latin: "Likvidnost", sr_cyrillic: "Ликвидност", pairId: 1023 },
+            { ru: "Амортизация", sr_latin: "Amortizacija", sr_cyrillic: "Амортизација", pairId: 1024 },
+            { ru: "Дебиторская задолженность", sr_latin: "Potraživanja", sr_cyrillic: "Потраживања", pairId: 1025 },
+            { ru: "Кредиторская задолженность", sr_latin: "Obaveze prema dobavljačima", sr_cyrillic: "Обавезе према добављачима", pairId: 1026 }, // Or samo Obaveze
+            { ru: "Баланс (отчет)", sr_latin: "Bilans stanja", sr_cyrillic: "Биланс стања", pairId: 1027 },
+            { ru: "Отчет о прибылях и убытках", sr_latin: "Bilans uspeha", sr_cyrillic: "Биланс успеха", pairId: 1028 },
+            { ru: "Оборот", sr_latin: "Promet", sr_cyrillic: "Промет", pairId: 1029 },
+            { ru: "Основные средства", sr_latin: "Osnovna sredstva", sr_cyrillic: "Основна средства", pairId: 1030 },
+            { ru: "Оборотные средства", sr_latin: "Obrtna sredstva", sr_cyrillic: "Обртна средства", pairId: 1031 },
+            { ru: "Уставный капитал", sr_latin: "Osnovni kapital", sr_cyrillic: "Основни капитал", pairId: 1032 },
+            { ru: "Слияние (компаний)", sr_latin: "Spajanje (kompanija)", sr_cyrillic: "Спајање (компанија)", pairId: 1033 }, // Fuzija
+            { ru: "Поглощение (компании)", sr_latin: "Akvizicija", sr_cyrillic: "Аквизиција", pairId: 1034 },
+            { ru: "Доля рынка", sr_latin: "Tržišni udeo", sr_cyrillic: "Тржишни удео", pairId: 1035 },
+            { ru: "Диверсификация", sr_latin: "Diversifikacija", sr_cyrillic: "Диверсификација", pairId: 1036 },
+            { ru: "Ноу-хау", sr_latin: "Nou-hau", sr_cyrillic: "Ноу-хау", pairId: 1037 },
+            { ru: "Интеллектуальная собственность", sr_latin: "Intelektualna svojina", sr_cyrillic: "Интелектуална својина", pairId: 1038 },
+            { ru: "Торговая марка", sr_latin: "Zaštitni znak", sr_cyrillic: "Заштитни знак", pairId: 1039 }, // Žig
+            { ru: "Франчайзинг", sr_latin: "Franšizing", sr_cyrillic: "Франшизинг", pairId: 1040 },
+            { ru: "Лизинг", sr_latin: "Lizing", sr_cyrillic: "Лизинг", pairId: 1041 },
+            { ru: "Форс-мажор", sr_latin: "Viša sila", sr_cyrillic: "Виша сила", pairId: 1042 },
+            { ru: "Арбитраж", sr_latin: "Arbitraža", sr_cyrillic: "Арбитража", pairId: 1043 },
+            { ru: "Медиация", sr_latin: "Medijacija", sr_cyrillic: "Медијација", pairId: 1044 },
+            { ru: "Корпоративная культура", sr_latin: "Korporativna kultura", sr_cyrillic: "Корпоративна култура", pairId: 1045 },
+            { ru: "Человеческие ресурсы (HR)", sr_latin: "Ljudski resursi (HR)", sr_cyrillic: "Људски ресурси (ХР)", pairId: 1046 },
+            { ru: "Подбор персонала", sr_latin: "Regrutacija", sr_cyrillic: "Регрутација", pairId: 1047 },
+            { ru: "Собеседование", sr_latin: "Intervju za posao", sr_cyrillic: "Интервју за посао", pairId: 1048 },
+            { ru: "Резюме", sr_latin: " биографија (CV)", sr_cyrillic: "Радна биографија (ЦВ)", pairId: 1049 },
+            { ru: "Вакансия", sr_latin: "Slobodno radno mesto", sr_cyrillic: "Слободно радно место", pairId: 1050 },
+            { ru: "Стажировка", sr_latin: "Praksa", sr_cyrillic: "Пракса", pairId: 1051 }, // Stažiranje
+            { ru: "Обучение (персонала)", sr_latin: "Obuka (zaposlenih)", sr_cyrillic: "Обука (запослених)", pairId: 1052 },
+            { ru: "Мотивация", sr_latin: "Motivacija", sr_cyrillic: "Мотивација", pairId: 1053 },
+            { ru: "Премия (бонус)", sr_latin: "Bonus", sr_cyrillic: "Бонус", pairId: 1054 },
+            { ru: "Увольнение", sr_latin: "Otkaz", sr_cyrillic: "Отказ", pairId: 1055 },
+            { ru: "Переговоры о зарплате", sr_latin: "Pregovori o plati", sr_cyrillic: "Преговори о плати", pairId: 1056 },
+            { ru: "Трудовой договор", sr_latin: "Ugovor o radu", sr_cyrillic: "Уговор о раду", pairId: 1057 },
+            { ru: "Рабочее время", sr_latin: "Radno vreme", sr_cyrillic: "Радно време", pairId: 1058 },
+            { ru: "Отпуск (оплачиваемый)", sr_latin: "Godišnji odmor", sr_cyrillic: "Годишњи одмор", pairId: 1059 },
+            { ru: "Больничный", sr_latin: "Bolovanje", sr_cyrillic: "Боловање", pairId: 1060 },
+            { ru: "Делегирование", sr_latin: "Delegiranje", sr_cyrillic: "Делегирање", pairId: 1061 },
+            { ru: "Презентация", sr_latin: "Prezentacija", sr_cyrillic: "Презентација", pairId: 1062 },
+            { ru: "Отзыв (клиента)", sr_latin: "Recenzija (klijenta)", sr_cyrillic: "Рецензија (клијента)", pairId: 1063 }, // Utisak, Povratna informacija
+            { ru: "Жалоба", sr_latin: "Žalba", sr_cyrillic: "Жалба", pairId: 1064 }, // Prigovor
+            { ru: "Посредник", sr_latin: "Posrednik", sr_cyrillic: "Посредник", pairId: 1065 },
+            { ru: "Оптовик", sr_latin: "Veletrgovac", sr_cyrillic: "Велетрговац", pairId: 1066 },
+            { ru: "Розничный продавец", sr_latin: "Maloprodavac", sr_cyrillic: "Малопродавац", pairId: 1067 },
+            { ru: "Потребитель", sr_latin: "Potrošač", sr_cyrillic: "Потрошач", pairId: 1068 },
+            { ru: "Цепочка поставок", sr_latin: "Lanac snabdevanja", sr_cyrillic: "Ланац снабдевања", pairId: 1069 },
+            { ru: "Закупка", sr_latin: "Nabavka", sr_cyrillic: "Набавка", pairId: 1070 },
+            { ru: "Торговый представитель", sr_latin: "Komercijalista", sr_cyrillic: "Комерцијалиста", pairId: 1071 },
+            { ru: "Исследование рынка", sr_latin: "Istraživanje tržišta", sr_cyrillic: "Истраживање тржишта", pairId: 1072 },
+            { ru: "Сегментация рынка", sr_latin: "Segmentacija tržišta", sr_cyrillic: "Сегментација тржишта", pairId: 1073 },
+            { ru: "Брендинг", sr_latin: "Brendiranje", sr_cyrillic: "Брендирање", pairId: 1074 },
+            { ru: "PR (связи с общественностью)", sr_latin: "Odnosi s javnošću (PR)", sr_cyrillic: "Односи с јавношћу (ПР)", pairId: 1075 },
+            { ru: "Рекламная кампания", sr_latin: "Reklamna kampanja", sr_cyrillic: "Рекламна кампања", pairId: 1076 },
+            { ru: "Спонсорство", sr_latin: "Sponzorstvo", sr_cyrillic: "Спонзорство", pairId: 1077 },
+            { ru: "Выставка (торговая)", sr_latin: "Sajam", sr_cyrillic: "Сајам", pairId: 1078 },
+            { ru: "Промышленность", sr_latin: "Industrija", sr_cyrillic: "Индустрија", pairId: 1079 },
+            { ru: "Сельское хозяйство", sr_latin: "Poljoprivreda", sr_cyrillic: "Пољопривреда", pairId: 1080 },
+            { ru: "Строительство", sr_latin: "Građevinarstvo", sr_cyrillic: "Грађевинарство", pairId: 1081 },
+            { ru: "Энергетика", sr_latin: "Energetika", sr_cyrillic: "Енергетика", pairId: 1082 },
+            { ru: "Инфраструктура", sr_latin: "Infrastruktura", sr_cyrillic: "Инфраструктура", pairId: 1083 },
+            { ru: "Государственный сектор", sr_latin: "Javni sektor", sr_cyrillic: "Јавни сектор", pairId: 1084 },
+            { ru: "Частный сектор", sr_latin: "Privatni sektor", sr_cyrillic: "Приватни сектор", pairId: 1085 },
+            { ru: "Некоммерческая организация", sr_latin: "Neprofitna organizacija", sr_cyrillic: "Непрофитна организација", pairId: 1086 },
+            { ru: "Малый бизнес", sr_latin: "Mali biznis", sr_cyrillic: "Мали бизнис", pairId: 1087 },
+            { ru: "Средний бизнес", sr_latin: "Srednji biznis", sr_cyrillic: "Средњи бизнис", pairId: 1088 },
+            { ru: "Крупный бизнес", sr_latin: "Veliki biznis", sr_cyrillic: "Велики бизнис", pairId: 1089 },
+            { ru: "Международный бизнес", sr_latin: "Međunarodni biznis", sr_cyrillic: "Међународни бизнис", pairId: 1090 },
+            { ru: "Совместное предприятие", sr_latin: "Zajedničko ulaganje", sr_cyrillic: "Заједничко улагање", pairId: 1091 }, // Joint venture
+            { ru: "Холдинг", sr_latin: "Holding", sr_cyrillic: "Холдинг", pairId: 1092 },
+            { ru: "Корпорация", sr_latin: "Korporacija", sr_cyrillic: "Корпорација", pairId: 1093 },
+            { ru: "Акционерное общество", sr_latin: "Akcionarsko društvo", sr_cyrillic: "Акционарско друштво", pairId: 1094 },
+            { ru: "ООО (Общество с ограниченной ответственностью)", sr_latin: "DOO (Društvo sa ograničenom odgovornošću)", sr_cyrillic: "ДОО (Друштво са ограниченом одговорношћу)", pairId: 1095 },
+            { ru: "Индивидуальный предприниматель", sr_latin: "Preduzetnik (pojedinac)", sr_cyrillic: "Предузетник (појединац)", pairId: 1096 },
+            { ru: "Налоговая декларация", sr_latin: "Poreska prijava", sr_cyrillic: "Пореска пријава", pairId: 1097 },
+            { ru: "НДС (Налог на добавленную стоимость)", sr_latin: "PDV (Porez na dodatu vrednost)", sr_cyrillic: "ПДВ (Порез на додату вредност)", pairId: 1098 },
+            { ru: "Таможенная пошлина", sr_latin: "Carina", sr_cyrillic: "Царина", pairId: 1099 }, // Duty
+            { ru: "Субсидия", sr_latin: "Subvencija", sr_cyrillic: "Субвенција", pairId: 1100 },
+            { ru: "Эмбарго", sr_latin: "Embargo", sr_cyrillic: "Ембарго", pairId: 1101 },
+            { ru: "Квота", sr_latin: "Kvota", sr_cyrillic: "Квота", pairId: 1102 },
+            { ru: "Перепроизводство", sr_latin: "Hiperprodukcija", sr_cyrillic: "Хиперпродукција", pairId: 1103 },
+            { ru: "Дефицит", sr_latin: "Deficit", sr_cyrillic: "Дефицит", pairId: 1104 },
+            { ru: "Профицит", sr_latin: "Suficit", sr_cyrillic: "Суфицит", pairId: 1105 },
+            { ru: "Лицензирование", sr_latin: "Licenciranje", sr_cyrillic: "Лиценцирање", pairId: 1106 },
+            { ru: "Сертификация", sr_latin: "Sertifikacija", sr_cyrillic: "Сертификација", pairId: 1107 },
+            { ru: "Стандартизация", sr_latin: "Standardizacija", sr_cyrillic: "Стандардизација", pairId: 1108 },
+            { ru: "Дедлайн (крайний срок)", sr_latin: "Rok (krajnji)", sr_cyrillic: "Рок (крајњи)", pairId: 1109 },
+            { ru: "Командировка", sr_latin: "Službeni put", sr_cyrillic: "Службени пут", pairId: 1110 },
+            { ru: "Протокол (собрания)", sr_latin: "Zapisnik (sastanka)", sr_cyrillic: "Записник (састанка)", pairId: 1111 },
+        ].map(word => ({ ...word, topic: 'business' }));
+
+
+        const allWordPairsData = [...basicsWords, ...foodWords, ...travelWords, ...techWords, ...businessWords];
+        // --- END OF WORD LISTS ---
+
+        // --- MODAL FUNCTIONS ---
+        function showGameEndModal(title, message) {
+            modalTitleEl.textContent = title;
+            modalMessageTextEl.innerHTML = message.replace(/\n/g, '<br>');
+            gameEndModal.classList.add('active');
+            lockBoard = true;
+        }
+
+        function hideGameEndModal() {
+            gameEndModal.classList.remove('active');
+        }
+
+        function showAboutModal() {
+            if (settingsDropdown.classList.contains('active')) {
+                settingsDropdown.classList.remove('active');
+            }
+            const aboutTextContent = `Игра для изучения сербских слов из пяти сфер жизни.
+0.1.0 beta версия (может некорректно отображать шрифты и цвета на некоторых мобильных устройствах).
+
+Автор: VOVSN
+GitHub: <a href="https://github.com/VOVSn" target="_blank" rel="noopener noreferrer" class="modal-link">https://github.com/VOVSn</a>
+
+Это проект с открытым исходным кодом. Вы можете внести свой вклад в репозиторий на GitHub!`;
+            if (aboutModalMessageTextContentEl) {
+                aboutModalMessageTextContentEl.innerHTML = aboutTextContent.replace(/\n/g, '<br>');
+            }
+            if (aboutModal) {
+                aboutModal.classList.add('active');
+            }
+        }
+
+        function hideAboutModal() {
+            if (aboutModal) {
+                aboutModal.classList.remove('active');
+            }
+        }
+
+
+        function playSound(soundType) {
+            if (!soundEnabled) return;
+            if (!audioCtx) {
+                try {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                } catch (e) {
+                    console.error("Web Audio API is not supported in this browser.", e);
+                    soundEnabled = false;
+                    if(soundToggle) soundToggle.checked = false;
+                    return;
+                }
+            }
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+
+            let oscillator, gainNode;
+            const now = audioCtx.currentTime;
+            const baseVolume = 0.05;
+
+            switch (soundType) {
+                case 'flip':
+                    oscillator = audioCtx.createOscillator(); gainNode = audioCtx.createGain();
+                    oscillator.type = 'triangle'; oscillator.frequency.setValueAtTime(1000, now);
+                    gainNode.gain.setValueAtTime(baseVolume * 0.8, now); gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.1);
+                    oscillator.connect(gainNode); gainNode.connect(audioCtx.destination);
+                    oscillator.start(now); oscillator.stop(now + 0.1);
+                    break;
+                case 'match':
+                    const playNote = (freq, startTime, duration, vol = baseVolume) => {
+                        const osc = audioCtx.createOscillator(); const gn = audioCtx.createGain();
+                        osc.type = 'sine'; osc.frequency.setValueAtTime(freq, startTime);
+                        gn.gain.setValueAtTime(vol, startTime); gn.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+                        osc.connect(gn); gn.connect(audioCtx.destination);
+                        osc.start(startTime); osc.stop(startTime + duration);
+                    };
+                    playNote(600, now, 0.12); playNote(900, now + 0.08, 0.12);
+                    break;
+                case 'noMatch':
+                    oscillator = audioCtx.createOscillator(); gainNode = audioCtx.createGain();
+                    oscillator.type = 'square'; oscillator.frequency.setValueAtTime(150, now);
+                    gainNode.gain.setValueAtTime(baseVolume * 0.7, now); gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.2);
+                    oscillator.connect(gainNode); gainNode.connect(audioCtx.destination);
+                    oscillator.start(now); oscillator.stop(now + 0.2);
+                    break;
+                case 'win':
+                    const winNotes = [ { freq: 523.25, time: 0, duration: 0.15, vol: baseVolume }, { freq: 659.25, time: 0.1, duration: 0.15, vol: baseVolume }, { freq: 783.99, time: 0.2, duration: 0.2, vol: baseVolume * 1.2 }, { freq: 1046.50, time: 0.35, duration: 0.25, vol: baseVolume * 1.5 } ];
+                    winNotes.forEach(note => {
+                        const osc = audioCtx.createOscillator(); const gn = audioCtx.createGain();
+                        osc.type = 'triangle'; osc.frequency.setValueAtTime(note.freq, now + note.time);
+                        gn.gain.setValueAtTime(note.vol, now + note.time); gn.gain.exponentialRampToValueAtTime(0.0001, now + note.time + note.duration);
+                        osc.connect(gn); gn.connect(audioCtx.destination);
+                        osc.start(now + note.time); osc.stop(now + note.time + note.duration);
+                    });
+                    break;
+            }
+        }
+
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function createCardElement(wordData, isSerbianCard) {
+            const card = document.createElement('div');
+            card.classList.add('memory-card');
+            card.dataset.pairId = wordData.pairId;
+            card.dataset.lang = isSerbianCard ? 'sr' : 'ru';
+
+            const cardInner = document.createElement('div');
+            cardInner.classList.add('card-inner');
+
+            const cardFront = document.createElement('div');
+            cardFront.classList.add('card-face', 'card-front');
+            const cardContent = document.createElement('div');
+            cardContent.classList.add('card-content');
+            const text = isSerbianCard ? (useCyrillic ? wordData.sr_cyrillic : wordData.sr_latin) : wordData.ru;
+            cardContent.textContent = text;
+
+            if (text.length > 25) { // For very long terms like "Bruto domaći proizvod" if it were displayed
+                 cardContent.classList.add('xx-small-text');
+            } else if (text.length > 20) {
+                cardContent.classList.add('x-small-text');
+            } else if (text.length > 15) {
+                cardContent.classList.add('small-text');
+            }
+
+            cardFront.appendChild(cardContent);
+
+
+            const cardBack = document.createElement('div');
+            cardBack.classList.add('card-face', 'card-back');
+            cardBack.textContent = '?';
+
+            cardInner.appendChild(cardFront);
+            cardInner.appendChild(cardBack);
+            card.appendChild(cardInner);
+
+            card.addEventListener('click', handleCardClick);
+            return card;
+        }
+
+
+        function updateGameSubtitles() {
+            gameSubtitleModeEl.textContent = gameMode === 'simple' ? "Сопоставьте видимые пары" : "Найдите и запомните пары";
+            if (gameActive || currentRound > 0) {
+                 if (selectedNumberOfRounds > 1) {
+                    gameSubtitleRoundEl.textContent = `Раунд ${currentRound}/${selectedNumberOfRounds}`;
+                } else {
+                    gameSubtitleRoundEl.textContent = "";
+                }
+            } else {
+                 gameSubtitleRoundEl.textContent = `Раунды: ${selectedNumberOfRounds}`;
+            }
+        }
+
+        function initGame() {
+            gameActive = false;
+            lockBoard = true;
+            boardHasBeenSetUpAtLeastOnce = false;
+
+
+            currentRound = 0;
+            wordsUsedInAllRounds.clear();
+            totalMovesAcrossAllRounds = 0;
+            totalTimeAcrossAllRounds = 0;
+
+            clearInterval(roundTimerInterval);
+            roundTimerInterval = null;
+
+            updateGameSubtitles();
+            proceedToNextRound();
+        }
+
+        function proceedToNextRound() {
+            currentRound++;
+            lockBoard = true;
+            gameActive = false;
+
+            if (currentRound > selectedNumberOfRounds) {
+                playSound('win');
+                let finalMessage, modalTitle;
+                if (selectedNumberOfRounds > 1) {
+                     modalTitle = `Все ${selectedNumberOfRounds} раундов завершены!`;
+                     finalMessage = `Общее количество ходов: ${totalMovesAcrossAllRounds}. \nОбщее время: ${formatTime(totalTimeAcrossAllRounds)}.`;
+                } else {
+                    modalTitle = "Игра завершена!";
+                    finalMessage = `Ходов: ${moves}. \nВремя: ${formatTime(roundSecondsElapsed)}.`;
+                }
+                gameSubtitleRoundEl.textContent = modalTitle;
+                showGameEndModal(modalTitle, finalMessage);
+                currentRound = 0;
+                gameBoard.innerHTML = `<p class="game-board-message">Игра завершена! Результаты в окне выше.</p>`;
+                updateStats();
+                timeValueEl.textContent = formatTime(0);
+                return;
+            }
+
+            updateGameSubtitles();
+            moves = 0;
+            matches = 0;
+            firstCard = null;
+            secondCard = null;
+
+            clearInterval(roundTimerInterval);
+            roundTimerInterval = null;
+            roundSecondsElapsed = 0;
+            timeValueEl.textContent = formatTime(roundSecondsElapsed);
+
+            updateStats();
+            setupBoardForCurrentRound();
+        }
+
+        function setupBoardForCurrentRound() {
+            gameBoard.innerHTML = '';
+
+            let availableConcepts = allWordPairsData
+                .filter(word => selectedTopics.includes(word.topic))
+                .filter(word => !wordsUsedInAllRounds.has(word.pairId.toString()));
+
+            if (availableConcepts.length === 0 && selectedTopics.length > 0 && boardHasBeenSetUpAtLeastOnce) {
+                 gameBoard.innerHTML = `<p class="game-board-message">Все слова из выбранных тем для текущей игры использованы. Начните новую игру или выберите другие темы.</p>`;
+                 currentTotalPairsInRound = 0;
+                 boardHasBeenSetUpAtLeastOnce = true;
+                 gameActive = false;
+                 lockBoard = true;
+                 updateStats();
+                  if (currentRound > 0 && selectedNumberOfRounds >=1) { // Check if it's not the very first setup try
+                    showGameEndModal("Запас слов исчерпан!", "Вы использовали все доступные слова для выбранных тем в этой игре.\nИгра завершена.");
+                    gameSubtitleRoundEl.textContent = `Раунд ${currentRound-1 > 0 ? currentRound-1 : 1}/${selectedNumberOfRounds} - Нет слов`;
+                    currentRound = 0; // Reset for new game
+                }
+                return;
+            } else if (availableConcepts.length < 1 && selectedTopics.length > 0) { // Need at least 1 unique pair
+                gameBoard.innerHTML = `<p class="game-board-message">Недостаточно уникальных слов для этого раунда.<br>Игра остановлена. Попробуйте выбрать больше тем или уменьшить количество раундов.</p>`;
+                currentTotalPairsInRound = 0;
+                gameSubtitleRoundEl.textContent += ` - Ошибка: нет слов`;
+                lockBoard = true;
+                gameActive = false;
+                clearInterval(roundTimerInterval); roundTimerInterval = null;
+                updateStats();
+                boardHasBeenSetUpAtLeastOnce = true;
+                return;
+            } else if (selectedTopics.length === 0) {
+                 gameBoard.innerHTML = `<p class="game-board-message">Пожалуйста, выберите хотя бы одну тему в настройках.</p>`;
+                 currentTotalPairsInRound = 0;
+                 updateStats();
+                 lockBoard = true;
+                 gameActive = false;
+                 boardHasBeenSetUpAtLeastOnce = true;
+                 return;
+            }
+
+            const shuffledConcepts = shuffle([...availableConcepts]);
+            currentTotalPairsInRound = Math.min(MAX_PAIRS_DISPLAYED, shuffledConcepts.length);
+
+
+            if (currentTotalPairsInRound === 0) { // Should be caught by above checks, but as a fallback
+                const messageText = (wordsUsedInAllRounds.size > 0 && availableConcepts.length === 0) ?
+                     'Все слова из выбранных тем использованы! Игра завершена.' :
+                     'Недостаточно слов для начала игры по выбранным темам (нужна хотя бы 1 пара).';
+                gameBoard.innerHTML = `<p class="game-board-message">${messageText}</p>`;
+                updateStats();
+                lockBoard = true;
+                gameActive = false;
+                boardHasBeenSetUpAtLeastOnce = true;
+                if (currentRound > 0 && selectedNumberOfRounds > 1 && availableConcepts.length === 0 && wordsUsedInAllRounds.size > 0) {
+                    showGameEndModal("Запас слов исчерпан!", "Вы использовали все доступные слова для выбранных тем.\nИгра завершена.");
+                    gameSubtitleRoundEl.textContent = `Раунд ${currentRound-1 > 0 ? currentRound-1 : 1}/${selectedNumberOfRounds} - Нет слов`;
+                    currentRound = 0;
+                } else if (currentRound > 0 && selectedNumberOfRounds > 1) {
+                    gameSubtitleRoundEl.textContent += ` - Ошибка: нет слов`;
+                }
+                return;
+            }
+
+            const conceptsForThisRound = shuffledConcepts.slice(0, currentTotalPairsInRound);
+
+            let gameCardsData = [];
+            conceptsForThisRound.forEach(pair => {
+                gameCardsData.push({ ...pair, type: 'ru', id: `ru-${pair.pairId}` });
+                gameCardsData.push({ ...pair, type: 'sr', id: `sr-${pair.pairId}` });
+            });
+
+            shuffle(gameCardsData);
+
+            gameCardsData.forEach(data => {
+                const cardElement = createCardElement(data, data.type === 'sr');
+                gameBoard.appendChild(cardElement);
+            });
+
+            const allCards = gameBoard.querySelectorAll('.memory-card');
+            if (gameMode === 'simple') {
+                allCards.forEach(cardEl => cardEl.classList.remove('is-flipped'));
+            } else {
+                allCards.forEach(cardEl => cardEl.classList.add('is-flipped'));
+            }
+
+            updateStats();
+            gameActive = true;
+            lockBoard = false;
+            boardHasBeenSetUpAtLeastOnce = true;
+        }
+
+
+        function handleCardClick() {
+            if (lockBoard || !gameActive || this.classList.contains('matched') || this === firstCard) {
+                return;
+            }
+
+            if (gameMode === 'memory' && this.classList.contains('is-flipped')) {
+                playSound('flip');
+                this.classList.remove('is-flipped');
+            } else if (gameMode === 'simple' && !this.classList.contains('is-flipped')){
+                if (!firstCard) playSound('flip');
+            }
+
+
+            if (moves === 0 && matches === 0 && !roundTimerInterval && gameActive) {
+                startRoundTimer();
+            }
+
+            this.classList.add('selected');
+
+            if (!firstCard) {
+                firstCard = this;
+                return;
+            }
+
+            secondCard = this;
+            if (firstCard && secondCard) playSound('flip');
+
+            moves++;
+            totalMovesAcrossAllRounds++;
+            updateStats();
+            lockBoard = true;
+
+            checkForMatch();
+        }
+
+        function checkForMatch() {
+            const isMatch = firstCard.dataset.pairId === secondCard.dataset.pairId && firstCard.dataset.lang !== secondCard.dataset.lang;
+
+            if (isMatch) {
+                playSound('match');
+                matches++;
+                updateStats();
+                firstCard.classList.remove('selected');
+                secondCard.classList.remove('selected');
+                firstCard.classList.add('matched');
+                secondCard.classList.add('matched');
+                resetTurn();
+                checkRoundWin();
+            } else {
+                playSound('noMatch');
+                firstCard.classList.add('incorrect');
+                secondCard.classList.add('incorrect');
+                setTimeout(() => {
+                    firstCard.classList.remove('selected', 'incorrect');
+                    secondCard.classList.remove('selected', 'incorrect');
+                    if (gameMode === 'memory') {
+                        firstCard.classList.add('is-flipped');
+                        secondCard.classList.add('is-flipped');
+                    }
+                    resetTurn();
+                }, 1000);
+            }
+        }
+
+        function resetTurn() {
+            firstCard = null;
+            secondCard = null;
+            lockBoard = !(matches < currentTotalPairsInRound && gameActive);
+        }
+
+        function updateStats() {
+            movesValueEl.textContent = moves;
+            matchesValueEl.textContent = `${matches}/${currentTotalPairsInRound}`;
+        }
+
+        function startRoundTimer() {
+            roundSecondsElapsed = 0;
+            timeValueEl.textContent = formatTime(roundSecondsElapsed);
+            clearInterval(roundTimerInterval);
+            roundTimerInterval = setInterval(() => {
+                if (gameActive) {
+                    roundSecondsElapsed++;
+                    totalTimeAcrossAllRounds++;
+                    timeValueEl.textContent = formatTime(roundSecondsElapsed);
+                } else {
+                    clearInterval(roundTimerInterval);
+                }
+            }, 1000);
+        }
+
+        function formatTime(totalSeconds) {
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        function checkRoundWin() {
+            if (matches === currentTotalPairsInRound && currentTotalPairsInRound > 0) {
+                clearInterval(roundTimerInterval);
+                gameActive = false;
+                lockBoard = true;
+                playSound('win');
+
+                const cardsInRound = Array.from(gameBoard.querySelectorAll('.memory-card.matched'));
+                const pairIdsInThisRound = new Set(cardsInRound.map(card => card.dataset.pairId.toString()));
+                pairIdsInThisRound.forEach(pid => wordsUsedInAllRounds.add(pid));
+
+                setTimeout(() => {
+                    proceedToNextRound();
+                }, 1500);
+            }
+        }
+
+        function handleSettingsChangeAndRestart() {
+            if (settingsDropdown.classList.contains('active')) settingsDropdown.classList.remove('active');
+            if (topicDropdown.classList.contains('active')) {
+                topicDropdown.classList.remove('active');
+                topicSelectorButton.classList.remove('open');
+            }
+            initGame();
+        }
+
+
+        function populateTopicDropdown() {
+            topicDropdown.innerHTML = '';
+            Object.keys(topicsData).forEach(key => {
+                const label = document.createElement('label');
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.value = key;
+                checkbox.name = 'topic-checkbox';
+                checkbox.checked = selectedTopics.includes(key);
+                checkbox.addEventListener('change', handleTopicSelectionChange);
+
+                label.appendChild(checkbox);
+                label.appendChild(document.createTextNode(topicsData[key]));
+                topicDropdown.appendChild(label);
+            });
+        }
+
+        function updateSelectedTopicsDisplay() {
+            topicCountDisplay.textContent = selectedTopics.length;
+        }
+
+
+        function handleTopicSelectionChange() {
+            const checkboxes = topicDropdown.querySelectorAll('input[type="checkbox"][name="topic-checkbox"]');
+            selectedTopics = [];
+            checkboxes.forEach(cb => {
+                if (cb.checked) {
+                    selectedTopics.push(cb.value);
+                }
+            });
+
+            if (selectedTopics.length === 0) {
+                selectedTopics.push('basics');
+                const basicsCheckbox = topicDropdown.querySelector('input[value="basics"]');
+                if (basicsCheckbox) basicsCheckbox.checked = true;
+
+                showGameEndModal("Внимание", "Должна быть выбрана хотя бы одна тема.<br>По умолчанию выбрана 'Основы'.");
+                modalPlayAgainBtn.style.display = 'none';
+                modalCloseBtn.textContent = 'OK';
+
+                const tempCloseHandler = () => {
+                    hideGameEndModal();
+                    modalPlayAgainBtn.style.display = '';
+                    modalCloseBtn.textContent = 'Закрыть';
+                    modalCloseBtn.removeEventListener('click', tempCloseHandler);
+                    modalCloseBtn.addEventListener('click', originalModalCloseBtnHandler); // Re-attach original
+                };
+                modalCloseBtn.removeEventListener('click', originalModalCloseBtnHandler); // Remove original to prevent double fire
+                modalCloseBtn.addEventListener('click', tempCloseHandler);
+            }
+            updateSelectedTopicsDisplay();
+            handleSettingsChangeAndRestart();
+        }
+
+        topicSelectorButton.addEventListener('click', (event) => {
+            event.stopPropagation();
+            topicDropdown.classList.toggle('active');
+            topicSelectorButton.classList.toggle('open');
+            if (settingsDropdown.classList.contains('active')) {
+                settingsDropdown.classList.remove('active');
+            }
+        });
+
+
+        newGameButton.addEventListener('click', initGame);
+
+        menuButton.addEventListener('click', (event) => {
+            event.stopPropagation();
+            settingsDropdown.classList.toggle('active');
+            if (topicDropdown.classList.contains('active')) {
+                topicDropdown.classList.remove('active');
+                topicSelectorButton.classList.remove('open');
+            }
+        });
+
+        document.addEventListener('click', (event) => {
+            if (settingsDropdown && !settingsDropdown.contains(event.target) && menuButton && !menuButton.contains(event.target)) {
+                settingsDropdown.classList.remove('active');
+            }
+            if (topicDropdown && !topicDropdown.contains(event.target) && topicSelectorButton && !topicSelectorButton.contains(event.target)) {
+                topicDropdown.classList.remove('active');
+                topicSelectorButton.classList.remove('open');
+            }
+        });
+
+        soundToggle.addEventListener('change', () => {
+            soundEnabled = soundToggle.checked;
+            if (soundEnabled && audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+        });
+
+        darkModeToggle.addEventListener('change', () => {
+            isDarkMode = darkModeToggle.checked;
+            document.body.classList.toggle('dark-mode', isDarkMode);
+            localStorage.setItem('darkMode', isDarkMode);
+        });
+
+        cyrillicToggle.addEventListener('change', () => {
+            useCyrillic = cyrillicToggle.checked;
+            scriptToggleLabel.textContent = useCyrillic ? 'Кириллица' : 'Латиница';
+            handleSettingsChangeAndRestart();
+        });
+
+        gameModeToggle.addEventListener('change', () => {
+            gameMode = gameModeToggle.checked ? 'memory' : 'simple';
+            gameModeLabel.textContent = gameMode === 'memory' ? 'Память' : 'Простой';
+            handleSettingsChangeAndRestart();
+        });
+
+        roundsSelect.addEventListener('change', (e) => {
+            const newNumRounds = parseInt(e.target.value);
+            if (newNumRounds === selectedNumberOfRounds) return;
+
+            selectedNumberOfRounds = newNumRounds;
+            if (gameActive || currentRound > 0 || boardHasBeenSetUpAtLeastOnce) {
+                initGame();
+            } else {
+                updateGameSubtitles();
+            }
+        });
+
+
+        const loadDarkModePreference = () => {
+            const savedDarkMode = localStorage.getItem('darkMode');
+            const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            isDarkMode = savedDarkMode !== null ? savedDarkMode === 'true' : systemPrefersDark;
+            document.body.classList.toggle('dark-mode', isDarkMode);
+            if (darkModeToggle) darkModeToggle.checked = isDarkMode;
+        };
+
+        let originalModalCloseBtnHandler; 
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadDarkModePreference();
+            populateTopicDropdown();
+            updateSelectedTopicsDisplay();
+
+            soundToggle.checked = soundEnabled;
+            cyrillicToggle.checked = useCyrillic;
+            scriptToggleLabel.textContent = useCyrillic ? 'Кириллица' : 'Латиница';
+            gameModeToggle.checked = gameMode === 'memory';
+            gameModeLabel.textContent = gameMode === 'memory' ? 'Память' : 'Простой';
+            roundsSelect.value = selectedNumberOfRounds;
+
+            updateGameSubtitles();
+            gameBoard.innerHTML = `<p class="game-board-message">Нажмите "Новая игра", чтобы начать.</p>`;
+            movesValueEl.textContent = '0';
+            matchesValueEl.textContent = `0/${MAX_PAIRS_DISPLAYED}`;
+            timeValueEl.textContent = formatTime(0);
+            lockBoard = true;
+            gameActive = false;
+
+            modalPlayAgainBtn.addEventListener('click', () => {
+                hideGameEndModal();
+                initGame();
+            });
+
+            originalModalCloseBtnHandler = () => {
+                 hideGameEndModal();
+                if (boardHasBeenSetUpAtLeastOnce && currentRound === 0) { 
+                    gameBoard.innerHTML = `<p class="game-board-message">Игра завершена. Нажмите "Новая игра", чтобы сыграть еще раз.</p>`;
+                } else if (!boardHasBeenSetUpAtLeastOnce) { 
+                     gameBoard.innerHTML = `<p class="game-board-message">Нажмите "Новая игра", чтобы начать.</p>`;
+                }
+            };
+            modalCloseBtn.addEventListener('click', originalModalCloseBtnHandler);
+
+
+            gameEndModal.addEventListener('click', (event) => {
+                if (event.target === gameEndModal) {
+                    modalCloseBtn.click(); 
+                }
+            });
+
+            // About Modal Listeners
+            if (aboutButton) {
+                aboutButton.addEventListener('click', showAboutModal);
+            }
+            if (aboutModalCloseBtn) {
+                aboutModalCloseBtn.addEventListener('click', hideAboutModal);
+            }
+            if (aboutModal) {
+                aboutModal.addEventListener('click', (event) => {
+                    if (event.target === aboutModal) {
+                        hideAboutModal();
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
