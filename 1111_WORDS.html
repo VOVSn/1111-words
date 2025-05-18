@@ -1039,7 +1039,8 @@
         </div>
     </div>
 
-    <script>
+<script>
+        // ... (keep existing const declarations and initial variable setups) ...
         const gameBoard = document.querySelector('.game-board');
         const movesValueEl = document.getElementById('moves-value');
         const matchesValueEl = document.getElementById('matches-value');
@@ -1100,8 +1101,8 @@
         let gameMode = 'simple'; // 'simple' or 'memory'
         let isDarkMode = false; // Will be set by loadDarkModePreference
 
-        let currentMainLanguage = 'ru'; // Default main language
-        let currentForeignLanguage = 'en'; // Default foreign language
+        let currentMainLanguage = 'en'; // Default main language (changed from 'ru')
+        let currentForeignLanguage = 'ru'; // Default foreign language (changed from 'en')
 
         const availableLanguages = {
             en: "English",
@@ -1112,6 +1113,8 @@
             sr_cyrillic: "Српски (Ћирилица)"
         };
 
+        // ... (uiStrings, allWordPairsMasterList, and other functions like _, showGameEndModal, etc., remain the same up to populateLanguageDropdown) ...
+        // --- uiStrings (keep as is) ---
         const uiStrings = {
             en: {
                 pageTitle: "1111 Words - Matching Game",
@@ -1156,7 +1159,7 @@
                 },
                 aboutModal: {
                     title: "About",
-                    content: "A game for learning words from five spheres of life.\n0.2.0 beta version (may display fonts and colors incorrectly on some mobile devices).\n\nAuthor: VOVSN\nGitHub: <a href=\"https://github.com/VOVSn\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"modal-link\">https://github.com/VOVSn</a>\n\nThis is an open-source project. You can contribute to the repository on GitHub!"
+                    content: "A game for learning words from five spheres of life.\n0.1.3 beta version (may display fonts and colors incorrectly on some mobile devices).\n\nAuthor: VOVSN\nGitHub: <a href=\"https://github.com/VOVSn\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"modal-link\">https://github.com/VOVSn</a>\n\nThis is an open-source project. You can contribute to the repository on GitHub!"
                 }
             },
             ru: {
@@ -1205,16 +1208,11 @@
                     content: "Игра для изучения слов из пяти сфер жизни.\n0.2.0 beta версия (может некорректно отображать шрифты и цвета на некоторых мобильных устройствах).\n\nАвтор: VOVSN\nGitHub: <a href=\"https://github.com/VOVSn\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"modal-link\">https://github.com/VOVSn</a>\n\nЭто проект с открытым исходным кодом. Вы можете внести свой вклад в репозиторий на GitHub!"
                 }
             },
-            // Add es, fr, sr_latin, sr_cyrillic similarly
-            // For brevity, I'll skip fully populating them here but the structure is the same.
-            // Placeholder for other languages:
-            es: { /* ... copy 'en' and translate ... */ pageTitle: "1111 Palabras - Juego de Coincidencias", gameTitle: "1111 Palabras", topics: {basics: "Básicos", food: "Comida/Restaurantes"}, subtitleModeSimple: "Empareja las palabras con su traducción", gameModeSimple: "Sencillo", gameModeMemory: "Memoria", aboutModal: { title: "Acerca de", content: "Juego para aprender palabras..."}},
-            fr: { /* ... copy 'en' and translate ... */ pageTitle: "1111 Mots - Jeu de Correspondance", gameTitle: "1111 Mots", topics: {basics: "Les bases", food: "Nourriture/Restaurants"}, subtitleModeSimple: "Associez les mots à leur traduction", gameModeSimple: "Simple", gameModeMemory: "Mémoire", aboutModal: { title: "À propos", content: "Jeu pour apprendre des mots..."}},
-            sr_latin: { /* ... copy 'en' and translate ... */ pageTitle: "1111 Reči - Igra Spajanja", gameTitle: "1111 Reči", topics: {basics: "Osnove", food: "Hrana/Restorani"}, subtitleModeSimple: "Poveži reči sa prevodom", gameModeSimple: "Jednostavno", gameModeMemory: "Memorija", aboutModal: { title: "O programu", content: "Igra za učenje reči..."}},
-            sr_cyrillic: { /* ... copy 'en' and translate ... */ pageTitle: "1111 Речи - Игра Спајања", gameTitle: "1111 Речи", topics: {basics: "Основе", food: "Храна/Ресторани"}, subtitleModeSimple: "Повежи речи са преводом", gameModeSimple: "Једноставно", gameModeMemory: "Меморија", aboutModal: { title: "О програму", content: "Игра за учење речи..."}},
+            es: { pageTitle: "1111 Palabras - Juego de Coincidencias", gameTitle: "1111 Palabras", topics: {basics: "Básicos", food: "Comida/Restaurantes", travel: "Viajes", tech: "Tecnología/Computadoras", business:"Negocios/Economía"}, subtitleModeSimple: "Empareja las palabras con su traducción", subtitleModeMemory: "Encuentra y recuerda las parejas", gameModeSimple: "Sencillo", gameModeMemory: "Memoria", mainLanguageLabel: "Idioma Principal:", foreignLanguageLabel: "Idioma a Aprender:", roundsLabel: "Rondas:", settingsMenuTitle: "Ajustes", gameModeLabel: "Modo de Juego", soundLabel: "Sonido", darkModeLabel: "Tema Oscuro", aboutButton: "Acerca de", movesStatLabel: "Movimientos", pairsStatLabel: "Pares", timeStatLabel: "Tiempo", newGameButton: "Nuevo Juego", playAgainButton: "Jugar de Nuevo", closeButton: "Cerrar", okButton: "OK", modalTitleGameEnd: "¡Juego Terminado!", modalTitleAllRoundsComplete: "¡Todas las {0} rondas completadas!", modalMessageStats: "Movimientos: {0}.\nTiempo: {1}.", modalMessageTotalStats: "Movimientos totales: {0}.\nTiempo total: {1}.", modalTitleAttention: "Atención", modalMessageMustSelectTopic: "Debe seleccionarse al menos un tema.\nPor defecto se selecciona 'Básicos'.", modalMessageNoWordsForRound: "No hay suficientes palabras únicas para esta ronda.\nJuego detenido. Intenta seleccionar más temas o reducir las rondas.", modalMessageAllWordsUsed: "Todas las palabras de los temas seleccionados para el juego actual han sido utilizadas. Comienza un nuevo juego o elige otros temas.", modalMessageNoWordsGameEnd: "Has utilizado todas las palabras disponibles para los temas seleccionados en este juego.\nJuego Terminado.", modalMessageNoWordsError: "Error: Sin palabras", modalMessageSelectTopic: "Por favor, selecciona al menos un tema en los ajustes.", modalMessageGameFinished: "¡Juego finalizado! Resultados en la ventana superior.", modalMessageStartGame: "Presiona \"Nuevo Juego\" para comenzar.", roundSubtitle: "Ronda {0}/{1}", roundSubtitleSingle: "Rondas: {0}", aboutModal: { title: "Acerca de", content: "Un juego para aprender palabras de cinco ámbitos de la vida.\nVersión beta 0.2.0 (puede mostrar fuentes y colores incorrectamente en algunos dispositivos móviles).\n\nAutor: VOVSN\nGitHub: <a href=\"https://github.com/VOVSn\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"modal-link\">https://github.com/VOVSn</a>\n\nEste es un proyecto de código abierto. ¡Puedes contribuir al repositorio en GitHub!"}},
+            fr: { pageTitle: "1111 Mots - Jeu de Correspondance", gameTitle: "1111 Mots", topics: {basics: "Les bases", food: "Nourriture/Restaurants", travel: "Voyages", tech: "Technologie/Ordinateurs", business:"Affaires/Économie"}, subtitleModeSimple: "Associez les mots à leur traduction", subtitleModeMemory: "Trouvez et mémorisez les paires", gameModeSimple: "Simple", gameModeMemory: "Mémoire", mainLanguageLabel: "Langue Principale :", foreignLanguageLabel: "Langue à Apprendre :", roundsLabel: "Manches :", settingsMenuTitle: "Paramètres", gameModeLabel: "Mode de Jeu", soundLabel: "Son", darkModeLabel: "Thème Sombre", aboutButton: "À propos", movesStatLabel: "Coups", pairsStatLabel: "Paires", timeStatLabel: "Temps", newGameButton: "Nouveau Jeu", playAgainButton: "Rejouer", closeButton: "Fermer", okButton: "OK", modalTitleGameEnd: "Partie Terminée !", modalTitleAllRoundsComplete: "Toutes les {0} manches terminées !", modalMessageStats: "Coups : {0}.\nTemps : {1}.", modalMessageTotalStats: "Total des coups : {0}.\nTemps total : {1}.", modalTitleAttention: "Attention", modalMessageMustSelectTopic: "Au moins un thème doit être sélectionné.\n'Les bases' est sélectionné par défaut.", modalMessageNoWordsForRound: "Pas assez de mots uniques pour cette manche.\nJeu arrêté. Essayez de sélectionner plus de thèmes ou de réduire le nombre de manches.", modalMessageAllWordsUsed: "Tous les mots des thèmes sélectionnés pour le jeu actuel ont été utilisés. Commencez un nouveau jeu ou choisissez d'autres thèmes.", modalMessageNoWordsGameEnd: "Vous avez utilisé tous les mots disponibles pour les thèmes sélectionnés dans ce jeu.\nPartie Terminée.", modalMessageNoWordsError: "Erreur : Pas de mots", modalMessageSelectTopic: "Veuillez sélectionner au moins un thème dans les paramètres.", modalMessageGameFinished: "Partie terminée ! Résultats dans la fenêtre ci-dessus.", modalMessageStartGame: "Appuyez sur \"Nouveau Jeu\" pour commencer.", roundSubtitle: "Manche {0}/{1}", roundSubtitleSingle: "Manches : {0}", aboutModal: { title: "À propos", content: "Un jeu pour apprendre des mots de cinq domaines de la vie.\nVersion bêta 0.2.0 (peut afficher incorrectement les polices et les couleurs sur certains appareils mobiles).\n\nAutheur : VOVSN\nGitHub : <a href=\"https://github.com/VOVSn\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"modal-link\">https://github.com/VOVSn</a>\n\nCeci est un projet open-source. Vous pouvez contribuer au dépôt sur GitHub !"}},
+            sr_latin: { pageTitle: "1111 Reči - Igra Spajanja", gameTitle: "1111 Reči", topics: {basics: "Osnove", food: "Hrana/Restorani", travel: "Putovanja", tech: "Tehnika/Računari", business:"Posao/Ekonomija"}, subtitleModeSimple: "Poveži reči sa prevodom", subtitleModeMemory: "Pronađi i zapamti parove", gameModeSimple: "Jednostavno", gameModeMemory: "Memorija", mainLanguageLabel: "Glavni Jezik:", foreignLanguageLabel: "Jezik za Učenje:", roundsLabel: "Runde:", settingsMenuTitle: "Podešavanja", gameModeLabel: "Režim Igre", soundLabel: "Zvuk", darkModeLabel: "Tamna Tema", aboutButton: "O programu", movesStatLabel: "Potezi", pairsStatLabel: "Parovi", timeStatLabel: "Vreme", newGameButton: "Nova Igra", playAgainButton: "Igraj Ponovo", closeButton: "Zatvori", okButton: "U redu", modalTitleGameEnd: "Igra Završena!", modalTitleAllRoundsComplete: "Svih {0} rundi završeno!", modalMessageStats: "Poteza: {0}.\nVreme: {1}.", modalMessageTotalStats: "Ukupno poteza: {0}.\nUkupno vreme: {1}.", modalTitleAttention: "Pažnja", modalMessageMustSelectTopic: "Mora biti izabrana bar jedna tema.\nPodrazumevano je izabrana 'Osnove'.", modalMessageNoWordsForRound: "Nema dovoljno jedinstvenih reči za ovu rundu.\nIgra zaustavljena. Pokušajte da izaberete više tema ili smanjite broj rundi.", modalMessageAllWordsUsed: "Sve reči iz izabranih tema za trenutnu igru su iskorišćene. Započnite novu igru ili izaberite druge teme.", modalMessageNoWordsGameEnd: "Iskoristili ste sve dostupne reči za izabrane teme u ovoj igri.\nIgra Završena.", modalMessageNoWordsError: "Greška: Nema reči", modalMessageSelectTopic: "Molimo izaberite bar jednu temu u podešavanjima.", modalMessageGameFinished: "Igra završena! Rezultati u prozoru iznad.", modalMessageStartGame: "Pritisnite \"Nova Igra\" da počnete.", roundSubtitle: "Runda {0}/{1}", roundSubtitleSingle: "Runde: {0}", aboutModal: { title: "O programu", content: "Igra za učenje reči iz pet sfera života.\n0.2.0 beta verzija (može nepravilno prikazivati fontove i boje na nekim mobilnim uređajima).\n\nAutor: VOVSN\nGitHub: <a href=\"https://github.com/VOVSn\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"modal-link\">https://github.com/VOVSn</a>\n\nOvo je projekat otvorenog koda. Možete doprineti repozitorijumu na GitHub-u!"}},
+            sr_cyrillic: { pageTitle: "1111 Речи - Игра Спајања", gameTitle: "1111 Речи", topics: {basics: "Основе", food: "Храна/Ресторани", travel: "Путовања", tech: "Техника/Рачунари", business:"Посао/Економија"}, subtitleModeSimple: "Повежи речи са преводом", subtitleModeMemory: "Пронађи и запамти парове", gameModeSimple: "Једноставно", gameModeMemory: "Меморија", mainLanguageLabel: "Главни Језик:", foreignLanguageLabel: "Језик за Учење:", roundsLabel: "Рунде:", settingsMenuTitle: "Подешавања", gameModeLabel: "Режим Игре", soundLabel: "Звук", darkModeLabel: "Тамна Тема", aboutButton: "О програму", movesStatLabel: "Потези", pairsStatLabel: "Парови", timeStatLabel: "Време", newGameButton: "Нова Игра", playAgainButton: "Играј Поново", closeButton: "Затвори", okButton: "У реду", modalTitleGameEnd: "Игра Завршена!", modalTitleAllRoundsComplete: "Свих {0} рунди завршено!", modalMessageStats: "Потеза: {0}.\nВреме: {1}.", modalMessageTotalStats: "Укупно потеза: {0}.\nУкупно време: {1}.", modalTitleAttention: "Пажња", modalMessageMustSelectTopic: "Мора бити изабрана бар једна тема.\nПодразумевано је изабрана 'Основе'.", modalMessageNoWordsForRound: "Нема довољно јединствених речи за ову рунду.\nИгра заустављена. Покушајте да изаберете више тема или смањите број рунди.", modalMessageAllWordsUsed: "Све речи из изабраних тема за тренутну игру су искоришћене. Започните нову игру или изаберите друге теме.", modalMessageNoWordsGameEnd: "Искористили сте све доступне речи за изабране теме у овој игри.\nИгра Завршена.", modalMessageNoWordsError: "Грешка: Нема речи", modalMessageSelectTopic: "Молимо изаберите бар једну тему у подешавањима.", modalMessageGameFinished: "Игра завршена! Резултати у прозору изнад.", modalMessageStartGame: "Притисните \"Нова Игра\" да почнете.", roundSubtitle: "Рунда {0}/{1}", roundSubtitleSingle: "Рунде: {0}", aboutModal: { title: "О програму", content: "Игра за учење речи из пет сфера живота.\n0.2.0 бета верзија (може неправилно приказивати фонтове и боје на неким мобилним уређајима).\n\nАутор: VOVSN\nGitHub: <a href=\"https://github.com/VOVSn\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"modal-link\">https://github.com/VOVSn</a>\n\nОво је пројекат отвореног кода. Можете допринети репозиторијуму на ГитХаб-у!"}},
         };
-
-        // Helper to get translated string
         function _(key, ...args) {
             let langStrings = uiStrings[currentMainLanguage] || uiStrings.en; // Fallback to English
             let string = key.split('.').reduce((obj, i) => (obj ? obj[i] : null), langStrings);
@@ -1233,7 +1231,6 @@
             }
             return string;
         }
-
         function updateAllUIText() {
             document.documentElement.lang = currentMainLanguage.split('_')[0]; // For 'sr_latin' -> 'sr'
             document.querySelectorAll('[data-translate-key]').forEach(el => {
@@ -1244,7 +1241,27 @@
                     el.title = _(key);
                 }
                 else {
-                    el.textContent = _(key);
+                    // For elements like topic-selector-button, preserve children like topic-count-display
+                    const textNode = Array.from(el.childNodes).find(node => node.nodeType === Node.TEXT_NODE && node.textContent.trim() !== '');
+                    if (textNode && (el.id === 'topic-selector-button' && key === 'topicsButton')) { // Target only the text part of the button
+                         textNode.textContent = _(key);
+                    } else if (!el.querySelector('[data-translate-key]')) { // Avoid nested translations
+                        // Preserve specific child elements if needed, e.g., topic count span
+                        if (el.id === 'topic-selector-button' && el.querySelector('#topic-count-display')) {
+                            const mainTextNode = Array.from(el.childNodes).find(node => node.nodeType === Node.TEXT_NODE && node.nodeValue.trim() !== '');
+                            if(mainTextNode) mainTextNode.nodeValue = _(key) + " "; // Add space before count
+                        } else {
+                           el.textContent = _(key);
+                        }
+                    } else {
+                         // If element has children with data-translate-key, only translate its own text content if any
+                        const ownTextNode = Array.from(el.childNodes).find(
+                            node => node.nodeType === Node.TEXT_NODE && node.textContent.trim() !== ''
+                        );
+                        if (ownTextNode) {
+                            ownTextNode.textContent = _(key);
+                        }
+                    }
                 }
             });
             // Specific updates not covered by data-translate-key
@@ -1266,10 +1283,8 @@
                 }
             }
         }
-
-
-        const topicInternalKeys = ['basics', 'food', 'travel', 'tech', 'business'];
-        let selectedTopics = ['basics']; // Default selected topic (internal key)
+		const topicInternalKeys = ['basics', 'food', 'travel', 'tech', 'business'];
+        let selectedTopics = ['basics'];
 
 		// --- WORD LISTS (MULTI-LANGUAGE SCHEMA) ---
 		// Schema: { pairId: unique_id, topic: "topic_internal_key", translations: { lang_key1: "Word1", lang_key2: "Word2", ... } }
@@ -2507,18 +2522,15 @@
 		];
 // --- END OF WORD LISTS ---
 
-
         function showGameEndModal(title, message) {
             modalTitleEl.textContent = title;
             modalMessageTextEl.innerHTML = message.replace(/\n/g, '<br>');
             gameEndModal.classList.add('active');
             lockBoard = true;
         }
-
         function hideGameEndModal() {
             gameEndModal.classList.remove('active');
         }
-
         function showAboutModal() {
             if (settingsDropdown.classList.contains('active')) {
                 settingsDropdown.classList.remove('active');
@@ -2531,13 +2543,11 @@
                 aboutModal.classList.add('active');
             }
         }
-
         function hideAboutModal() {
             if (aboutModal) {
                 aboutModal.classList.remove('active');
             }
         }
-
         function playSound(soundType) {
             if (!soundEnabled) return;
             if (!audioCtx) {
@@ -2593,7 +2603,6 @@
                     break;
             }
         }
-
         function shuffle(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -2601,7 +2610,6 @@
             }
             return array;
         }
-
         function createCardElement(cardDisplayData) {
             const card = document.createElement('div');
             card.classList.add('memory-card');
@@ -2640,8 +2648,6 @@
             card.addEventListener('click', handleCardClick);
             return card;
         }
-
-
         function updateGameSubtitles() {
             gameSubtitleModeEl.textContent = _(gameMode === 'simple' ? 'subtitleModeSimple' : 'subtitleModeMemory');
             if (gameActive || currentRound > 0) {
@@ -2654,7 +2660,6 @@
                  gameSubtitleRoundEl.textContent = _('roundSubtitleSingle', selectedNumberOfRounds);
             }
         }
-
         function initGame() {
             gameActive = false;
             lockBoard = true;
@@ -2671,7 +2676,6 @@
             updateGameSubtitles();
             proceedToNextRound();
         }
-
         function proceedToNextRound() {
             currentRound++;
             lockBoard = true;
@@ -2688,12 +2692,12 @@
                     finalMessage = _('modalMessageStats', moves, formatTime(roundSecondsElapsed));
                 }
                 const modalTitleText = _(modalTitleKey, selectedNumberOfRounds > 1 ? selectedNumberOfRounds : undefined);
-                gameSubtitleRoundEl.textContent = modalTitleText;
+                gameSubtitleRoundEl.textContent = modalTitleText; // Or keep round subtitle?
                 showGameEndModal(modalTitleText, finalMessage);
                 currentRound = 0; // Reset for potential new game from modal
                 gameBoard.innerHTML = `<p class="game-board-message">${_('modalMessageGameFinished')}</p>`;
-                updateStats();
-                timeValueEl.textContent = formatTime(0);
+                updateStats(); // Update stats to show final counts from last round.
+                timeValueEl.textContent = formatTime(0); // Reset timer display for "finished" state
                 return;
             }
 
@@ -2711,7 +2715,6 @@
             updateStats();
             setupBoardForCurrentRound();
         }
-
         function setupBoardForCurrentRound() {
             gameBoard.innerHTML = '';
 
@@ -2728,13 +2731,16 @@
                  lockBoard = true;
                  updateStats();
                   if (currentRound > 0 && selectedNumberOfRounds >=1) {
-                    showGameEndModal(_('modalMessageNoWordsGameEnd'), _('modalMessageNoWordsGameEnd')); // Title and message can be same or more specific
-                    let roundDisplay = currentRound - 1 > 0 ? currentRound - 1 : 1;
+                    showGameEndModal(_('modalMessageNoWordsGameEnd'), _('modalMessageNoWordsGameEnd'));
+                    let roundDisplay = currentRound -1; // currentRound already incremented for the round that couldn't start
+                    if (roundDisplay <= 0 && selectedNumberOfRounds === 1) roundDisplay = 1; // If it was a single round game that failed
+                    else if (roundDisplay <= 0) roundDisplay = selectedNumberOfRounds; // All rounds were actually completed before this empty attempt
+
                     gameSubtitleRoundEl.textContent = `${_('roundSubtitle', roundDisplay, selectedNumberOfRounds)} - ${_('modalMessageNoWordsError')}`;
-                    currentRound = 0;
+                    currentRound = 0; // Reset, game truly ended
                 }
                 return;
-            } else if (availableConcepts.length < 1 && selectedTopics.length > 0) {
+            } else if (availableConcepts.length < 1 && selectedTopics.length > 0) { // Not enough words for even one pair
                 gameBoard.innerHTML = `<p class="game-board-message">${_('modalMessageNoWordsForRound')}</p>`;
                 currentTotalPairsInRound = 0;
                 gameSubtitleRoundEl.textContent += ` - ${_('modalMessageNoWordsError')}`;
@@ -2758,10 +2764,10 @@
             currentTotalPairsInRound = Math.min(MAX_PAIRS_DISPLAYED, shuffledConcepts.length);
 
 
-            if (currentTotalPairsInRound === 0) {
+            if (currentTotalPairsInRound === 0) { // Should be caught by earlier checks, but as a safeguard
                 const messageText = (wordsUsedInAllRounds.size > 0 && availableConcepts.length === 0) ?
                      _('modalMessageAllWordsUsed') :
-                     _('modalMessageNoWordsForRound'); // Simplified from before
+                     _('modalMessageNoWordsForRound');
                 gameBoard.innerHTML = `<p class="game-board-message">${messageText}</p>`;
                 updateStats();
                 lockBoard = true;
@@ -2772,7 +2778,7 @@
                     let roundDisplay = currentRound - 1 > 0 ? currentRound - 1 : 1;
                     gameSubtitleRoundEl.textContent = `${_('roundSubtitle', roundDisplay, selectedNumberOfRounds)} - ${_('modalMessageNoWordsError')}`;
                     currentRound = 0;
-                } else if (currentRound > 0 && selectedNumberOfRounds > 1) {
+                } else if (currentRound > 0 && selectedNumberOfRounds >= 1) { //  >= 1 to cover single round case
                     gameSubtitleRoundEl.textContent += ` - ${_('modalMessageNoWordsError')}`;
                 }
                 return;
@@ -2782,13 +2788,11 @@
 
             let gameCardsData = [];
             conceptsForThisRound.forEach(pairConcept => {
-                // Card for the main language
                 gameCardsData.push({
                     displayText: pairConcept.translations[currentMainLanguage],
                     pairId: pairConcept.pairId,
                     langKey: currentMainLanguage
                 });
-                // Card for the foreign language
                 gameCardsData.push({
                     displayText: pairConcept.translations[currentForeignLanguage],
                     pairId: pairConcept.pairId,
@@ -2806,34 +2810,82 @@
             const allCards = gameBoard.querySelectorAll('.memory-card');
             if (gameMode === 'simple') {
                 allCards.forEach(cardEl => cardEl.classList.remove('is-flipped'));
-            } else {
+            } else { // memory mode
                 allCards.forEach(cardEl => cardEl.classList.add('is-flipped'));
+                 // Briefly show cards in memory mode then flip back
+                lockBoard = true;
+                setTimeout(() => {
+                    allCards.forEach(cardEl => {
+                        if (!cardEl.classList.contains('matched')) { // Don't flip already matched cards if this logic runs mid-game (it shouldn't here)
+                            cardEl.classList.remove('is-flipped');
+                        }
+                    });
+                    lockBoard = false;
+                }, 1500 + (currentTotalPairsInRound * 100)); // Adjust time based on number of cards
             }
+
 
             updateStats();
             gameActive = true;
-            lockBoard = false;
+            // lockBoard = false; // Handled by memory mode timeout if applicable
+            if (gameMode === 'simple') lockBoard = false;
             boardHasBeenSetUpAtLeastOnce = true;
         }
-
-
         function handleCardClick() {
             if (lockBoard || !gameActive || this.classList.contains('matched') || this === firstCard) {
                 return;
             }
 
-            if (gameMode === 'memory' && this.classList.contains('is-flipped')) {
-                playSound('flip');
-                this.classList.remove('is-flipped');
-            } else if (gameMode === 'simple' && !this.classList.contains('is-flipped')){
+            // In memory mode, cards start face down (.is-flipped is a visual state of being face-up)
+            // Memory mode: click reveals card (removes .is-flipped if it was on the .card-back, or adds to .memory-card)
+            // Simple mode: cards start face up (no .is-flipped on .memory-card initially)
+            // The CSS .memory-card.is-flipped .card-inner { transform: rotateY(180deg); } shows the back.
+            // So, if .is-flipped is on memory-card, it means it's showing the back. We want to show the front.
+            // This means, for memory mode, when a card is face-down, it *doesn't* have .is-flipped on memory-card.
+            // Clicking it should show its content (effectively flipping it to show front).
+
+            if (gameMode === 'memory') {
+                if (this.classList.contains('is-flipped')) { // It's showing its back, flip to front
+                    this.classList.remove('is-flipped');
+                    playSound('flip');
+                } else { // It's showing its front, this click shouldn't happen if already selected or matched
+                    // This case might not be reachable if logic is correct for selected/matched
+                }
+            } else { // simple mode
+                 if (!this.classList.contains('is-flipped')) { // Card is face-up, this is the normal click
+                    // No visual flip needed for first card, already face up.
+                    // Second card click will also be on face-up.
+                     if (!firstCard) playSound('flip'); // Sound for first selection
+                 } else {
+                    // This shouldn't happen in simple mode as cards are not flipped back unless incorrect.
+                 }
+            }
+
+
+            // The provided CSS and card structure has:
+            // .card-front (content), .card-back ('?')
+            // .memory-card.is-flipped .card-inner { transform: rotateY(180deg); }
+            // This means .is-flipped on .memory-card shows the card-back.
+            // So, for memory mode, initially cards are NOT .is-flipped. Clicking one adds .is-flipped.
+            // For simple mode, cards are initially NOT .is-flipped. They stay that way.
+
+            // Revised logic for card click visualization
+            if (gameMode === 'memory') {
+                if (!this.classList.contains('is-flipped')) { // If card is face down
+                    this.classList.add('is-flipped'); // Flip to show content
+                    playSound('flip');
+                }
+            } else { // simple mode, cards are always face up (content showing)
+                // No visual flip on click, but add 'selected' style
                 if (!firstCard) playSound('flip');
             }
+
 
             if (moves === 0 && matches === 0 && !roundTimerInterval && gameActive) {
                 startRoundTimer();
             }
 
-            this.classList.add('selected');
+            this.classList.add('selected'); // Visual cue for selection
 
             if (!firstCard) {
                 firstCard = this;
@@ -2841,7 +2893,11 @@
             }
 
             secondCard = this;
-            if (firstCard && secondCard) playSound('flip');
+            // In simple mode, second card is already face up.
+            // In memory mode, second card was just flipped by its own click.
+            if (firstCard && secondCard && gameMode === 'simple') playSound('flip'); // Sound for second selection in simple
+            // (Memory mode flip sound handled when card itself is flipped)
+
 
             moves++;
             totalMovesAcrossAllRounds++;
@@ -2850,7 +2906,6 @@
 
             checkForMatch();
         }
-
         function checkForMatch() {
             const isMatch = firstCard.dataset.pairId === secondCard.dataset.pairId &&
                             firstCard.dataset.langKey !== secondCard.dataset.langKey;
@@ -2863,6 +2918,8 @@
                 secondCard.classList.remove('selected');
                 firstCard.classList.add('matched');
                 secondCard.classList.add('matched');
+                // In simple mode, matched cards stay face up.
+                // In memory mode, matched cards stay .is-flipped (content showing).
                 resetTurn();
                 checkRoundWin();
             } else {
@@ -2873,25 +2930,24 @@
                     firstCard.classList.remove('selected', 'incorrect');
                     secondCard.classList.remove('selected', 'incorrect');
                     if (gameMode === 'memory') {
-                        firstCard.classList.add('is-flipped');
-                        secondCard.classList.add('is-flipped');
+                        // Flip back to face-down if not matched
+                        firstCard.classList.remove('is-flipped');
+                        secondCard.classList.remove('is-flipped');
                     }
+                    // In simple mode, incorrect cards remain face up.
                     resetTurn();
                 }, 1000);
             }
         }
-
         function resetTurn() {
             firstCard = null;
             secondCard = null;
             lockBoard = !(matches < currentTotalPairsInRound && gameActive);
         }
-
         function updateStats() {
             movesValueEl.textContent = moves;
             matchesValueEl.textContent = `${matches}/${currentTotalPairsInRound}`;
         }
-
         function startRoundTimer() {
             roundSecondsElapsed = 0;
             timeValueEl.textContent = formatTime(roundSecondsElapsed);
@@ -2906,13 +2962,11 @@
                 }
             }, 1000);
         }
-
         function formatTime(totalSeconds) {
             const minutes = Math.floor(totalSeconds / 60);
             const seconds = totalSeconds % 60;
             return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
         }
-
         function checkRoundWin() {
             if (matches === currentTotalPairsInRound && currentTotalPairsInRound > 0) {
                 clearInterval(roundTimerInterval);
@@ -2929,39 +2983,37 @@
                 }, 1500);
             }
         }
-
         function handleSettingsChangeAndRestart() {
             if (settingsDropdown.classList.contains('active')) settingsDropdown.classList.remove('active');
             if (topicDropdown.classList.contains('active')) {
                 topicDropdown.classList.remove('active');
                 topicSelectorButton.classList.remove('open');
             }
-            initGame(); // This will re-setup board with new language/mode settings
+            initGame();
         }
-
-
         function populateTopicDropdown() {
-            topicDropdown.innerHTML = '';
+            topicDropdown.innerHTML = ''; // Clear existing
+            const fragment = document.createDocumentFragment();
             topicInternalKeys.forEach(key => {
                 const label = document.createElement('label');
                 const checkbox = document.createElement('input');
                 checkbox.type = 'checkbox';
-                checkbox.value = key; // Internal key
+                checkbox.value = key;
                 checkbox.name = 'topic-checkbox';
                 checkbox.checked = selectedTopics.includes(key);
                 checkbox.addEventListener('change', handleTopicSelectionChange);
 
                 label.appendChild(checkbox);
-                label.appendChild(document.createTextNode(_(`topics.${key}`))); // Translated name
-                topicDropdown.appendChild(label);
+                label.appendChild(document.createTextNode(" " + _(`topics.${key}`))); // Add space for styling
+                fragment.appendChild(label);
             });
+            topicDropdown.appendChild(fragment);
+            // REMOVED THE PROBLEMATIC CODE BLOCK THAT CAUSED DUPLICATE "TOPICS" TEXT
+            updateSelectedTopicsDisplay();
         }
-
         function updateSelectedTopicsDisplay() {
             topicCountDisplay.textContent = selectedTopics.length;
         }
-
-
         function handleTopicSelectionChange() {
             const checkboxes = topicDropdown.querySelectorAll('input[type="checkbox"][name="topic-checkbox"]');
             selectedTopics = [];
@@ -2984,13 +3036,14 @@
                     hideGameEndModal();
                     modalPlayAgainBtn.style.display = ''; // Restore
                     modalCloseBtn.textContent = _('closeButton'); // Restore
-                    modalCloseBtn.removeEventListener('click', tempCloseHandler);
-                    modalCloseBtn.addEventListener('click', originalModalCloseBtnHandler);
+                    modalCloseBtn.removeEventListener('click', tempCloseHandler); // Clean up self
+                    if(originalModalCloseBtnHandler) modalCloseBtn.addEventListener('click', originalModalCloseBtnHandler); // Re-attach original
                 };
-                modalCloseBtn.removeEventListener('click', originalModalCloseBtnHandler);
+                 if(originalModalCloseBtnHandler) modalCloseBtn.removeEventListener('click', originalModalCloseBtnHandler); // Detach original before adding temp
                 modalCloseBtn.addEventListener('click', tempCloseHandler);
             }
             updateSelectedTopicsDisplay();
+            localStorage.setItem('selectedTopics', JSON.stringify(selectedTopics)); // Save selected topics
             handleSettingsChangeAndRestart();
         }
 
@@ -3002,10 +3055,7 @@
                 settingsDropdown.classList.remove('active');
             }
         });
-
-
         newGameButton.addEventListener('click', initGame);
-
         menuButton.addEventListener('click', (event) => {
             event.stopPropagation();
             settingsDropdown.classList.toggle('active');
@@ -3014,7 +3064,6 @@
                 topicSelectorButton.classList.remove('open');
             }
         });
-
         document.addEventListener('click', (event) => {
             if (settingsDropdown && !settingsDropdown.contains(event.target) && menuButton && !menuButton.contains(event.target)) {
                 settingsDropdown.classList.remove('active');
@@ -3024,33 +3073,40 @@
                 topicSelectorButton.classList.remove('open');
             }
         });
-
         soundToggle.addEventListener('change', () => {
             soundEnabled = soundToggle.checked;
-            localStorage.setItem('soundEnabled', soundEnabled);
+            localStorage.setItem('soundEnabled', soundEnabled.toString());
             if (soundEnabled && audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
         });
-
         darkModeToggle.addEventListener('change', () => {
             isDarkMode = darkModeToggle.checked;
             document.body.classList.toggle('dark-mode', isDarkMode);
-            localStorage.setItem('darkMode', isDarkMode);
+            localStorage.setItem('darkMode', isDarkMode.toString());
         });
-
-
         gameModeToggle.addEventListener('change', () => {
             gameMode = gameModeToggle.checked ? 'memory' : 'simple';
             gameModeLabelTextEl.textContent = _(gameMode === 'memory' ? 'gameModeMemory' : 'gameModeSimple');
             localStorage.setItem('gameMode', gameMode);
-            handleSettingsChangeAndRestart();
-        });
 
+            // Adjust card visibility for memory mode start
+            if (gameMode === 'memory' && boardHasBeenSetUpAtLeastOnce && gameActive) { // if game is active
+                const allCards = gameBoard.querySelectorAll('.memory-card:not(.matched)');
+                lockBoard = true;
+                allCards.forEach(cardEl => cardEl.classList.add('is-flipped')); // Show content
+                setTimeout(() => {
+                    allCards.forEach(cardEl => cardEl.classList.remove('is-flipped')); // Flip back
+                    lockBoard = false;
+                }, 1500 + (allCards.length * 50));
+            } else {
+                 handleSettingsChangeAndRestart();
+            }
+        });
         roundsSelect.addEventListener('change', (e) => {
             const newNumRounds = parseInt(e.target.value);
             if (newNumRounds === selectedNumberOfRounds) return;
 
             selectedNumberOfRounds = newNumRounds;
-            localStorage.setItem('selectedNumberOfRounds', selectedNumberOfRounds);
+            localStorage.setItem('selectedNumberOfRounds', selectedNumberOfRounds.toString());
             if (gameActive || currentRound > 0 || boardHasBeenSetUpAtLeastOnce) {
                 initGame();
             } else {
@@ -3058,112 +3114,130 @@
             }
         });
 
-        function populateLanguageDropdown(selectElement, currentSelectedLang, langToDisable) {
+        // MODIFIED: populateLanguageDropdown
+        function populateLanguageDropdown(selectElement, selectedLangKeyToSet) {
+            const currentValue = selectElement.value;
             selectElement.innerHTML = '';
+
             Object.keys(availableLanguages).forEach(key => {
-                if (key === langToDisable) return; // Skip the language to disable
                 const option = document.createElement('option');
                 option.value = key;
                 option.textContent = availableLanguages[key];
-                if (key === currentSelectedLang) {
-                    option.selected = true;
-                }
                 selectElement.appendChild(option);
             });
+
+            if (availableLanguages[selectedLangKeyToSet]) {
+                selectElement.value = selectedLangKeyToSet;
+            } else if (availableLanguages[currentValue]) {
+                selectElement.value = currentValue;
+            } else if (selectElement.options.length > 0) {
+                selectElement.value = selectElement.options[0].value;
+            }
         }
 
+        // MODIFIED: mainLangSelect event listener
         mainLangSelect.addEventListener('change', (e) => {
             const newMainLang = e.target.value;
-            if (newMainLang === currentForeignLanguage) {
-                // If new main lang is same as current foreign, pick a new valid foreign lang
-                const availableForeign = Object.keys(availableLanguages).find(lang => lang !== newMainLang);
-                currentForeignLanguage = availableForeign || 'en'; // Fallback
+            currentMainLanguage = newMainLang;
+
+            if (currentMainLanguage === currentForeignLanguage) {
+                const otherAvailableLangs = Object.keys(availableLanguages).filter(lang => lang !== currentMainLanguage);
+                currentForeignLanguage = otherAvailableLangs.length > 0 ? otherAvailableLangs[0] : (currentMainLanguage === 'en' ? 'ru' : 'en');
+                foreignLangSelect.value = currentForeignLanguage;
                 localStorage.setItem('currentForeignLanguage', currentForeignLanguage);
             }
-            currentMainLanguage = newMainLang;
             localStorage.setItem('currentMainLanguage', currentMainLanguage);
-            populateLanguageDropdown(foreignLangSelect, currentForeignLanguage, currentMainLanguage);
             updateAllUIText();
             handleSettingsChangeAndRestart();
         });
 
+        // MODIFIED: foreignLangSelect event listener
         foreignLangSelect.addEventListener('change', (e) => {
-            currentForeignLanguage = e.target.value;
-            // Main language cannot be same as foreign, this is ensured by populateLanguageDropdown
+            const newForeignLang = e.target.value;
+            currentForeignLanguage = newForeignLang;
+
+            let mainLanguageChangedByLogic = false;
+            if (currentForeignLanguage === currentMainLanguage) {
+                const otherAvailableLangs = Object.keys(availableLanguages).filter(lang => lang !== currentForeignLanguage);
+                currentMainLanguage = otherAvailableLangs.length > 0 ? otherAvailableLangs[0] : (currentForeignLanguage === 'ru' ? 'en' : 'ru');
+                mainLangSelect.value = currentMainLanguage;
+                localStorage.setItem('currentMainLanguage', currentMainLanguage);
+                mainLanguageChangedByLogic = true;
+            }
             localStorage.setItem('currentForeignLanguage', currentForeignLanguage);
-            // No need to update mainLangSelect options as they are already correct.
+
+            if (mainLanguageChangedByLogic) {
+                updateAllUIText();
+            }
             handleSettingsChangeAndRestart();
         });
 
-
+        // MODIFIED: loadPreferences
         const loadPreferences = () => {
-            // Dark Mode (default to true if not set)
             const savedDarkMode = localStorage.getItem('darkMode');
-            if (savedDarkMode !== null) {
-                isDarkMode = savedDarkMode === 'true';
-            } else {
-                isDarkMode = true; // Default to dark mode
-                localStorage.setItem('darkMode', 'true'); // Save this default
-            }
+            isDarkMode = savedDarkMode !== null ? savedDarkMode === 'true' : true; // Default dark mode to true
             document.body.classList.toggle('dark-mode', isDarkMode);
             if (darkModeToggle) darkModeToggle.checked = isDarkMode;
+            if (savedDarkMode === null) localStorage.setItem('darkMode', 'true');
 
-            // Sound
+
             const savedSound = localStorage.getItem('soundEnabled');
             soundEnabled = savedSound !== null ? savedSound === 'true' : true;
             if (soundToggle) soundToggle.checked = soundEnabled;
 
-            // Game Mode
             const savedGameMode = localStorage.getItem('gameMode');
             gameMode = savedGameMode || 'simple';
             if (gameModeToggle) gameModeToggle.checked = gameMode === 'memory';
-            // gameModeLabelTextEl set by updateAllUIText
 
-            // Rounds
             const savedRounds = localStorage.getItem('selectedNumberOfRounds');
             selectedNumberOfRounds = savedRounds ? parseInt(savedRounds) : 1;
-            if (roundsSelect) roundsSelect.value = selectedNumberOfRounds;
+            if (roundsSelect) roundsSelect.value = selectedNumberOfRounds.toString();
 
-            // Languages
-            currentMainLanguage = localStorage.getItem('currentMainLanguage') || 'ru';
-            currentForeignLanguage = localStorage.getItem('currentForeignLanguage') || 'en';
-            // Ensure foreign language is not same as main
+            // Languages - Default main to 'en', foreign to 'ru'
+            currentMainLanguage = localStorage.getItem('currentMainLanguage') || 'en';
+            currentForeignLanguage = localStorage.getItem('currentForeignLanguage') || 'ru';
+
             if (currentMainLanguage === currentForeignLanguage) {
-                currentForeignLanguage = Object.keys(availableLanguages).find(lang => lang !== currentMainLanguage) || 'en';
+                if (currentMainLanguage === 'en' && availableLanguages['ru']) {
+                    currentForeignLanguage = 'ru';
+                } else if (availableLanguages['en']) {
+                    currentForeignLanguage = 'en';
+                     // If main was also 'en', this means foreign is now 'en'. Main needs to change.
+                    if (currentMainLanguage === 'en') {
+                        currentMainLanguage = Object.keys(availableLanguages).find(lang => lang !== 'en') || 'ru';
+                    }
+                } else { // Fallback if 'en' or 'ru' not in availableLanguages
+                    currentForeignLanguage = Object.keys(availableLanguages).find(lang => lang !== currentMainLanguage) || Object.keys(availableLanguages)[1];
+                }
+                localStorage.setItem('currentMainLanguage', currentMainLanguage);
                 localStorage.setItem('currentForeignLanguage', currentForeignLanguage);
             }
 
-            populateLanguageDropdown(mainLangSelect, currentMainLanguage, currentForeignLanguage);
-            populateLanguageDropdown(foreignLangSelect, currentForeignLanguage, currentMainLanguage);
+            populateLanguageDropdown(mainLangSelect, currentMainLanguage);
+            populateLanguageDropdown(foreignLangSelect, currentForeignLanguage);
 
-            // Selected Topics (example, more robust storage might be needed for multi-select)
             const savedTopics = localStorage.getItem('selectedTopics');
             if (savedTopics) {
                 try {
                     selectedTopics = JSON.parse(savedTopics);
-                    if (!Array.isArray(selectedTopics) || selectedTopics.length === 0) {
+                    if (!Array.isArray(selectedTopics) || selectedTopics.length === 0 || !selectedTopics.every(t => topicInternalKeys.includes(t))) {
                         selectedTopics = ['basics'];
                     }
-                } catch (e) {
-                    selectedTopics = ['basics'];
-                }
-            } else {
-                selectedTopics = ['basics'];
-            }
-
+                } catch (e) { selectedTopics = ['basics']; }
+            } else { selectedTopics = ['basics']; }
+             // populateTopicDropdown() called by updateAllUIText which is called after loadPreferences
         };
 
         let originalModalCloseBtnHandler;
 
         document.addEventListener('DOMContentLoaded', () => {
-            loadPreferences(); // Load all preferences first
-            updateAllUIText();   // Then update UI texts based on loaded language
-
-            updateSelectedTopicsDisplay(); // After topics are loaded and dropdown populated
+            loadPreferences();
+            updateAllUIText(); // This will also populate topic dropdown with correct language
+            updateSelectedTopicsDisplay(); // After topics potentially loaded
 
             gameBoard.innerHTML = `<p class="game-board-message">${_('modalMessageStartGame')}</p>`;
             movesValueEl.textContent = '0';
-            matchesValueEl.textContent = `0/${MAX_PAIRS_DISPLAYED}`;
+            matchesValueEl.textContent = `0/${MAX_PAIRS_DISPLAYED}`; // Or 0/0 initially
             timeValueEl.textContent = formatTime(0);
             lockBoard = true;
             gameActive = false;
@@ -3175,31 +3249,26 @@
 
             originalModalCloseBtnHandler = () => {
                  hideGameEndModal();
-                if (boardHasBeenSetUpAtLeastOnce && currentRound === 0) {
+                if (boardHasBeenSetUpAtLeastOnce && currentRound === 0 && !gameActive) { // Game truly finished
                     gameBoard.innerHTML = `<p class="game-board-message">${_('modalMessageGameFinished')}</p>`;
-                } else if (!boardHasBeenSetUpAtLeastOnce) {
+                } else if (!boardHasBeenSetUpAtLeastOnce && !gameActive) { // Before first game
                      gameBoard.innerHTML = `<p class="game-board-message">${_('modalMessageStartGame')}</p>`;
                 }
+                // If modal closed mid-game (e.g. topic selection alert), board state is preserved.
             };
             modalCloseBtn.addEventListener('click', originalModalCloseBtnHandler);
 
             gameEndModal.addEventListener('click', (event) => {
-                if (event.target === gameEndModal) {
+                if (event.target === gameEndModal) { // Click on overlay itself
                     modalCloseBtn.click();
                 }
             });
 
-            if (aboutButton) {
-                aboutButton.addEventListener('click', showAboutModal);
-            }
-            if (aboutModalCloseBtn) {
-                aboutModalCloseBtn.addEventListener('click', hideAboutModal);
-            }
+            if (aboutButton) aboutButton.addEventListener('click', showAboutModal);
+            if (aboutModalCloseBtn) aboutModalCloseBtn.addEventListener('click', hideAboutModal);
             if (aboutModal) {
                 aboutModal.addEventListener('click', (event) => {
-                    if (event.target === aboutModal) {
-                        hideAboutModal();
-                    }
+                    if (event.target === aboutModal) hideAboutModal();
                 });
             }
         });
