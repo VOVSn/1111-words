@@ -2,7 +2,7 @@
 # "1111 Words" Game Series: Learn Languages Easily and Flexibly!
 # Серия Игр "1111 Слов": Изучаем Языки Легко и Гибко!
 
-#[1111words.vovsn.com](1111words.vovsn.com) - online version
+#[1111words.vovsn.com](https://1111words.vovsn.com) - online version
 
 Welcome to a collection of exciting word-matching games designed to help you learn various languages! Our flagship game, **"1111 Words" (multilingual version)**, allows you to choose your native language and the language you want to learn, offering 1111 of the most common words. Classic single-language versions are also available for **Spanish, Serbian, and French**.
 Добро пожаловать в коллекцию увлекательных игр на сопоставление слов, созданных для помощи в изучении различных языков! Наша флагманская игра **"1111 Слов" (многоязычная версия)** позволяет вам выбирать родной язык и язык для изучения, предлагая 1111 наиболее употребительных слов. Также доступны классические одноязычные версии для **испанского, сербского и французского** языков.
