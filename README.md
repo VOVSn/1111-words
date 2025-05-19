@@ -1,3 +1,4 @@
+#(Current version is not working on IOS)
 # "1111 Words" Game Series: Learn Languages Easily and Flexibly!
 # Серия Игр "1111 Слов": Изучаем Языки Легко и Гибко!
 
