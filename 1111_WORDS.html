@@ -3,14 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark"> <!-- Added for theme consistency -->
     <title data-translate-key="pageTitle">1111 Слов - Игра на Сопоставление</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&display=swap" rel="stylesheet"> <!-- Added Noto Sans -->
     <style>
         /* Global Styles */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Noto Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Updated font family */
         }
 
         body {
@@ -29,9 +33,9 @@
             height: 650px;
             background: linear-gradient(145deg, #eae5db, #dcd7cd);
             border-radius: 20px;
-            box-shadow:
-                15px 15px 35px #c4c0b7,
-                -15px -15px 35px #fcf7ed;
+            box-shadow: /* Reduced */
+                10px 10px 24px #c4c0b7,
+                -10px -10px 24px #fcf7ed;
             overflow: hidden;
             position: relative;
             display: flex;
@@ -46,7 +50,7 @@
             justify-content: space-between;
             padding: 15px 20px; /* Adjusted padding */
             background: linear-gradient(145deg, #eae5db, #e0dbd1);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 1px 7px rgba(0, 0, 0, 0.04); /* Reduced */
             position: relative;
             z-index: 2;
             transition: background 0.3s ease, box-shadow 0.3s ease;
@@ -98,8 +102,8 @@
             padding: 8px 12px;
             border-radius: 10px;
             background: linear-gradient(145deg, #e8e3d9, #d9d4ca);
-            box-shadow: 3px 3px 7px #c4c0b7, -3px -3px 7px #fcf7ed;
-            border: 1px solid rgba(173, 157, 124, 0.15);
+            box-shadow: 2px 2px 5px #c4c0b7, -2px -2px 5px #fcf7ed; /* Reduced */
+            border: 1px solid rgba(173, 157, 124, 0.1); /* Reduced alpha */
             color: #5a5346;
             font-weight: 500;
             font-size: 13px;
@@ -113,7 +117,7 @@
             text-align: left;
         }
         .topic-button:active {
-            box-shadow: inset 2px 2px 4px #c4c0b7, inset -2px -2px 4px #fcf7ed;
+            box-shadow: inset 1px 1px 3px #c4c0b7, inset -1px -1px 3px #fcf7ed; /* Reduced */
         }
         .topic-button .dropdown-arrow {
             font-size: 10px;
@@ -129,11 +133,11 @@
             top: calc(100% + 5px);
             left: 50%;
             transform: translateX(-50%);
-            width: 220px;
+            width: 250px; /* Increased width */
             background: linear-gradient(145deg, #e8e3d9, #dcd7cd);
-            box-shadow:
-                6px 6px 15px #c4c0b7,
-                -6px -6px 15px #fcf7ed;
+            box-shadow: /* Reduced */
+                4px 4px 10px #c4c0b7,
+                -4px -4px 10px #fcf7ed;
             border-radius: 10px;
             padding: 10px;
             z-index: 11;
@@ -146,7 +150,7 @@
         .topic-dropdown-content label {
             display: flex;
             align-items: center;
-            font-size: 14px;
+            font-size: 13px; /* Reduced font size */
             color: #5a5346;
             cursor: pointer;
             padding: 5px;
@@ -180,8 +184,8 @@
             padding: 7px 10px;
             border-radius: 10px;
             background: linear-gradient(145deg, #e8e3d9, #d9d4ca);
-            box-shadow: 3px 3px 7px #c4c0b7, -3px -3px 7px #fcf7ed;
-            border: 1px solid rgba(173, 157, 124, 0.15);
+            box-shadow: 2px 2px 5px #c4c0b7, -2px -2px 5px #fcf7ed; /* Reduced */
+            border: 1px solid rgba(173, 157, 124, 0.1); /* Reduced alpha */
             color: #5a5346;
             font-weight: 500;
             font-size: 13px;
@@ -196,8 +200,8 @@
             text-align-last: center; /* For centering in select */
         }
         .rounds-select-dropdown:focus {
-            box-shadow: inset 1px 1px 2px #c4c0b7, inset -1px -1px 2px #fcf7ed,
-                        3px 3px 7px #c4c0b7, -3px -3px 7px #fcf7ed;
+            box-shadow: inset 1px 1px 1px #c4c0b7, inset -1px -1px 1px #fcf7ed, /* Reduced */
+                        2px 2px 5px #c4c0b7, -2px -2px 5px #fcf7ed; /* Reduced */
         }
 
 
@@ -207,7 +211,7 @@
             height: 40px;
             border-radius: 50%;
             background: linear-gradient(145deg, #eae5db, #dcd7cd);
-            box-shadow: 4px 4px 8px #c4c0b7, -4px -4px 8px #fcf7ed;
+            box-shadow: 3px 3px 6px #c4c0b7, -3px -3px 6px #fcf7ed; /* Reduced */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -218,7 +222,7 @@
             flex-shrink: 0;
         }
         .menu-button:active {
-            box-shadow: inset 3px 3px 6px #c4c0b7, inset -3px -3px 6px #fcf7ed;
+            box-shadow: inset 2px 2px 4px #c4c0b7, inset -2px -2px 4px #fcf7ed; /* Reduced */
         }
 
         /* Settings Dropdown Panel */
@@ -229,9 +233,9 @@
             width: 320px; /* Increased width for language selectors */
             padding: 15px;
             background: linear-gradient(145deg, #e8e3d9, #dcd7cd);
-            box-shadow:
-                8px 8px 20px #c4c0b7,
-                -8px -8px 20px #fcf7ed;
+            box-shadow: /* Reduced */
+                5px 5px 14px #c4c0b7,
+                -5px -5px 14px #fcf7ed;
             border-radius: 15px;
             z-index: 10;
             display: none;
@@ -258,8 +262,8 @@
             padding: 6px 8px;
             border-radius: 8px;
             background: linear-gradient(145deg, #e8e3d9, #d9d4ca);
-            box-shadow: 2px 2px 5px #c4c0b7, -2px -2px 5px #fcf7ed;
-            border: 1px solid rgba(173, 157, 124, 0.1);
+            box-shadow: 1px 1px 3px #c4c0b7, -1px -1px 3px #fcf7ed; /* Reduced */
+            border: 1px solid rgba(173, 157, 124, 0.07); /* Reduced alpha */
             color: #5a5346;
             font-size: 13px;
             cursor: pointer;
@@ -285,8 +289,8 @@
             padding: 8px 15px;
             border-radius: 10px;
             background: linear-gradient(145deg, #e8e3d9, #d9d4ca);
-            box-shadow: 3px 3px 7px #c4c0b7, -3px -3px 7px #fcf7ed;
-            border: 1px solid rgba(173, 157, 124, 0.15);
+            box-shadow: 2px 2px 5px #c4c0b7, -2px -2px 5px #fcf7ed; /* Reduced */
+            border: 1px solid rgba(173, 157, 124, 0.1); /* Reduced alpha */
             color: #5a5346;
             font-weight: 500;
             font-size: 14px;
@@ -297,7 +301,7 @@
             margin-top: 5px; /* Optional: adds a bit of space if it's the last item */
         }
         .settings-action-button:active {
-            box-shadow: inset 2px 2px 4px #c4c0b7, inset -2px -2px 4px #fcf7ed;
+            box-shadow: inset 1px 1px 3px #c4c0b7, inset -1px -1px 3px #fcf7ed; /* Reduced */
         }
 
 
@@ -313,7 +317,7 @@
             cursor: pointer;
             top: 0; left: 0; right: 0; bottom: 0;
             background: #dcd7cd;
-            box-shadow: inset 2px 2px 4px #cbc6bd, inset -2px -2px 4px #f5f0e5;
+            box-shadow: inset 1px 1px 3px #cbc6bd, inset -1px -1px 3px #f5f0e5; /* Reduced */
             border-radius: 34px;
             transition: .4s;
         }
@@ -324,7 +328,7 @@
             left: 3px; bottom: 3px;
             background: linear-gradient(145deg, #f0ebe1, #e0dbd1);
             border-radius: 50%;
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.08); /* Reduced */
             transition: .4s;
         }
         input:checked + .toggle-slider { background: linear-gradient(145deg, #d5ccb8, #c6bdaa); }
@@ -338,7 +342,7 @@
             flex: 1;
             padding: 20px 25px;
             background: linear-gradient(125deg, #e6e1d7, #dbd6cc);
-            box-shadow: inset 5px 5px 15px #cbc6bd, inset -5px -5px 15px #f5f0e5;
+            box-shadow: inset 3px 3px 10px #cbc6bd, inset -3px -3px 10px #f5f0e5; /* Reduced */
             position: relative;
             z-index: 1;
             display: grid;
@@ -372,9 +376,9 @@
             perspective: 1000px;
         }
         .memory-card:hover:not(.matched) {
-            box-shadow:
-                7px 7px 20px #c4c0b7,
-                -7px -7px 20px #fcf7ed;
+            box-shadow: /* Reduced */
+                5px 5px 14px #c4c0b7,
+                -5px -5px 14px #fcf7ed;
         }
 
         .card-inner {
@@ -399,10 +403,10 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow:
-                5px 5px 15px #cbc6bd,
-                -5px -5px 15px #f5f0e5;
-            border: 1px solid rgba(173, 157, 124, 0.1);
+            box-shadow: /* Reduced */
+                3px 3px 10px #cbc6bd,
+                -3px -3px 10px #f5f0e5;
+            border: 1px solid rgba(173, 157, 124, 0.07); /* Reduced alpha */
             overflow: hidden;
             transition: background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
         }
@@ -411,7 +415,7 @@
             position: absolute;
             top: -50%; left: -50%;
             width: 200%; height: 200%;
-            background: linear-gradient(60deg, transparent 35%, rgba(255, 215, 0, 0.04) 45%, rgba(255, 215, 0, 0.08) 50%, rgba(255, 215, 0, 0.04) 55%, transparent 65%);
+            background: linear-gradient(60deg, transparent 35%, rgba(255, 215, 0, 0.03) 45%, rgba(255, 215, 0, 0.05) 50%, rgba(255, 215, 0, 0.03) 55%, transparent 65%); /* Reduced opacity */
             transform: rotate(30deg);
             pointer-events: none;
             z-index: 1;
@@ -448,27 +452,27 @@
 
 
         .memory-card.is-flipped:active .card-back { /* Active state when card-back is visible */
-             box-shadow:
-                inset 3px 3px 6px #cbc6bd,
-                inset -3px -3px 6px #f5f0e5,
-                3px 3px 10px #cbc6bd,
-                -3px -3px 10px #f5f0e5;
+             box-shadow: /* Reduced */
+                inset 2px 2px 4px #cbc6bd,
+                inset -2px -2px 4px #f5f0e5,
+                2px 2px 7px #cbc6bd,
+                -2px -2px 7px #f5f0e5;
         }
         .memory-card:not(.is-flipped):active .card-front { /* Active state when card-front is visible */
-             box-shadow:
-                inset 3px 3px 6px #cbc6bd,
-                inset -3px -3px 6px #f5f0e5,
-                3px 3px 10px #cbc6bd,
-                -3px -3px 10px #f5f0e5;
+             box-shadow: /* Reduced */
+                inset 2px 2px 4px #cbc6bd,
+                inset -2px -2px 4px #f5f0e5,
+                2px 2px 7px #cbc6bd,
+                -2px -2px 7px #f5f0e5;
         }
 
         .memory-card.selected .card-front { /* Applied when card is face-up and selected */
             background: linear-gradient(145deg, #dad2c5, #cbc3b6);
-            box-shadow:
-                inset 4px 4px 8px #b5ac9a,
-                inset -4px -4px 8px #e5dcc8,
-                3px 3px 10px #cbc6bd,
-                -3px -3px 10px #f5f0e5;
+            box-shadow: /* Reduced */
+                inset 3px 3px 6px #b5ac9a,
+                inset -3px -3px 6px #e5dcc8,
+                2px 2px 7px #cbc6bd,
+                -2px -2px 7px #f5f0e5;
             border: 1px solid #ad9d7c;
         }
         /* If a card is selected AND .is-flipped, .selected styling won't apply to .card-front directly.
@@ -482,9 +486,9 @@
         .memory-card.matched .card-front { /* Styles for matched card when face-up (content showing) */
             opacity: 0.65;
             background: linear-gradient(145deg, #d1c9bd, #c2b8a8);
-            box-shadow:
-                inset 3px 3px 6px #b9b2a5,
-                inset -3px -3px 6px #e9e2d5;
+            box-shadow: /* Reduced */
+                inset 2px 2px 4px #b9b2a5,
+                inset -2px -2px 4px #e9e2d5;
         }
         .memory-card.matched .card-front .card-content {
             color: #756e60;
@@ -519,8 +523,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-top: 1px solid rgba(173, 157, 124, 0.1);
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.03);
+            border-top: 1px solid rgba(173, 157, 124, 0.07); /* Reduced alpha */
+            box-shadow: 0 -1px 7px rgba(0, 0, 0, 0.02); /* Reduced */
             position: relative;
             z-index: 1;
             transition: background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
@@ -533,8 +537,8 @@
             padding: 10px 20px;
             border-radius: 15px;
             background: linear-gradient(145deg, #d9cebc, #c8beac);
-            box-shadow: 4px 4px 8px #b5ac9a, -4px -4px 8px #e5dcc8;
-            border: 1px solid rgba(173, 157, 124, 0.2);
+            box-shadow: 3px 3px 6px #b5ac9a, -3px -3px 6px #e5dcc8; /* Reduced */
+            border: 1px solid rgba(173, 157, 124, 0.14); /* Reduced alpha */
             color: #5a5346;
             font-weight: bold;
             font-size: 14px;
@@ -542,10 +546,10 @@
             transition: all 0.2s ease;
             position: relative;
         }
-        .new-game-button:active { box-shadow: inset 3px 3px 6px #b5ac9a, inset -3px -3px 6px #e5dcc8; }
+        .new-game-button:active { box-shadow: inset 2px 2px 4px #b5ac9a, inset -2px -2px 4px #e5dcc8; } /* Reduced */
         .new-game-button::before {
             content: ""; position: absolute; inset: -1px; border-radius: inherit;
-            background: linear-gradient(135deg, transparent 30%, rgba(255, 215, 0, 0.15) 50%, transparent 70%);
+            background: linear-gradient(135deg, transparent 30%, rgba(255, 215, 0, 0.10) 50%, transparent 70%); /* Reduced opacity */
             opacity: 0; transition: opacity 0.3s; z-index: -1; pointer-events: none;
         }
         .new-game-button:hover::before { opacity: 1; }
@@ -559,7 +563,7 @@
         /* Golden shimmer effect for game-app */
         .game-app::before {
             content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(45deg, transparent 0%, rgba(255, 215, 0, 0.03) 25%, rgba(255, 215, 0, 0.06) 50%, rgba(255, 215, 0, 0.03) 75%, transparent 100%);
+            background: linear-gradient(45deg, transparent 0%, rgba(255, 215, 0, 0.02) 25%, rgba(255, 215, 0, 0.04) 50%, rgba(255, 215, 0, 0.02) 75%, transparent 100%); /* Reduced opacity */
             border-radius: 20px; z-index: 0; pointer-events: none;
         }
 
@@ -589,9 +593,9 @@
         .modal-content-wrapper {
             background: linear-gradient(145deg, #eae5db, #dcd7cd);
             border-radius: 20px;
-            box-shadow:
-                15px 15px 35px #c4c0b7,
-                -15px -15px 35px #fcf7ed;
+            box-shadow: /* Reduced */
+                10px 10px 24px #c4c0b7,
+                -10px -10px 24px #fcf7ed;
             padding: 25px 30px;
             width: 100%;
             max-width: 450px;
@@ -636,17 +640,17 @@
         }
         #modal-close-btn { /* Slightly less prominent style */
             background: linear-gradient(145deg, #e8e3d9, #d9d4ca);
-            box-shadow: 3px 3px 7px #c4c0b7, -3px -3px 7px #fcf7ed;
+            box-shadow: 2px 2px 5px #c4c0b7, -2px -2px 5px #fcf7ed; /* Reduced */
         }
         #modal-close-btn:active {
-            box-shadow: inset 2px 2px 4px #c4c0b7, inset -2px -2px 4px #fcf7ed;
+            box-shadow: inset 1px 1px 3px #c4c0b7, inset -1px -1px 3px #fcf7ed; /* Reduced */
         }
 
         /* Responsive Design */
         @media (max-width: 850px) {
             .game-app { width: 95%; height: 90vh; }
             .game-board { grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(4, 1fr); }
-            .settings-dropdown { width: 280px; right: 15px; } /* Adjusted from 250px for wider lang selects */
+            .settings-dropdown { width: 280px; right: 15px; }
             .topic-selector-container { min-width: 120px; }
             .topic-button { font-size: 12px; padding: 8px 10px; min-width: 110px; }
             .rounds-selector-container { margin: 0; }
@@ -656,7 +660,7 @@
         }
         @media (max-width: 680px) { /* Header items wrap */
             .game-header { flex-wrap: wrap; justify-content: space-between; padding: 10px 15px;}
-            .game-info { order: 1; width: calc(100% - 50px); /* Title takes most width, leaves space for menu btn */}
+            .game-info { order: 1; width: calc(100% - 50px); }
             .menu-button { order: 2; width: 35px; height: 35px; font-size: 18px;}
             .topic-selector-container { order: 3; width: calc(50% - 5px); margin-top: 10px; justify-content: flex-start; }
             .rounds-selector-container { order: 4; width: calc(50% - 5px); margin-top: 10px; justify-content: flex-end; }
@@ -665,13 +669,37 @@
 
         @media (max-width: 576px) {
             .game-info { width: calc(100% - 45px); }
-            .topic-selector-container { width: 100%; justify-content: center; }
-            .rounds-selector-container { width: 100%; margin-top: 8px; justify-content: center; }
+            .topic-selector-container {
+                order: 3;
+                width: calc(50% - 5px);
+                margin-top: 10px;
+                justify-content: flex-start;
+            }
+            .rounds-selector-container {
+                order: 4;
+                width: calc(50% - 5px);
+                margin-top: 10px;
+                justify-content: flex-end;
+            }
 
             .game-app { height: auto; min-height: 85vh; }
             .game-board { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(6, 1fr); gap: 10px; padding: 15px; }
-            .game-stats { flex-wrap: wrap; gap: 10px; justify-content: center; padding: 10px 15px; }
-            .stat-item { flex: 0 0 40%; align-items: center; }
+
+            .game-stats {
+                flex-wrap: wrap;
+                gap: 10px;
+                justify-content: space-around;
+                padding: 10px 15px;
+            }
+            .stat-item {
+                flex-grow: 1;
+                flex-shrink: 1;
+                flex-basis: auto;
+                min-width: 65px;
+                text-align: center;
+                align-items: center;
+            }
+
             .new-game-button { flex-basis: 100%; margin-top: 10px; }
             .game-title { font-size: 18px; }
             .game-subtitle { font-size: 11px; }
@@ -680,17 +708,50 @@
             .card-content.small-text { font-size: 12px; }
             .card-content.x-small-text { font-size: 11px; }
             .card-content.xx-small-text { font-size: 10px;}
-            /* .settings-dropdown width already handled by 680px */
-            .topic-dropdown-content { width: calc(100% - 30px); }
+            .topic-dropdown-content { width: calc(100% - 20px); /* Adjusted for wider feel if needed, might be ok with text changes */ }
             .modal-content-wrapper { padding: 20px; }
             .modal-content-wrapper h3 { font-size: 20px; }
             .modal-content-wrapper p { font-size: 14px; }
-            .modal-buttons .new-game-button { flex-basis: 100%; } /* Stack buttons on small screens */
-            .settings-row { flex-direction: column; align-items: flex-start; }
-            .settings-row .select-wrapper, .settings-row .toggle-switch { margin-left: 0; margin-top: 5px; width: 100%; max-width: none;}
-            .settings-row .toggle-switch { align-self: flex-end; }
-             .settings-row .game-mode-label-text { margin-left: 0; align-self: flex-end; padding-right: 55px; /* approx toggle width + gap */}
+            .modal-buttons .new-game-button { flex-basis: 100%; }
 
+            .settings-row:has(select) {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .settings-row:has(select) .settings-label {
+                margin-bottom: 5px;
+            }
+            .settings-row:has(select) .select-wrapper {
+                width: 100%;
+                margin-left: 0;
+                margin-top: 0;
+            }
+            .settings-row > div:has(.toggle-switch):has(.game-mode-label-text) {
+                display: flex;
+                align-items: center;
+            }
+            .settings-row .game-mode-label-text {
+                margin-left: 8px;
+            }
+            .settings-row .toggle-switch {
+                margin-top: 0;
+                width: 50px;
+                max-width: 50px;
+                flex-shrink: 0;
+                margin-left: auto;
+            }
+            .settings-row:has(select) .select-wrapper,
+            .settings-row .settings-action-button {
+                 width: 100%;
+                 max-width: none;
+            }
+            .settings-row:has(.settings-action-button) {
+                justify-content: center;
+            }
+             .settings-row .settings-action-button {
+                flex-grow: 1;
+                margin-top: 5px;
+            }
         }
 
         /* Dark Mode Styles */
@@ -700,33 +761,33 @@
 
         .dark-mode .game-app {
             background: linear-gradient(145deg, #454545, #3b3b3b);
-            box-shadow:
-                15px 15px 35px #252525,
-                -15px -15px 35px #515151;
+            box-shadow: /* Reduced */
+                10px 10px 24px #252525,
+                -10px -10px 24px #515151;
         }
         .dark-mode .game-app::before {
-             background: linear-gradient(45deg, transparent 0%, rgba(255, 255, 255, 0.02) 25%, rgba(255, 255, 255, 0.04) 50%, rgba(255, 255, 255, 0.02) 75%, transparent 100%);
+             background: linear-gradient(45deg, transparent 0%, rgba(255, 255, 255, 0.01) 25%, rgba(255, 255, 255, 0.03) 50%, rgba(255, 255, 255, 0.01) 75%, transparent 100%); /* Reduced opacity */
         }
 
         .dark-mode .game-header {
             background: linear-gradient(145deg, #424242, #383838);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 1px 7px rgba(0, 0, 0, 0.15); /* Reduced */
         }
         .dark-mode .game-title { color: #d1d1d1; }
         .dark-mode .game-subtitle { color: #9e9e9e; }
 
         .dark-mode .topic-button {
             background: linear-gradient(145deg, #4f4f4f, #454545);
-            box-shadow: 3px 3px 7px #252525, -3px -3px 7px #515151;
-            border: 1px solid rgba(100, 100, 100, 0.15);
+            box-shadow: 2px 2px 5px #252525, -2px -2px 5px #515151; /* Reduced */
+            border: 1px solid rgba(100, 100, 100, 0.1); /* Reduced alpha */
             color: #d1d1d1;
         }
         .dark-mode .topic-button:active {
-            box-shadow: inset 2px 2px 4px #252525, inset -2px -2px 4px #515151;
+            box-shadow: inset 1px 1px 3px #252525, inset -1px -1px 3px #515151; /* Reduced */
         }
         .dark-mode .topic-dropdown-content {
             background: linear-gradient(145deg, #404040, #363636);
-            box-shadow: 6px 6px 15px #222222, -6px -6px 15px #4e4e4e;
+            box-shadow: 4px 4px 10px #222222, -4px -4px 10px #4e4e4e; /* Reduced */
         }
         .dark-mode .topic-dropdown-content label {
             color: #c0c0c0;
@@ -741,56 +802,56 @@
         .dark-mode .rounds-label { color: #c0c0c0; }
         .dark-mode .rounds-select-dropdown {
             background: linear-gradient(145deg, #4f4f4f, #454545);
-            box-shadow: 3px 3px 7px #252525, -3px -3px 7px #515151;
-            border: 1px solid rgba(100, 100, 100, 0.15);
+            box-shadow: 2px 2px 5px #252525, -2px -2px 5px #515151; /* Reduced */
+            border: 1px solid rgba(100, 100, 100, 0.1); /* Reduced alpha */
             color: #d1d1d1;
         }
         .dark-mode .rounds-select-dropdown:focus {
-             box-shadow: inset 1px 1px 2px #252525, inset -1px -1px 2px #515151,
-                        3px 3px 7px #252525, -3px -3px 7px #515151;
+             box-shadow: inset 1px 1px 1px #252525, inset -1px -1px 1px #515151, /* Reduced */
+                        2px 2px 5px #252525, -2px -2px 5px #515151; /* Reduced */
         }
 
 
         .dark-mode .menu-button {
             background: linear-gradient(145deg, #454545, #3b3b3b);
-            box-shadow: 4px 4px 8px #252525, -4px -4px 8px #515151;
+            box-shadow: 3px 3px 6px #252525, -3px -3px 6px #515151; /* Reduced */
             color: #d1d1d1;
         }
         .dark-mode .menu-button:active {
-            box-shadow: inset 3px 3px 6px #252525, inset -3px -3px 6px #515151;
+            box-shadow: inset 2px 2px 4px #252525, inset -2px -2px 4px #515151; /* Reduced */
         }
 
         .dark-mode .settings-dropdown {
             background: linear-gradient(145deg, #404040, #363636);
-            box-shadow:
-                8px 8px 20px #222222,
-                -8px -8px 20px #4e4e4e;
+            box-shadow: /* Reduced */
+                5px 5px 14px #222222,
+                -5px -5px 14px #4e4e4e;
         }
         .dark-mode .settings-row select {
             background: linear-gradient(145deg, #4a4a4a, #404040);
-            box-shadow: 2px 2px 5px #252525, -2px -2px 5px #515151;
-            border: 1px solid rgba(100,100,100,0.1);
+            box-shadow: 1px 1px 3px #252525, -1px -1px 3px #515151; /* Reduced */
+            border: 1px solid rgba(100,100,100,0.07); /* Reduced alpha */
             color: #d1d1d1;
         }
         .dark-mode .settings-label { color: #c0c0c0; }
         .dark-mode .game-mode-label-text { color: #909090; }
         .dark-mode .settings-action-button {
             background: linear-gradient(145deg, #4f4f4f, #454545);
-            box-shadow: 3px 3px 7px #252525, -3px -3px 7px #515151;
-            border: 1px solid rgba(100, 100, 100, 0.15);
+            box-shadow: 2px 2px 5px #252525, -2px -2px 5px #515151; /* Reduced */
+            border: 1px solid rgba(100, 100, 100, 0.1); /* Reduced alpha */
             color: #d1d1d1;
         }
         .dark-mode .settings-action-button:active {
-            box-shadow: inset 2px 2px 4px #252525, inset -2px -2px 4px #515151;
+            box-shadow: inset 1px 1px 3px #252525, inset -1px -1px 3px #515151; /* Reduced */
         }
 
         .dark-mode .toggle-slider {
             background: #3a3a3a;
-            box-shadow: inset 2px 2px 4px #2d2d2d, inset -2px -2px 4px #474747;
+            box-shadow: inset 1px 1px 3px #2d2d2d, inset -1px -1px 3px #474747; /* Reduced */
         }
         .dark-mode .toggle-slider:before {
             background: linear-gradient(145deg, #525252, #484848);
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+            box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2); /* Reduced */
         }
         .dark-mode input:checked + .toggle-slider {
             background: linear-gradient(145deg, #507a50, #406a40);
@@ -801,7 +862,7 @@
 
         .dark-mode .game-board {
             background: linear-gradient(125deg, #3f3f3f, #353535);
-            box-shadow: inset 5px 5px 15px #2a2a2a, inset -5px -5px 15px #4a4a4a;
+            box-shadow: inset 3px 3px 10px #2a2a2a, inset -3px -3px 10px #4a4a4a; /* Reduced */
         }
         .dark-mode .game-board::-webkit-scrollbar-thumb { background-color: #5a5a5a; }
         .dark-mode .game-board::-webkit-scrollbar-thumb:hover { background-color: #6a6a6a; }
@@ -811,19 +872,19 @@
 
 
         .dark-mode .memory-card:hover:not(.matched) {
-            box-shadow:
-                7px 7px 20px #232323,
-                -7px -7px 20px #4f4f4f;
+            box-shadow: /* Reduced */
+                5px 5px 14px #232323,
+                -5px -5px 14px #4f4f4f;
         }
 
         .dark-mode .card-face {
-            box-shadow:
-                5px 5px 15px #282828,
-                -5px -5px 15px #484848;
-            border: 1px solid rgba(100, 100, 100, 0.1);
+            box-shadow: /* Reduced */
+                3px 3px 10px #282828,
+                -3px -3px 10px #484848;
+            border: 1px solid rgba(100, 100, 100, 0.07); /* Reduced alpha */
         }
         .dark-mode .card-face::before {
-            background: linear-gradient(60deg, transparent 35%, rgba(255, 255, 255, 0.02) 45%, rgba(255, 255, 255, 0.04) 50%, rgba(255, 255, 255, 0.02) 55%, transparent 65%);
+            background: linear-gradient(60deg, transparent 35%, rgba(255, 255, 255, 0.01) 45%, rgba(255, 255, 255, 0.03) 50%, rgba(255, 255, 255, 0.01) 55%, transparent 65%); /* Reduced opacity */
         }
         .dark-mode .card-front {
             background: linear-gradient(145deg, #4f4f4f, #454545);
@@ -837,36 +898,36 @@
         }
 
         .dark-mode .memory-card.is-flipped:active .card-back {
-             box-shadow:
-                inset 3px 3px 6px #282828,
-                inset -3px -3px 6px #484848,
-                3px 3px 10px #282828,
-                -3px -3px 10px #484848;
+             box-shadow: /* Reduced */
+                inset 2px 2px 4px #282828,
+                inset -2px -2px 4px #484848,
+                2px 2px 7px #282828,
+                -2px -2px 7px #484848;
         }
          .dark-mode .memory-card:not(.is-flipped):active .card-front {
-             box-shadow:
-                inset 3px 3px 6px #282828,
-                inset -3px -3px 6px #484848,
-                3px 3px 10px #282828,
-                -3px -3px 10px #484848;
+             box-shadow: /* Reduced */
+                inset 2px 2px 4px #282828,
+                inset -2px -2px 4px #484848,
+                2px 2px 7px #282828,
+                -2px -2px 7px #484848;
         }
 
         .dark-mode .memory-card.selected .card-front {
             background: linear-gradient(145deg, #4a4a4a, #404040);
-            box-shadow:
-                inset 4px 4px 8px #2d2d2d,
-                inset -4px -4px 8px #575757,
-                3px 3px 10px #282828,
-                -3px -3px 10px #484848;
+            box-shadow: /* Reduced */
+                inset 3px 3px 6px #2d2d2d,
+                inset -3px -3px 6px #575757,
+                2px 2px 7px #282828,
+                -2px -2px 7px #484848;
             border: 1px solid #707070;
         }
 
         .dark-mode .memory-card.matched .card-front {
             opacity: 0.7;
             background: linear-gradient(145deg, #3e3e3e, #343434);
-            box-shadow:
-                inset 3px 3px 6px #242424,
-                inset -3px -3px 6px #444444;
+            box-shadow: /* Reduced */
+                inset 2px 2px 4px #242424,
+                inset -2px -2px 4px #444444;
         }
         .dark-mode .memory-card.matched .card-front .card-content {
             color: #888888;
@@ -881,23 +942,23 @@
 
         .dark-mode .game-stats {
             background: linear-gradient(145deg, #404040, #363636);
-            border-top: 1px solid rgba(100, 100, 100, 0.15);
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.15);
+            border-top: 1px solid rgba(100, 100, 100, 0.1); /* Reduced alpha */
+            box-shadow: 0 -1px 7px rgba(0, 0, 0, 0.1); /* Reduced */
         }
         .dark-mode .stat-label { color: #a0a0a0; }
         .dark-mode .stat-value { color: #dcdcdc; }
 
         .dark-mode .new-game-button {
             background: linear-gradient(145deg, #585858, #4e4e4e);
-            box-shadow: 4px 4px 8px #2a2a2a, -4px -4px 8px #626262;
-            border: 1px solid rgba(100, 100, 100, 0.2);
+            box-shadow: 3px 3px 6px #2a2a2a, -4px -4px 8px #626262; /* Reduced */
+            border: 1px solid rgba(100, 100, 100, 0.14); /* Reduced alpha */
             color: #dcdcdc;
         }
         .dark-mode .new-game-button:active {
-            box-shadow: inset 3px 3px 6px #2a2a2a, inset -3px -3px 6px #626262;
+            box-shadow: inset 2px 2px 4px #2a2a2a, inset -2px -2px 4px #626262; /* Reduced */
         }
         .dark-mode .new-game-button::before {
-            background: linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.06) 50%, transparent 70%);
+            background: linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.04) 50%, transparent 70%); /* Reduced opacity */
         }
 
         /* Dark Mode Modal Styles */
@@ -906,9 +967,9 @@
         }
         .dark-mode .modal-content-wrapper {
             background: linear-gradient(145deg, #454545, #3b3b3b);
-            box-shadow:
-                15px 15px 35px #252525,
-                -15px -15px 35px #515151;
+            box-shadow: /* Reduced */
+                10px 10px 24px #252525,
+                -10px -10px 24px #515151;
             color: #d1d1d1;
         }
         .dark-mode .modal-content-wrapper h3 {
@@ -922,11 +983,11 @@
         }
         .dark-mode #modal-close-btn {
             background: linear-gradient(145deg, #4f4f4f, #454545);
-            box-shadow: 3px 3px 7px #252525, -3px -3px 7px #515151;
+            box-shadow: 2px 2px 5px #252525, -2px -2px 5px #515151; /* Reduced */
             color: #d1d1d1;
         }
         .dark-mode #modal-close-btn:active {
-            box-shadow: inset 2px 2px 4px #252525, inset -2px -2px 4px #515151;
+            box-shadow: inset 1px 1px 3px #252525, inset -1px -1px 3px #515151; /* Reduced */
         }
 
     </style>
@@ -1160,12 +1221,12 @@
                 modalMessageStartGame: "Press \"New Game\" to start.",
                 roundSubtitle: "Round {0}/{1}",
                 roundSubtitleSingle: "Rounds: {0}",
-                topics: {
-                    basics: "Basics", food: "Food/Restaurants", travel: "Travel", tech: "Tech/Computers", business: "Business/Economy"
+                topics: { // Shorter names
+                    basics: "Basics", food: "Food", travel: "Travel", tech: "Tech", business: "Business"
                 },
                 aboutModal: {
                     title: "About",
-                    content: "A game for learning words from five spheres of life.\n0.1.3 beta version (may display fonts and colors incorrectly on some mobile devices).\n\nAuthor: VOVSN\nGitHub: <a href=\"https://github.com/VOVSn\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"modal-link\">https://github.com/VOVSn</a>\n\nThis is an open-source project. You can contribute to the repository on GitHub!"
+                    content: "A game for learning words from five spheres of life.\n0.1.4 alpha version (may display fonts and colors incorrectly on some mobile devices).\n\nLearn 1111 WORDS with me!\n\nAuthor: Vladimir Korolev\nGitHub: <a href=\"https://github.com/VOVSn\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"modal-link\">https://github.com/VOVSn</a>\n\nThis is an open-source project. You can contribute to the repository on GitHub!"
                 }
             },
             ru: {
@@ -1206,18 +1267,194 @@
                 modalMessageStartGame: "Нажмите \"Новая игра\", чтобы начать.",
                 roundSubtitle: "Раунд {0}/{1}",
                 roundSubtitleSingle: "Раунды: {0}",
-                topics: {
-                    basics: "Основы", food: "Еда/Рестораны", travel: "Путешествия", tech: "Техника/Компьютеры", business: "Бизнес/Экономика"
+                topics: { // Shorter names
+                    basics: "Основы", food: "Еда", travel: "Путешествия", tech: "Техника", business: "Бизнес"
                 },
                 aboutModal: {
                     title: "О программе",
-                    content: "Игра для изучения слов из пяти сфер жизни.\n0.1.3 beta версия (может некорректно отображать шрифты и цвета на некоторых мобильных устройствах).\n\nАвтор: VOVSN\nGitHub: <a href=\"https://github.com/VOVSn\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"modal-link\">https://github.com/VOVSn</a>\n\nЭто проект с открытым исходным кодом. Вы можете внести свой вклад в репозиторий на GitHub!"
+                    content: "Игра для изучения слов из пяти сфер жизни.\n0.1.4 alpha версия (может некорректно отображать шрифты и цвета на некоторых мобильных устройствах).\n\nИзучайте 1111 СЛОВ со мной!\n\nАвтор: VOVSN\nGitHub: <a href=\"https://github.com/VOVSn\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"modal-link\">https://github.com/VOVSn</a>\n\nЭто проект с открытым исходным кодом. Вы можете внести свой вклад в репозиторий на GitHub!"
                 }
             },
-            es: { pageTitle: "1111 Palabras - Juego de Coincidencias", gameTitle: "1111 Palabras", topics: {basics: "Básicos", food: "Comida/Restaurantes", travel: "Viajes", tech: "Tecnología/Computadoras", business:"Negocios/Economía"}, subtitleModeSimple: "Empareja las palabras con su traducción", subtitleModeMemory: "Encuentra y recuerda las parejas", gameModeSimple: "Sencillo", gameModeMemory: "Memoria", mainLanguageLabel: "Idioma Principal:", foreignLanguageLabel: "Idioma a Aprender:", roundsLabel: "Rondas:", settingsMenuTitle: "Ajustes", gameModeLabel: "Modo de Juego", soundLabel: "Sonido", darkModeLabel: "Tema Oscuro", aboutButton: "Acerca de", movesStatLabel: "Movimientos", pairsStatLabel: "Pares", timeStatLabel: "Tiempo", newGameButton: "Nuevo Juego", playAgainButton: "Jugar de Nuevo", closeButton: "Cerrar", okButton: "OK", modalTitleGameEnd: "¡Juego Terminado!", modalTitleAllRoundsComplete: "¡Todas las {0} rondas completadas!", modalMessageStats: "Movimientos: {0}.\nTiempo: {1}.", modalMessageTotalStats: "Movimientos totales: {0}.\nTiempo total: {1}.", modalTitleAttention: "Atención", modalMessageMustSelectTopic: "Debe seleccionarse al menos un tema.\nPor defecto se selecciona 'Básicos'.", modalMessageNoWordsForRound: "No hay suficientes palabras únicas para esta ronda.\nJuego detenido. Intenta seleccionar más temas o reducir las rondas.", modalMessageAllWordsUsed: "Todas las palabras de los temas seleccionados para el juego actual han sido utilizadas. Comienza un nuevo juego o elige otros temas.", modalMessageNoWordsGameEnd: "Has utilizado todas las palabras disponibles para los temas seleccionados en este juego.\nJuego Terminado.", modalMessageNoWordsError: "Error: Sin palabras", modalMessageSelectTopic: "Por favor, selecciona al menos un tema en los ajustes.", modalMessageGameFinished: "¡Juego finalizado! Resultados en la ventana superior.", modalMessageStartGame: "Presiona \"Nuevo Juego\" para comenzar.", roundSubtitle: "Ronda {0}/{1}", roundSubtitleSingle: "Rondas: {0}", aboutModal: { title: "Acerca de", content: "Un juego para aprender palabras de cinco ámbitos de la vida.\nVersión beta 0.1.3 (puede mostrar fuentes y colores incorrectamente en algunos dispositivos móviles).\n\nAutor: VOVSN\nGitHub: <a href=\"https://github.com/VOVSn\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"modal-link\">https://github.com/VOVSn</a>\n\nEste es un proyecto de código abierto. ¡Puedes contribuir al repositorio en GitHub!"}},
-            fr: { pageTitle: "1111 Mots - Jeu de Correspondance", gameTitle: "1111 Mots", topics: {basics: "Les bases", food: "Nourriture/Restaurants", travel: "Voyages", tech: "Technologie/Ordinateurs", business:"Affaires/Économie"}, subtitleModeSimple: "Associez les mots à leur traduction", subtitleModeMemory: "Trouvez et mémorisez les paires", gameModeSimple: "Simple", gameModeMemory: "Mémoire", mainLanguageLabel: "Langue Principale :", foreignLanguageLabel: "Langue à Apprendre :", roundsLabel: "Manches :", settingsMenuTitle: "Paramètres", gameModeLabel: "Mode de Jeu", soundLabel: "Son", darkModeLabel: "Thème Sombre", aboutButton: "À propos", movesStatLabel: "Coups", pairsStatLabel: "Paires", timeStatLabel: "Temps", newGameButton: "Nouveau Jeu", playAgainButton: "Rejouer", closeButton: "Fermer", okButton: "OK", modalTitleGameEnd: "Partie Terminée !", modalTitleAllRoundsComplete: "Toutes les {0} manches terminées !", modalMessageStats: "Coups : {0}.\nTemps : {1}.", modalMessageTotalStats: "Total des coups : {0}.\nTemps total : {1}.", modalTitleAttention: "Attention", modalMessageMustSelectTopic: "Au moins un thème doit être sélectionné.\n'Les bases' est sélectionné par défaut.", modalMessageNoWordsForRound: "Pas assez de mots uniques pour cette manche.\nJeu arrêté. Essayez de sélectionner plus de thèmes ou de réduire le nombre de manches.", modalMessageAllWordsUsed: "Tous les mots des thèmes sélectionnés pour le jeu actuel ont été utilisés. Commencez un nouveau jeu ou choisissez d'autres thèmes.", modalMessageNoWordsGameEnd: "Vous avez utilisé tous les mots disponibles pour les thèmes sélectionnés dans ce jeu.\nPartie Terminée.", modalMessageNoWordsError: "Erreur : Pas de mots", modalMessageSelectTopic: "Veuillez sélectionner au moins un thème dans les paramètres.", modalMessageGameFinished: "Partie terminée ! Résultats dans la fenêtre ci-dessus.", modalMessageStartGame: "Appuyez sur \"Nouveau Jeu\" pour commencer.", roundSubtitle: "Manche {0}/{1}", roundSubtitleSingle: "Manches : {0}", aboutModal: { title: "À propos", content: "Un jeu pour apprendre des mots de cinq domaines de la vie.\nVersion bêta 0.1.3 (peut afficher incorrectement les polices et les couleurs sur certains appareils mobiles).\n\nAutheur : VOVSN\nGitHub : <a href=\"https://github.com/VOVSn\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"modal-link\">https://github.com/VOVSn</a>\n\nCeci est un projet open-source. Vous pouvez contribuer au dépôt sur GitHub !"}},
-            sr_latin: { pageTitle: "1111 Reči - Igra Spajanja", gameTitle: "1111 Reči", topics: {basics: "Osnove", food: "Hrana/Restorani", travel: "Putovanja", tech: "Tehnika/Računari", business:"Posao/Ekonomija"}, subtitleModeSimple: "Poveži reči sa prevodom", subtitleModeMemory: "Pronađi i zapamti parove", gameModeSimple: "Jednostavno", gameModeMemory: "Memorija", mainLanguageLabel: "Glavni Jezik:", foreignLanguageLabel: "Jezik za Učenje:", roundsLabel: "Runde:", settingsMenuTitle: "Podešavanja", gameModeLabel: "Režim Igre", soundLabel: "Zvuk", darkModeLabel: "Tamna Tema", aboutButton: "O programu", movesStatLabel: "Potezi", pairsStatLabel: "Parovi", timeStatLabel: "Vreme", newGameButton: "Nova Igra", playAgainButton: "Igraj Ponovo", closeButton: "Zatvori", okButton: "U redu", modalTitleGameEnd: "Igra Završena!", modalTitleAllRoundsComplete: "Svih {0} rundi završeno!", modalMessageStats: "Poteza: {0}.\nVreme: {1}.", modalMessageTotalStats: "Ukupno poteza: {0}.\nUkupno vreme: {1}.", modalTitleAttention: "Pažnja", modalMessageMustSelectTopic: "Mora biti izabrana bar jedna tema.\nPodrazumevano je izabrana 'Osnove'.", modalMessageNoWordsForRound: "Nema dovoljno jedinstvenih reči za ovu rundu.\nIgra zaustavljena. Pokušajte da izaberete više tema ili smanjite broj rundi.", modalMessageAllWordsUsed: "Sve reči iz izabranih tema za trenutnu igru su iskorišćene. Započnite novu igru ili izaberite druge teme.", modalMessageNoWordsGameEnd: "Iskoristili ste sve dostupne reči za izabrane teme u ovoj igri.\nIgra Završena.", modalMessageNoWordsError: "Greška: Nema reči", modalMessageSelectTopic: "Molimo izaberite bar jednu temu u podešavanjima.", modalMessageGameFinished: "Igra završena! Rezultati u prozoru iznad.", modalMessageStartGame: "Pritisnite \"Nova Igra\" da počnete.", roundSubtitle: "Runda {0}/{1}", roundSubtitleSingle: "Runde: {0}", aboutModal: { title: "O programu", content: "Igra za učenje reči iz pet sfera života.\n0.1.3 beta verzija (može nepravilno prikazivati fontove i boje na nekim mobilnim uređajima).\n\nAutor: VOVSN\nGitHub: <a href=\"https://github.com/VOVSn\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"modal-link\">https://github.com/VOVSn</a>\n\nOvo je projekat otvorenog koda. Možete doprineti repozitorijumu na GitHub-u!"}},
-            sr_cyrillic: { pageTitle: "1111 Речи - Игра Спајања", gameTitle: "1111 Речи", topics: {basics: "Основе", food: "Храна/Ресторани", travel: "Путовања", tech: "Техника/Рачунари", business:"Посао/Економија"}, subtitleModeSimple: "Повежи речи са преводом", subtitleModeMemory: "Пронађи и запамти парове", gameModeSimple: "Једноставно", gameModeMemory: "Меморија", mainLanguageLabel: "Главни Језик:", foreignLanguageLabel: "Језик за Учење:", roundsLabel: "Рунде:", settingsMenuTitle: "Подешавања", gameModeLabel: "Режим Игре", soundLabel: "Звук", darkModeLabel: "Тамна Тема", aboutButton: "О програму", movesStatLabel: "Потези", pairsStatLabel: "Парови", timeStatLabel: "Време", newGameButton: "Нова Игра", playAgainButton: "Играј Поново", closeButton: "Затвори", okButton: "У реду", modalTitleGameEnd: "Игра Завршена!", modalTitleAllRoundsComplete: "Свих {0} рунди завршено!", modalMessageStats: "Потеза: {0}.\nВреме: {1}.", modalMessageTotalStats: "Укупно потеза: {0}.\nУкупно време: {1}.", modalTitleAttention: "Пажња", modalMessageMustSelectTopic: "Мора бити изабрана бар једна тема.\nПодразумевано је изабрана 'Основе'.", modalMessageNoWordsForRound: "Нема довољно јединствених речи за ову рунду.\nИгра заустављена. Покушајте да изаберете више тема или смањите број рунди.", modalMessageAllWordsUsed: "Све речи из изабраних тема за тренутну игру су искоришћене. Започните нову игру или изаберите друге теме.", modalMessageNoWordsGameEnd: "Искористили сте све доступне речи за изабране теме у овој игри.\nИгра Завршена.", modalMessageNoWordsError: "Грешка: Нема речи", modalMessageSelectTopic: "Молимо изаберите бар једну тему у подешавањима.", modalMessageGameFinished: "Игра завршена! Резултати у прозору изнад.", modalMessageStartGame: "Притисните \"Нова Игра\" да почнете.", roundSubtitle: "Рунда {0}/{1}", roundSubtitleSingle: "Рунде: {0}", aboutModal: { title: "О програму", content: "Игра за учење речи из пет сфера живота.\n0.1.3 бета верзија (може неправилно приказивати фонтове и боје на неким мобилним уређајима).\n\nАутор: VOVSN\nGitHub: <a href=\"https://github.com/VOVSn\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"modal-link\">https://github.com/VOVSn</a>\n\nОво је пројекат отвореног кода. Можете допринети репозиторијуму на ГитХаб-у!"}},
+            es: {
+                pageTitle: "1111 Palabras - Juego de Coincidencias",
+                gameTitle: "1111 Palabras",
+                topics: { // Shorter names
+                    basics: "Básicos", food: "Comida", travel: "Viajes", tech: "Tecnología", business:"Negocios"
+                },
+                subtitleModeSimple: "Empareja las palabras con su traducción",
+                subtitleModeMemory: "Encuentra y recuerda las parejas",
+                gameModeSimple: "Sencillo",
+                gameModeMemory: "Memoria",
+                mainLanguageLabel: "Idioma Principal:",
+                foreignLanguageLabel: "Idioma a Aprender:",
+                roundsLabel: "Rondas:",
+                settingsMenuTitle: "Ajustes",
+                gameModeLabel: "Modo de Juego",
+                soundLabel: "Sonido",
+                darkModeLabel: "Tema Oscuro",
+                aboutButton: "Acerca de",
+                movesStatLabel: "Movimientos",
+                pairsStatLabel: "Pares",
+                timeStatLabel: "Tiempo",
+                newGameButton: "Nuevo Juego",
+                playAgainButton: "Jugar de Nuevo",
+                closeButton: "Cerrar",
+                okButton: "OK",
+                modalTitleGameEnd: "¡Juego Terminado!",
+                modalTitleAllRoundsComplete: "¡Todas las {0} rondas completadas!",
+                modalMessageStats: "Movimientos: {0}.\nTiempo: {1}.",
+                modalMessageTotalStats: "Movimientos totales: {0}.\nTiempo total: {1}.",
+                modalTitleAttention: "Atención",
+                modalMessageMustSelectTopic: "Debe seleccionarse al menos un tema.\nPor defecto se selecciona 'Básicos'.",
+                modalMessageNoWordsForRound: "No hay suficientes palabras únicas para esta ronda.\nJuego detenido. Intenta seleccionar más temas o reducir las rondas.",
+                modalMessageAllWordsUsed: "Todas las palabras de los temas seleccionados para el juego actual han sido utilizadas. Comienza un nuevo juego o elige otros temas.",
+                modalMessageNoWordsGameEnd: "Has utilizado todas las palabras disponibles para los temas seleccionados en este juego.\nJuego Terminado.",
+                modalMessageNoWordsError: "Error: Sin palabras",
+                modalMessageSelectTopic: "Por favor, selecciona al menos un tema en los ajustes.",
+                modalMessageGameFinished: "¡Juego finalizado! Resultados en la ventana superior.",
+                modalMessageStartGame: "Presiona \"Nuevo Juego\" para comenzar.",
+                roundSubtitle: "Ronda {0}/{1}",
+                roundSubtitleSingle: "Rondas: {0}",
+                aboutModal: {
+                    title: "Acerca de",
+                    content: "Un juego para aprender palabras de cinco ámbitos de la vida.\nVersión alpha 0.1.4 (puede mostrar fuentes y colores incorrectamente en algunos dispositivos móviles).\n\n¡Aprende 1111 PALABRAS conmigo!\n\nAutor: VOVSN\nGitHub: <a href=\"https://github.com/VOVSn\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"modal-link\">https://github.com/VOVSn</a>\n\nEste es un proyecto de código abierto. ¡Puedes contribuir al repositorio en GitHub!"
+                }
+            },
+            fr: {
+                pageTitle: "1111 Mots - Jeu de Correspondance",
+                gameTitle: "1111 Mots",
+                topics: { // Shorter names
+                    basics: "Les bases", food: "Nourriture", travel: "Voyages", tech: "Technologie", business:"Affaires"
+                },
+                subtitleModeSimple: "Associez les mots à leur traduction",
+                subtitleModeMemory: "Trouvez et mémorisez les paires",
+                gameModeSimple: "Simple",
+                gameModeMemory: "Mémoire",
+                mainLanguageLabel: "Langue Principale :",
+                foreignLanguageLabel: "Langue à Apprendre :",
+                roundsLabel: "Manches :",
+                settingsMenuTitle: "Paramètres",
+                gameModeLabel: "Mode de Jeu",
+                soundLabel: "Son",
+                darkModeLabel: "Thème Sombre",
+                aboutButton: "À propos",
+                movesStatLabel: "Coups",
+                pairsStatLabel: "Paires",
+                timeStatLabel: "Temps",
+                newGameButton: "Nouveau Jeu",
+                playAgainButton: "Rejouer",
+                closeButton: "Fermer",
+                okButton: "OK",
+                modalTitleGameEnd: "Partie Terminée !",
+                modalTitleAllRoundsComplete: "Toutes les {0} manches terminées !",
+                modalMessageStats: "Coups : {0}.\nTemps : {1}.",
+                modalMessageTotalStats: "Total des coups : {0}.\nTemps total : {1}.",
+                modalTitleAttention: "Attention",
+                modalMessageMustSelectTopic: "Au moins un thème doit être sélectionné.\n'Les bases' est sélectionné par défaut.",
+                modalMessageNoWordsForRound: "Pas assez de mots uniques pour cette manche.\nJeu arrêté. Essayez de sélectionner plus de thèmes ou de réduire le nombre de manches.",
+                modalMessageAllWordsUsed: "Tous les mots des thèmes sélectionnés pour le jeu actuel ont été utilisés. Commencez un nouveau jeu ou choisissez d'autres thèmes.",
+                modalMessageNoWordsGameEnd: "Vous avez utilisé tous les mots disponibles pour les thèmes sélectionnés dans ce jeu.\nPartie Terminée.",
+                modalMessageNoWordsError: "Erreur : Pas de mots",
+                modalMessageSelectTopic: "Veuillez sélectionner au moins un thème dans les paramètres.",
+                modalMessageGameFinished: "Partie terminée ! Résultats dans la fenêtre ci-dessus.",
+                modalMessageStartGame: "Appuyez sur \"Nouveau Jeu\" pour commencer.",
+                roundSubtitle: "Manche {0}/{1}",
+                roundSubtitleSingle: "Manches : {0}",
+                aboutModal: {
+                    title: "À propos",
+                    content: "Un jeu pour apprendre des mots de cinq domaines de la vie.\nVersion alpha 0.1.4 (peut afficher incorrectement les polices et les couleurs sur certains appareils mobiles).\n\nApprenez 1111 MOTS avec moi !\n\nAutheur : VOVSN\nGitHub : <a href=\"https://github.com/VOVSn\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"modal-link\">https://github.com/VOVSn</a>\n\nCeci est un projet open-source. Vous pouvez contribuer au dépôt sur GitHub !"
+                }
+            },
+            sr_latin: {
+                pageTitle: "1111 Reči - Igra Spajanja",
+                gameTitle: "1111 Reči",
+                topics: { // Shorter names
+                    basics: "Osnove", food: "Hrana", travel: "Putovanja", tech: "Tehnika", business:"Posao"
+                },
+                subtitleModeSimple: "Poveži reči sa prevodom",
+                subtitleModeMemory: "Pronađi i zapamti parove",
+                gameModeSimple: "Jednostavno",
+                gameModeMemory: "Memorija",
+                mainLanguageLabel: "Glavni Jezik:",
+                foreignLanguageLabel: "Jezik za Učenje:",
+                roundsLabel: "Runde:",
+                settingsMenuTitle: "Podešavanja",
+                gameModeLabel: "Režim Igre",
+                soundLabel: "Zvuk",
+                darkModeLabel: "Tamna Tema",
+                aboutButton: "O programu",
+                movesStatLabel: "Potezi",
+                pairsStatLabel: "Parovi",
+                timeStatLabel: "Vreme",
+                newGameButton: "Nova Igra",
+                playAgainButton: "Igraj Ponovo",
+                closeButton: "Zatvori",
+                okButton: "U redu",
+                modalTitleGameEnd: "Igra Završena!",
+                modalTitleAllRoundsComplete: "Svih {0} rundi završeno!",
+                modalMessageStats: "Poteza: {0}.\nVreme: {1}.",
+                modalMessageTotalStats: "Ukupno poteza: {0}.\nUkupno vreme: {1}.",
+                modalTitleAttention: "Pažnja",
+                modalMessageMustSelectTopic: "Mora biti izabrana bar jedna tema.\nPodrazumevano je izabrana 'Osnove'.",
+                modalMessageNoWordsForRound: "Nema dovoljno jedinstvenih reči za ovu rundu.\nIgra zaustavljena. Pokušajte da izaberete više tema ili smanjite broj rundi.",
+                modalMessageAllWordsUsed: "Sve reči iz izabranih tema za trenutnu igru su iskorišćene. Započnite novu igru ili izaberite druge teme.",
+                modalMessageNoWordsGameEnd: "Iskoristili ste sve dostupne reči za izabrane teme u ovoj igri.\nIgra Završena.",
+                modalMessageNoWordsError: "Greška: Nema reči",
+                modalMessageSelectTopic: "Molimo izaberite bar jednu temu u podešavanjima.",
+                modalMessageGameFinished: "Igra završena! Rezultati u prozoru iznad.",
+                modalMessageStartGame: "Pritisnite \"Nova Igra\" da počnete.",
+                roundSubtitle: "Runda {0}/{1}",
+                roundSubtitleSingle: "Runde: {0}",
+                aboutModal: {
+                    title: "O programu",
+                    content: "Igra za učenje reči iz pet sfera života.\n0.1.4 alpha verzija (može nepravilno prikazivati fontove i boje na nekim mobilnim uređajima).\n\nNaučite 1111 REČI sa mnom!\n\nAutor: VOVSN\nGitHub: <a href=\"https://github.com/VOVSn\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"modal-link\">https://github.com/VOVSn</a>\n\nOvo je projekat otvorenog koda. Možete doprineti repozitorijumu na GitHub-u!"
+                }
+            },
+            sr_cyrillic: {
+                pageTitle: "1111 Речи - Игра Спајања",
+                gameTitle: "1111 Речи",
+                topics: { // Shorter names
+                    basics: "Основе", food: "Храна", travel: "Путовања", tech: "Техника", business:"Посао"
+                },
+                subtitleModeSimple: "Повежи речи са преводом",
+                subtitleModeMemory: "Пронађи и запамти парове",
+                gameModeSimple: "Једноставно",
+                gameModeMemory: "Меморија",
+                mainLanguageLabel: "Главни Језик:",
+                foreignLanguageLabel: "Језик за Учење:",
+                roundsLabel: "Рунде:",
+                settingsMenuTitle: "Подешавања",
+                gameModeLabel: "Режим Игре",
+                soundLabel: "Звук",
+                darkModeLabel: "Тамна Тема",
+                aboutButton: "О програму",
+                movesStatLabel: "Потези",
+                pairsStatLabel: "Парови",
+                timeStatLabel: "Време",
+                newGameButton: "Нова Игра",
+                playAgainButton: "Играј Поново",
+                closeButton: "Затвори",
+                okButton: "У реду",
+                modalTitleGameEnd: "Игра Завршена!",
+                modalTitleAllRoundsComplete: "Свих {0} рунди завршено!",
+                modalMessageStats: "Потеза: {0}.\nВреме: {1}.",
+                modalMessageTotalStats: "Укупно потеза: {0}.\nУкупно време: {1}.",
+                modalTitleAttention: "Пажња",
+                modalMessageMustSelectTopic: "Мора бити изабрана бар једна тема.\nПодразумевано је изабрана 'Основе'.",
+                modalMessageNoWordsForRound: "Нема довољно јединствених речи за ову рунду.\nИгра заустављена. Покушајте да изаберете више тема или смањите број рунди.",
+                modalMessageAllWordsUsed: "Све речи из изабраних тема за тренутну игру су искоришћене. Започните нову игру или изаберите друге теме.",
+                modalMessageNoWordsGameEnd: "Искористили сте све доступне речи за изабране теме у овој игри.\nИгра Завршена.",
+                modalMessageNoWordsError: "Грешка: Нема речи",
+                modalMessageSelectTopic: "Молимо изаберите бар једну тему у подешавањима.",
+                modalMessageGameFinished: "Игра завршена! Резултати у прозору изнад.",
+                modalMessageStartGame: "Притисните \"Нова Игра\" да почнете.",
+                roundSubtitle: "Рунда {0}/{1}",
+                roundSubtitleSingle: "Рунде: {0}",
+                aboutModal: {
+                    title: "О програму",
+                    content: "Игра за учење речи из пет сфера живота.\n0.1.4 алфа верзија (може неправилно приказивати фонтове и боје на неким мобилним уређајима).\n\nНаучите 1111 РЕЧИ са мном!\n\nАутор: VOVSN\nGitHub: <a href=\"https://github.com/VOVSn\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"modal-link\">https://github.com/VOVSn</a>\n\nОво је пројекат отвореног кода. Можете допринети репозиторијуму на ГитХаб-у!"
+                }
+            },
         };
         function _(key, ...args) {
             let langStrings = uiStrings[currentMainLanguage] || uiStrings.en; // Fallback to English
@@ -2518,7 +2755,7 @@
         }
         function showAboutModal() {
             if (settingsDropdown.classList.contains('active')) {
-                settingsDropdown.classList.remove('active');
+                settingsDropdown.classList.remove('active'); // Close settings when opening About modal
             }
             const aboutContent = _('aboutModal.content');
             if (aboutModalMessageTextContentEl) {
@@ -2794,25 +3031,19 @@
 
             const allCards = gameBoard.querySelectorAll('.memory-card');
             if (gameMode === 'simple') {
-                // Simple mode: cards start face-up (content showing).
-                // Ensure no .is-flipped class.
                 allCards.forEach(cardEl => cardEl.classList.remove('is-flipped'));
                 lockBoard = false;
-            } else { // Memory mode
-                // Memory mode: cards briefly show content, then flip to '?' (face-down).
+            } else {
                 lockBoard = true;
-                // 1. Initially, show content (face-up, no .is-flipped class)
                 allCards.forEach(cardEl => cardEl.classList.remove('is-flipped'));
-
-                // 2. After a delay, flip to '?' (face-down, add .is-flipped class)
                 setTimeout(() => {
                     allCards.forEach(cardEl => {
-                        if (!cardEl.classList.contains('matched')) { // Don't flip already matched ones (safety)
-                            cardEl.classList.add('is-flipped'); // Add .is-flipped to show '?'
+                        if (!cardEl.classList.contains('matched')) {
+                            cardEl.classList.add('is-flipped');
                         }
                     });
-                    lockBoard = false; // Board is ready for play
-                }, 1500 + (currentTotalPairsInRound * 100)); // Time content is visible
+                    lockBoard = false;
+                }, 1500 + (currentTotalPairsInRound * 100));
             }
 
             updateStats();
@@ -2824,21 +3055,12 @@
             if (lockBoard || !gameActive || this.classList.contains('matched') || this === firstCard) {
                 return;
             }
-
-            // Card flipping logic based on gameMode:
-            // CSS: .is-flipped on .memory-card -> shows card-back ('?')
-            //      No .is-flipped -> shows card-front (content)
             if (gameMode === 'memory') {
-                // In memory mode, a clickable card is face-down (showing '?'), meaning it HAS 'is-flipped'.
-                // Clicking it should reveal content by REMOVING 'is-flipped'.
                 if (this.classList.contains('is-flipped')) {
-                    this.classList.remove('is-flipped'); // Remove .is-flipped to show content
+                    this.classList.remove('is-flipped');
                     playSound('flip');
                 }
-                // If card was already face-up (no 'is-flipped'), it shouldn't be processed by this click
-                // if it's not the firstCard or already matched (handled by initial checks).
-            } else { // simple mode
-                // Cards are always face-up. Play sound only for the first card of a pair selection.
+            } else {
                 if (!firstCard) {
                     playSound('flip');
                 }
@@ -2848,16 +3070,14 @@
                 startRoundTimer();
             }
 
-            this.classList.add('selected'); // Visual cue for selection
+            this.classList.add('selected');
 
             if (!firstCard) {
-                firstCard = this; // 'this' is now face-up (content showing)
+                firstCard = this;
                 return;
             }
 
-            secondCard = this; // 'this' is also now face-up (content showing)
-            // Sound for second card in simple mode was here, removed as first click sound should suffice.
-
+            secondCard = this;
             moves++;
             totalMovesAcrossAllRounds++;
             updateStats();
@@ -2878,8 +3098,6 @@
                 secondCard.classList.remove('selected');
                 firstCard.classList.add('matched');
                 secondCard.classList.add('matched');
-                // In simple mode, matched cards stay face-up (no .is-flipped).
-                // In memory mode, matched cards also stay face-up (content showing, so NO .is-flipped class).
                 resetTurn();
                 checkRoundWin();
             } else {
@@ -2890,12 +3108,9 @@
                     firstCard.classList.remove('selected', 'incorrect');
                     secondCard.classList.remove('selected', 'incorrect');
                     if (gameMode === 'memory') {
-                        // Flip back to face-down ('?') if not matched.
-                        // Face-down means ADDING 'is-flipped'.
                         firstCard.classList.add('is-flipped');
                         secondCard.classList.add('is-flipped');
                     }
-                    // In simple mode, incorrect cards remain face-up.
                     resetTurn();
                 }, 1000);
             }
@@ -2945,12 +3160,12 @@
             }
         }
         function handleSettingsChangeAndRestart() {
-            if (settingsDropdown.classList.contains('active')) settingsDropdown.classList.remove('active');
+            // REMOVED: if (settingsDropdown.classList.contains('active')) settingsDropdown.classList.remove('active');
             if (topicDropdown.classList.contains('active')) {
                 topicDropdown.classList.remove('active');
                 topicSelectorButton.classList.remove('open');
             }
-            initGame(); // This will set up the board with new settings, including gameMode.
+            initGame();
         }
         function populateTopicDropdown() {
             topicDropdown.innerHTML = '';
@@ -3004,7 +3219,7 @@
             }
             updateSelectedTopicsDisplay();
             localStorage.setItem('selectedTopics', JSON.stringify(selectedTopics));
-            handleSettingsChangeAndRestart();
+            handleSettingsChangeAndRestart(); // Settings menu will remain open if it was
         }
 
         topicSelectorButton.addEventListener('click', (event) => {
@@ -3015,7 +3230,7 @@
                 settingsDropdown.classList.remove('active');
             }
         });
-        newGameButton.addEventListener('click', initGame);
+        newGameButton.addEventListener('click', initGame); // Settings menu remains open if it was
         menuButton.addEventListener('click', (event) => {
             event.stopPropagation();
             settingsDropdown.classList.toggle('active');
@@ -3037,19 +3252,21 @@
             soundEnabled = soundToggle.checked;
             localStorage.setItem('soundEnabled', soundEnabled.toString());
             if (soundEnabled && audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+            // No game restart, settings menu remains open
         });
         darkModeToggle.addEventListener('change', () => {
             isDarkMode = darkModeToggle.checked;
             document.body.classList.toggle('dark-mode', isDarkMode);
+            document.documentElement.style.colorScheme = isDarkMode ? 'dark' : 'light'; // Added
             localStorage.setItem('darkMode', isDarkMode.toString());
+            // No game restart, settings menu remains open
         });
 
         gameModeToggle.addEventListener('change', () => {
             gameMode = gameModeToggle.checked ? 'memory' : 'simple';
             gameModeLabelTextEl.textContent = _(gameMode === 'memory' ? 'gameModeMemory' : 'gameModeSimple');
             localStorage.setItem('gameMode', gameMode);
-            // Always restart game on mode change to ensure correct setup.
-            handleSettingsChangeAndRestart();
+            handleSettingsChangeAndRestart(); // Settings menu remains open
         });
 
         roundsSelect.addEventListener('change', (e) => {
@@ -3059,9 +3276,9 @@
             selectedNumberOfRounds = newNumRounds;
             localStorage.setItem('selectedNumberOfRounds', selectedNumberOfRounds.toString());
             if (gameActive || currentRound > 0 || boardHasBeenSetUpAtLeastOnce) {
-                initGame();
+                initGame(); // Settings menu remains open
             } else {
-                updateGameSubtitles();
+                updateGameSubtitles(); // Settings menu remains open
             }
         });
 
@@ -3097,7 +3314,7 @@
             }
             localStorage.setItem('currentMainLanguage', currentMainLanguage);
             updateAllUIText();
-            handleSettingsChangeAndRestart();
+            handleSettingsChangeAndRestart(); // Settings menu remains open
         });
 
         foreignLangSelect.addEventListener('change', (e) => {
@@ -3117,13 +3334,14 @@
             if (mainLanguageChangedByLogic) {
                 updateAllUIText();
             }
-            handleSettingsChangeAndRestart();
+            handleSettingsChangeAndRestart(); // Settings menu remains open
         });
 
         const loadPreferences = () => {
             const savedDarkMode = localStorage.getItem('darkMode');
             isDarkMode = savedDarkMode !== null ? savedDarkMode === 'true' : true;
             document.body.classList.toggle('dark-mode', isDarkMode);
+            document.documentElement.style.colorScheme = isDarkMode ? 'dark' : 'light'; // Added
             if (darkModeToggle) darkModeToggle.checked = isDarkMode;
             if (savedDarkMode === null) localStorage.setItem('darkMode', 'true');
 
@@ -3188,7 +3406,7 @@
 
             modalPlayAgainBtn.addEventListener('click', () => {
                 hideGameEndModal();
-                initGame();
+                initGame(); // Settings menu remains open if it was
             });
 
             originalModalCloseBtnHandler = () => {
