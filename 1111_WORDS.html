@@ -2646,7 +2646,7 @@
         }
         function showAboutModal() { /* ... unchanged ... */
             if (settingsDropdown.classList.contains('active')) {
-                settingsDropdown.classList.remove('active');
+                settingsDropdown.classList.remove('active'); // Close settings when opening About modal
             }
             const aboutContent = _('aboutModal.content');
             if (aboutModalMessageTextContentEl) {
@@ -2774,7 +2774,7 @@
                  gameBoard.innerHTML = `<p class="game-board-message">${_('modalMessageAllWordsUsed')}</p>`;
                  currentTotalPairsInRound = 0; boardHasBeenSetUpAtLeastOnce = true; gameActive = false; lockBoard = true; updateStats();
                   if (currentRound > 0 && selectedNumberOfRounds >=1) {
-                    showGameEndModal(_('modalMessageNoWordsGameEnd'), _('modalMessageNoWordsGameEnd'));
+                    showGameEndModal(_('modalMessageNoWordsGameEnd'), _('modalMessageNoWordsGameEnd')); // This modal doesn't show mistakes
                     let roundDisplay = currentRound -1;
                     if (roundDisplay <= 0 && selectedNumberOfRounds === 1) roundDisplay = 1; else if (roundDisplay <= 0) roundDisplay = selectedNumberOfRounds;
                     gameSubtitleRoundEl.textContent = `${_('roundSubtitle', roundDisplay, selectedNumberOfRounds)} - ${_('modalMessageNoWordsError')}`; currentRound = 0;
@@ -2796,7 +2796,7 @@
                 gameBoard.innerHTML = `<p class="game-board-message">${messageText}</p>`;
                 updateStats(); lockBoard = true; gameActive = false; boardHasBeenSetUpAtLeastOnce = true;
                 if (currentRound > 0 && selectedNumberOfRounds > 1 && availableConcepts.length === 0 && wordsUsedInAllRounds.size > 0) {
-                    showGameEndModal(_('modalMessageNoWordsGameEnd'), _('modalMessageNoWordsGameEnd'));
+                    showGameEndModal(_('modalMessageNoWordsGameEnd'), _('modalMessageNoWordsGameEnd')); // No mistakes here
                     let roundDisplay = currentRound - 1 > 0 ? currentRound - 1 : 1;
                     gameSubtitleRoundEl.textContent = `${_('roundSubtitle', roundDisplay, selectedNumberOfRounds)} - ${_('modalMessageNoWordsError')}`; currentRound = 0;
                 } else if (currentRound > 0 || selectedNumberOfRounds > 1) { gameSubtitleRoundEl.textContent += ` - ${_('modalMessageNoWordsError')}`; }
@@ -2908,10 +2908,10 @@
                 const tempCloseHandler = () => {
                     hideGameEndModal(); modalPlayAgainBtn.style.display = ''; modalCloseBtn.textContent = _('closeButton');
                     modalCloseBtn.removeEventListener('click', tempCloseHandler);
-                    if(originalModalCloseBtnHandler) modalCloseBtn.addEventListener('click', originalModalCloseBtnHandler);
+                    if(originalModalCloseBtnHandler) modalCloseBtn.addEventListener('click', originalModalCloseBtnHandler); // Re-attach original
                 };
-                 if(originalModalCloseBtnHandler) modalCloseBtn.removeEventListener('click', originalModalCloseBtnHandler);
-                modalCloseBtn.addEventListener('click', tempCloseHandler);
+                 if(originalModalCloseBtnHandler) modalCloseBtn.removeEventListener('click', originalModalCloseBtnHandler); // Remove original temporarily
+                modalCloseBtn.addEventListener('click', tempCloseHandler); // Attach temporary
             }
             updateSelectedTopicsDisplay(); localStorage.setItem('selectedTopics', JSON.stringify(selectedTopics));
             handleSettingsChangeAndRestart();
