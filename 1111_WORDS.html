@@ -3,14 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark"> <!-- Will be updated by JS based on theme base -->
     <title data-translate-key="pageTitle">1111 Слов - Игра на Сопоставление</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&family=Pixelify+Sans:wght@400;700&display=swap" rel="stylesheet">
     <style>
         /* Global Styles */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Noto Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
@@ -20,7 +24,7 @@
             align-items: center;
             min-height: 100vh;
             padding: 20px;
-            transition: background-color 0.3s ease; /* Smooth transition for dark mode */
+            transition: background-color 0.3s ease;
         }
 
         /* Main Game Container */
@@ -30,8 +34,8 @@
             background: linear-gradient(145deg, #eae5db, #dcd7cd);
             border-radius: 20px;
             box-shadow:
-                15px 15px 35px #c4c0b7,
-                -15px -15px 35px #fcf7ed;
+                10px 10px 24px #c4c0b7,
+                -10px -10px 24px #fcf7ed;
             overflow: hidden;
             position: relative;
             display: flex;
@@ -44,19 +48,19 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 15px 20px; /* Adjusted padding */
+            padding: 15px 20px;
             background: linear-gradient(145deg, #eae5db, #e0dbd1);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 1px 7px rgba(0, 0, 0, 0.04);
             position: relative;
             z-index: 2;
-            transition: background 0.3s ease, box-shadow 0.3s ease;
-            gap: 10px; /* Gap between header items */
+            transition: background 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+            gap: 10px;
         }
 
         .game-info {
             display: flex;
             align-items: center;
-            flex-shrink: 0; /* Prevent title from shrinking too much */
+            flex-shrink: 0;
         }
          .game-info-text {
             display: flex;
@@ -70,36 +74,31 @@
             transition: color 0.3s ease;
         }
 
-        .game-subtitle { /* General class for subtitles */
+        .game-subtitle {
             font-size: 12px;
             color: #847c6f;
             margin-top: 2px;
             transition: color 0.3s ease;
         }
-        #game-subtitle-mode { /* Specific ID for mode subtitle */
-             /* Inherits .game-subtitle styles */
-        }
-        #game-subtitle-round { /* Specific ID for round subtitle */
-            font-weight: 500;
-            /* Inherits .game-subtitle styles */
-        }
+        #game-subtitle-mode { /* Specific ID for mode subtitle */ }
+        #game-subtitle-round { font-weight: 500; }
 
 
         /* Topic Selector */
         .topic-selector-container {
             position: relative;
-            flex-grow: 1; /* Allow it to take available space */
+            flex-grow: 1;
             display: flex;
             justify-content: center;
-            min-width: 130px; /* Minimum width for the button */
+            min-width: 130px;
         }
 
         .topic-button {
             padding: 8px 12px;
             border-radius: 10px;
             background: linear-gradient(145deg, #e8e3d9, #d9d4ca);
-            box-shadow: 3px 3px 7px #c4c0b7, -3px -3px 7px #fcf7ed;
-            border: 1px solid rgba(173, 157, 124, 0.15);
+            box-shadow: 2px 2px 5px #c4c0b7, -2px -2px 5px #fcf7ed;
+            border: 1px solid rgba(173, 157, 124, 0.1);
             color: #5a5346;
             font-weight: 500;
             font-size: 13px;
@@ -113,7 +112,7 @@
             text-align: left;
         }
         .topic-button:active {
-            box-shadow: inset 2px 2px 4px #c4c0b7, inset -2px -2px 4px #fcf7ed;
+            box-shadow: inset 1px 1px 3px #c4c0b7, inset -1px -1px 3px #fcf7ed;
         }
         .topic-button .dropdown-arrow {
             font-size: 10px;
@@ -129,36 +128,32 @@
             top: calc(100% + 5px);
             left: 50%;
             transform: translateX(-50%);
-            width: 220px;
+            width: 250px;
             background: linear-gradient(145deg, #e8e3d9, #dcd7cd);
-            box-shadow:
-                6px 6px 15px #c4c0b7,
-                -6px -6px 15px #fcf7ed;
+            box-shadow: 4px 4px 10px #c4c0b7, -4px -4px 10px #fcf7ed;
             border-radius: 10px;
             padding: 10px;
             z-index: 11;
             flex-direction: column;
             gap: 8px;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
         }
-        .topic-dropdown-content.active {
-            display: flex;
-        }
+        .topic-dropdown-content.active { display: flex; }
         .topic-dropdown-content label {
             display: flex;
             align-items: center;
-            font-size: 14px;
+            font-size: 13px;
             color: #5a5346;
             cursor: pointer;
             padding: 5px;
             border-radius: 5px;
-            transition: background-color 0.2s;
+            transition: background-color 0.2s, color 0.3s ease;
         }
-        .topic-dropdown-content label:hover {
-            background-color: rgba(173, 157, 124, 0.1);
-        }
+        .topic-dropdown-content label:hover { background-color: rgba(173, 157, 124, 0.1); }
         .topic-dropdown-content input[type="checkbox"] {
             margin-right: 8px;
             accent-color: #847c6f;
+            transition: accent-color 0.3s ease;
         }
 
         /* Rounds Selector */
@@ -166,8 +161,8 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            flex-shrink: 0; /* Prevent shrinking */
-            margin: 0 5px; /* Spacing from neighbors */
+            flex-shrink: 0;
+            margin: 0 5px;
         }
         .rounds-label {
             font-size: 13px;
@@ -180,151 +175,91 @@
             padding: 7px 10px;
             border-radius: 10px;
             background: linear-gradient(145deg, #e8e3d9, #d9d4ca);
-            box-shadow: 3px 3px 7px #c4c0b7, -3px -3px 7px #fcf7ed;
-            border: 1px solid rgba(173, 157, 124, 0.15);
-            color: #5a5346;
-            font-weight: 500;
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            outline: none;
-            min-width: 50px; /* Ensure it has some width */
-            text-align: center;
-            text-align-last: center; /* For centering in select */
-        }
-        .rounds-select-dropdown:focus {
-            box-shadow: inset 1px 1px 2px #c4c0b7, inset -1px -1px 2px #fcf7ed,
-                        3px 3px 7px #c4c0b7, -3px -3px 7px #fcf7ed;
-        }
-
-
-        /* Menu Button */
-        .menu-button {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(145deg, #eae5db, #dcd7cd);
-            box-shadow: 4px 4px 8px #c4c0b7, -4px -4px 8px #fcf7ed;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            color: #5a5346;
-            font-size: 20px;
-            flex-shrink: 0;
-        }
-        .menu-button:active {
-            box-shadow: inset 3px 3px 6px #c4c0b7, inset -3px -3px 6px #fcf7ed;
-        }
-
-        /* Settings Dropdown Panel */
-        .settings-dropdown {
-            position: absolute;
-            top: 70px; /* Below header */
-            right: 20px; /* Adjusted for header padding */
-            width: 320px; /* Increased width for language selectors */
-            padding: 15px;
-            background: linear-gradient(145deg, #e8e3d9, #dcd7cd);
-            box-shadow:
-                8px 8px 20px #c4c0b7,
-                -8px -8px 20px #fcf7ed;
-            border-radius: 15px;
-            z-index: 10;
-            display: none;
-            flex-direction: column;
-            gap: 15px;
-            transition: background 0.3s ease, box-shadow 0.3s ease;
-        }
-        .settings-dropdown.active {
-            display: flex;
-        }
-
-        .settings-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-        }
-        .settings-row .select-wrapper { /* Wrapper for language select to control width */
-            flex-grow: 1;
-            max-width: 180px; /* Adjust as needed */
-        }
-        .settings-row select {
-            width: 100%;
-            padding: 6px 8px;
-            border-radius: 8px;
-            background: linear-gradient(145deg, #e8e3d9, #d9d4ca);
             box-shadow: 2px 2px 5px #c4c0b7, -2px -2px 5px #fcf7ed;
             border: 1px solid rgba(173, 157, 124, 0.1);
             color: #5a5346;
+            font-weight: 500;
             font-size: 13px;
             cursor: pointer;
+            transition: all 0.2s ease;
+            -webkit-appearance: none; -moz-appearance: none; appearance: none;
             outline: none;
+            min-width: 50px;
+            text-align: center; text-align-last: center;
+        }
+        .rounds-select-dropdown:focus {
+            box-shadow: inset 1px 1px 1px #c4c0b7, inset -1px -1px 1px #fcf7ed,
+                        2px 2px 5px #c4c0b7, -2px -2px 5px #fcf7ed;
         }
 
+        /* Menu Button */
+        .menu-button {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: linear-gradient(145deg, #eae5db, #dcd7cd);
+            box-shadow: 3px 3px 6px #c4c0b7, -3px -3px 6px #fcf7ed;
+            display: flex; justify-content: center; align-items: center;
+            cursor: pointer; transition: all 0.2s ease;
+            color: #5a5346; font-size: 20px; flex-shrink: 0;
+        }
+        .menu-button:active { box-shadow: inset 2px 2px 4px #c4c0b7, inset -2px -2px 4px #fcf7ed; }
 
+        /* Settings Dropdown Panel */
+        .settings-dropdown {
+            position: absolute; top: 70px; right: 20px; width: 320px;
+            padding: 15px;
+            background: linear-gradient(145deg, #e8e3d9, #dcd7cd);
+            box-shadow: 5px 5px 14px #c4c0b7, -5px -5px 14px #fcf7ed;
+            border-radius: 15px; z-index: 10; display: none;
+            flex-direction: column; gap: 15px;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+        }
+        .settings-dropdown.active { display: flex; }
+
+        .settings-row {
+            display: flex; align-items: center; justify-content: space-between; gap: 10px;
+        }
+        .settings-row .select-wrapper { flex-grow: 1; max-width: 180px; }
+        .settings-row select { /* Applies to lang and theme selects */
+            width: 100%; padding: 6px 8px; border-radius: 8px;
+            background: linear-gradient(145deg, #e8e3d9, #d9d4ca);
+            box-shadow: 1px 1px 3px #c4c0b7, -1px -1px 3px #fcf7ed;
+            border: 1px solid rgba(173, 157, 124, 0.07);
+            color: #5a5346; font-size: 13px; cursor: pointer; outline: none;
+            transition: background 0.3s ease, box-shadow 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
         .settings-label {
-            font-size: 14px;
-            color: #5a5346;
-            font-weight: 500;
-            transition: color 0.3s ease;
-            white-space: nowrap;
+            font-size: 14px; color: #5a5346; font-weight: 500;
+            transition: color 0.3s ease; white-space: nowrap;
         }
         .game-mode-label-text {
-            font-size: 12px;
-            color: #847c6f;
-            margin-left: 5px;
+            font-size: 12px; color: #847c6f; margin-left: 5px;
             transition: color 0.3s ease;
         }
-
         .settings-action-button {
-            padding: 8px 15px;
-            border-radius: 10px;
+            padding: 8px 15px; border-radius: 10px;
             background: linear-gradient(145deg, #e8e3d9, #d9d4ca);
-            box-shadow: 3px 3px 7px #c4c0b7, -3px -3px 7px #fcf7ed;
-            border: 1px solid rgba(173, 157, 124, 0.15);
-            color: #5a5346;
-            font-weight: 500;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            width: 100%;
-            text-align: center;
-            margin-top: 5px; /* Optional: adds a bit of space if it's the last item */
+            box-shadow: 2px 2px 5px #c4c0b7, -2px -2px 5px #fcf7ed;
+            border: 1px solid rgba(173, 157, 124, 0.1);
+            color: #5a5346; font-weight: 500; font-size: 14px;
+            cursor: pointer; transition: all 0.2s ease;
+            width: 100%; text-align: center; margin-top: 5px;
         }
-        .settings-action-button:active {
-            box-shadow: inset 2px 2px 4px #c4c0b7, inset -2px -2px 4px #fcf7ed;
-        }
-
+        .settings-action-button:active { box-shadow: inset 1px 1px 3px #c4c0b7, inset -1px -1px 3px #fcf7ed; }
 
         /* Toggle Switch */
-        .toggle-switch {
-            position: relative;
-            width: 50px;
-            height: 26px;
-        }
+        .toggle-switch { position: relative; width: 50px; height: 26px; }
         .toggle-switch input { opacity: 0; width: 0; height: 0; }
         .toggle-slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0; left: 0; right: 0; bottom: 0;
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
             background: #dcd7cd;
-            box-shadow: inset 2px 2px 4px #cbc6bd, inset -2px -2px 4px #f5f0e5;
-            border-radius: 34px;
-            transition: .4s;
+            box-shadow: inset 1px 1px 3px #cbc6bd, inset -1px -1px 3px #f5f0e5;
+            border-radius: 34px; transition: .4s;
         }
         .toggle-slider:before {
-            position: absolute;
-            content: "";
-            height: 20px; width: 20px;
+            position: absolute; content: ""; height: 20px; width: 20px;
             left: 3px; bottom: 3px;
             background: linear-gradient(145deg, #f0ebe1, #e0dbd1);
-            border-radius: 50%;
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 50%; box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.08);
             transition: .4s;
         }
         input:checked + .toggle-slider { background: linear-gradient(145deg, #d5ccb8, #c6bdaa); }
@@ -335,194 +270,99 @@
 
         /* Game Board */
         .game-board {
-            flex: 1;
-            padding: 20px 25px;
+            flex: 1; padding: 20px 25px;
             background: linear-gradient(125deg, #e6e1d7, #dbd6cc);
-            box-shadow: inset 5px 5px 15px #cbc6bd, inset -5px -5px 15px #f5f0e5;
-            position: relative;
-            z-index: 1;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: repeat(3, 1fr);
-            gap: 15px;
-            overflow: auto;
+            box-shadow: inset 3px 3px 10px #cbc6bd, inset -3px -3px 10px #f5f0e5;
+            position: relative; z-index: 1; display: grid;
+            grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(3, 1fr);
+            gap: 15px; overflow: auto;
             transition: background 0.3s ease, box-shadow 0.3s ease;
         }
          .game-board-message {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            grid-column: 1 / -1; /* Span all columns */
-            grid-row: 1 / -1;    /* Span all rows */
-            height: 100%;
-            font-size: 16px;
-            color: #5a5346;
-            padding: 20px;
-            text-align: center;
-            line-height: 1.5;
+            display: flex; justify-content: center; align-items: center;
+            grid-column: 1 / -1; grid-row: 1 / -1; height: 100%;
+            font-size: 16px; color: #5a5346; padding: 20px;
+            text-align: center; line-height: 1.5; transition: color 0.3s ease;
         }
-
 
         /* Game Card - Flipping Structure */
         .memory-card {
-            position: relative;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: box-shadow 0.3s;
-            perspective: 1000px;
+            position: relative; border-radius: 15px; cursor: pointer;
+            transition: box-shadow 0.3s; perspective: 1000px;
         }
         .memory-card:hover:not(.matched) {
-            box-shadow:
-                7px 7px 20px #c4c0b7,
-                -7px -7px 20px #fcf7ed;
+            box-shadow: 5px 5px 14px #c4c0b7, -5px -5px 14px #fcf7ed;
         }
-
         .card-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            transition: transform 0.6s;
-            transform-style: preserve-3d;
+            position: relative; width: 100%; height: 100%;
+            transition: transform 0.6s; transform-style: preserve-3d;
         }
-
-        .memory-card.is-flipped .card-inner { /* This rule means .is-flipped shows the card-back ('?') */
-            transform: rotateY(180deg);
-        }
-
+        .memory-card.is-flipped .card-inner { transform: rotateY(180deg); }
         .card-face {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            border-radius: 15px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow:
-                5px 5px 15px #cbc6bd,
-                -5px -5px 15px #f5f0e5;
-            border: 1px solid rgba(173, 157, 124, 0.1);
+            position: absolute; width: 100%; height: 100%;
+            -webkit-backface-visibility: hidden; backface-visibility: hidden;
+            border-radius: 15px; display: flex; justify-content: center; align-items: center;
+            box-shadow: 3px 3px 10px #cbc6bd, -3px -3px 10px #f5f0e5;
+            border: 1px solid rgba(173, 157, 124, 0.07);
             overflow: hidden;
-            transition: background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            transition: background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, color 0.3s ease;
         }
         .card-face::before {
-            content: "";
-            position: absolute;
-            top: -50%; left: -50%;
+            content: ""; position: absolute; top: -50%; left: -50%;
             width: 200%; height: 200%;
-            background: linear-gradient(60deg, transparent 35%, rgba(255, 215, 0, 0.04) 45%, rgba(255, 215, 0, 0.08) 50%, rgba(255, 215, 0, 0.04) 55%, transparent 65%);
-            transform: rotate(30deg);
-            pointer-events: none;
-            z-index: 1;
+            background: linear-gradient(60deg, transparent 35%, rgba(255, 215, 0, 0.03) 45%, rgba(255, 215, 0, 0.05) 50%, rgba(255, 215, 0, 0.03) 55%, transparent 65%);
+            transform: rotate(30deg); pointer-events: none; z-index: 1;
+             transition: background 0.3s ease;
         }
-
-        .card-front { /* This is the default visible face (content) */
-            background: linear-gradient(145deg, #e8e3d9, #d9d4ca);
-        }
-
-        .card-back { /* This face is shown when .is-flipped is on .memory-card */
+        .card-front { background: linear-gradient(145deg, #e8e3d9, #d9d4ca); }
+        .card-back {
             background: linear-gradient(145deg, #d5ccb8, #c6bdaa);
-            transform: rotateY(180deg); /* Pre-rotated so it faces correctly after card-inner rotation */
-            color: #5a5346;
-            font-size: 32px;
-            font-weight: bold;
-            transition: color 0.3s ease, background 0.3s ease;
+            transform: rotateY(180deg);
+            color: #5a5346; font-size: 56px; font-weight: bold;
         }
-
         .card-content {
-            padding: 10px;
-            text-align: center;
-            word-break: break-word;
-            font-size: 18px;
-            color: #5a5346;
-            font-weight: bold;
-            transition: color 0.3s;
-            position: relative;
-            z-index: 2;
+            padding: 10px; text-align: center; word-break: break-word;
+            font-size: 18px; color: #5a5346; font-weight: bold;
+            transition: color 0.3s; position: relative; z-index: 2;
         }
-        /* Adjust font size for longer words */
         .card-content.small-text { font-size: 14px; }
         .card-content.x-small-text { font-size: 12px; }
         .card-content.xx-small-text { font-size: 10px; }
 
-
-        .memory-card.is-flipped:active .card-back { /* Active state when card-back is visible */
-             box-shadow:
-                inset 3px 3px 6px #cbc6bd,
-                inset -3px -3px 6px #f5f0e5,
-                3px 3px 10px #cbc6bd,
-                -3px -3px 10px #f5f0e5;
+        .memory-card.is-flipped:active .card-back,
+        .memory-card:not(.is-flipped):active .card-front {
+             box-shadow: inset 2px 2px 4px #cbc6bd, inset -2px -2px 4px #f5f0e5,
+                        2px 2px 7px #cbc6bd, -2px -2px 7px #f5f0e5;
         }
-        .memory-card:not(.is-flipped):active .card-front { /* Active state when card-front is visible */
-             box-shadow:
-                inset 3px 3px 6px #cbc6bd,
-                inset -3px -3px 6px #f5f0e5,
-                3px 3px 10px #cbc6bd,
-                -3px -3px 10px #f5f0e5;
-        }
-
-        .memory-card.selected .card-front { /* Applied when card is face-up and selected */
+        .memory-card.selected .card-front {
             background: linear-gradient(145deg, #dad2c5, #cbc3b6);
-            box-shadow:
-                inset 4px 4px 8px #b5ac9a,
-                inset -4px -4px 8px #e5dcc8,
-                3px 3px 10px #cbc6bd,
-                -3px -3px 10px #f5f0e5;
+            box-shadow: inset 3px 3px 6px #b5ac9a, inset -3px -3px 6px #e5dcc8,
+                        2px 2px 7px #cbc6bd, -2px -2px 7px #f5f0e5;
             border: 1px solid #ad9d7c;
         }
-        /* If a card is selected AND .is-flipped, .selected styling won't apply to .card-front directly.
-           This is fine as selected cards in memory mode are typically face-up.
-        */
-
-
-        .memory-card.matched {
-            cursor: default;
+        .memory-card.matched .card-front {
+            opacity: 0.65; background: linear-gradient(145deg, #d1c9bd, #c2b8a8);
+            box-shadow: inset 2px 2px 4px #b9b2a5, inset -2px -2px 4px #e9e2d5;
         }
-        .memory-card.matched .card-front { /* Styles for matched card when face-up (content showing) */
-            opacity: 0.65;
-            background: linear-gradient(145deg, #d1c9bd, #c2b8a8);
-            box-shadow:
-                inset 3px 3px 6px #b9b2a5,
-                inset -3px -3px 6px #e9e2d5;
-        }
-        .memory-card.matched .card-front .card-content {
-            color: #756e60;
-        }
-        /* Note: If a matched card in memory mode *were* to have .is-flipped, these .card-front styles wouldn't apply.
-           However, logic ensures matched cards in memory mode are face-up (no .is-flipped).
-        */
-
-
-        .memory-card.incorrect {
-            animation: shake 0.5s;
-        }
-        .memory-card.incorrect:not(.is-flipped) .card-front { /* Incorrect and face-up */
+        .memory-card.matched .card-front .card-content { color: #756e60; }
+        .memory-card.incorrect { animation: shake 0.5s; }
+        .memory-card.incorrect:not(.is-flipped) .card-front,
+        .memory-card.incorrect.is-flipped .card-back {
             background: linear-gradient(145deg, #eddcd2, #e3cdc2);
         }
-        .memory-card.incorrect.is-flipped .card-back { /* Incorrect and face-down (e.g. if it was flipped back quickly after error) */
-             background: linear-gradient(145deg, #eddcd2, #e3cdc2);
-        }
-
-
         @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            50% { transform: translateX(5px); }
-            75% { transform: translateX(-5px); }
+            0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); } 75% { transform: translateX(-5px); }
         }
 
         /* Game Stats Area */
         .game-stats {
             padding: 15px 25px;
             background: linear-gradient(145deg, #e8e3d9, #dcd7cd);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-top: 1px solid rgba(173, 157, 124, 0.1);
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.03);
-            position: relative;
-            z-index: 1;
+            display: flex; justify-content: space-between; align-items: center;
+            border-top: 1px solid rgba(173, 157, 124, 0.07);
+            box-shadow: 0 -1px 7px rgba(0, 0, 0, 0.02);
+            position: relative; z-index: 1;
             transition: background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
         }
         .stat-item { display: flex; flex-direction: column; align-items: center; }
@@ -530,22 +370,17 @@
         .stat-value { font-size: 16px; font-weight: bold; color: #5a5346; transition: color 0.3s ease; }
 
         .new-game-button {
-            padding: 10px 20px;
-            border-radius: 15px;
+            padding: 10px 20px; border-radius: 15px;
             background: linear-gradient(145deg, #d9cebc, #c8beac);
-            box-shadow: 4px 4px 8px #b5ac9a, -4px -4px 8px #e5dcc8;
-            border: 1px solid rgba(173, 157, 124, 0.2);
-            color: #5a5346;
-            font-weight: bold;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            position: relative;
+            box-shadow: 3px 3px 6px #b5ac9a, -3px -3px 6px #e5dcc8;
+            border: 1px solid rgba(173, 157, 124, 0.14);
+            color: #5a5346; font-weight: bold; font-size: 14px;
+            cursor: pointer; transition: all 0.2s ease; position: relative;
         }
-        .new-game-button:active { box-shadow: inset 3px 3px 6px #b5ac9a, inset -3px -3px 6px #e5dcc8; }
+        .new-game-button:active { box-shadow: inset 2px 2px 4px #b5ac9a, inset -2px -2px 4px #e5dcc8; }
         .new-game-button::before {
             content: ""; position: absolute; inset: -1px; border-radius: inherit;
-            background: linear-gradient(135deg, transparent 30%, rgba(255, 215, 0, 0.15) 50%, transparent 70%);
+            background: linear-gradient(135deg, transparent 30%, rgba(255, 215, 0, 0.10) 50%, transparent 70%);
             opacity: 0; transition: opacity 0.3s; z-index: -1; pointer-events: none;
         }
         .new-game-button:hover::before { opacity: 1; }
@@ -559,379 +394,649 @@
         /* Golden shimmer effect for game-app */
         .game-app::before {
             content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(45deg, transparent 0%, rgba(255, 215, 0, 0.03) 25%, rgba(255, 215, 0, 0.06) 50%, rgba(255, 215, 0, 0.03) 75%, transparent 100%);
-            border-radius: 20px; z-index: 0; pointer-events: none;
+            background: linear-gradient(45deg, transparent 0%, rgba(255, 215, 0, 0.02) 25%, rgba(255, 215, 0, 0.04) 50%, rgba(255, 215, 0, 0.02) 75%, transparent 100%);
+            border-radius: 20px; z-index: 0; pointer-events: none; transition: background 0.3s ease;
         }
 
         /* Modal Styles */
         .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(90, 83, 70, 0.65); /* Darker beige overlay */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(90, 83, 70, 0.65);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 1000; opacity: 0; visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0s linear 0.3s, background-color 0.3s ease;
             padding: 20px;
         }
-        .modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
-            transition: opacity 0.3s ease, visibility 0s linear 0s;
-        }
-
+        .modal-overlay.active { opacity: 1; visibility: visible; transition: opacity 0.3s ease, visibility 0s linear 0s; }
         .modal-content-wrapper {
             background: linear-gradient(145deg, #eae5db, #dcd7cd);
             border-radius: 20px;
-            box-shadow:
-                15px 15px 35px #c4c0b7,
-                -15px -15px 35px #fcf7ed;
-            padding: 25px 30px;
-            width: 100%;
-            max-width: 450px;
-            text-align: center;
+            box-shadow: 10px 10px 24px #c4c0b7, -10px -10px 24px #fcf7ed;
+            padding: 25px 30px; width: 100%; max-width: 450px; text-align: center;
             transform: scale(0.9);
             transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
             color: #5a5346;
         }
-        .modal-overlay.active .modal-content-wrapper {
-            transform: scale(1);
-        }
-
+        .modal-overlay.active .modal-content-wrapper { transform: scale(1); }
         .modal-content-wrapper h3 {
-            font-size: 22px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: #5a5346;
-             transition: color 0.3s ease;
+            font-size: 22px; font-weight: bold; margin-bottom: 15px;
+            color: #5a5346; transition: color 0.3s ease;
         }
         .modal-content-wrapper p {
-            font-size: 16px;
-            line-height: 1.6;
-            margin-bottom: 25px;
-            white-space: pre-line; /* To respect \n in message from JS */
-             transition: color 0.3s ease;
+            font-size: 16px; line-height: 1.6; margin-bottom: 25px;
+            white-space: pre-line; transition: color 0.3s ease;
         }
         .modal-content-wrapper p .modal-link {
-            color: #4a4336; /* Darker than main text for emphasis */
-            text-decoration: underline;
-            font-weight: 500;
+            color: #4a4336; text-decoration: underline; font-weight: 500;
             transition: color 0.3s ease;
         }
-        .modal-content-wrapper p .modal-link:hover {
-            color: #3a3326;
-        }
-
-        .modal-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap; /* Allow buttons to wrap on smaller modal */
-        }
-        #modal-close-btn { /* Slightly less prominent style */
+        .modal-content-wrapper p .modal-link:hover { color: #3a3326; }
+        .modal-buttons { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        #modal-close-btn {
             background: linear-gradient(145deg, #e8e3d9, #d9d4ca);
-            box-shadow: 3px 3px 7px #c4c0b7, -3px -3px 7px #fcf7ed;
+            box-shadow: 2px 2px 5px #c4c0b7, -2px -2px 5px #fcf7ed;
         }
-        #modal-close-btn:active {
-            box-shadow: inset 2px 2px 4px #c4c0b7, inset -2px -2px 4px #fcf7ed;
-        }
+        #modal-close-btn:active { box-shadow: inset 1px 1px 3px #c4c0b7, inset -1px -1px 3px #fcf7ed; }
 
         /* Responsive Design */
         @media (max-width: 850px) {
-            .game-app { width: 95%; height: 90vh; }
-            .game-board { grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(4, 1fr); }
-            .settings-dropdown { width: 280px; right: 15px; } /* Adjusted from 250px for wider lang selects */
-            .topic-selector-container { min-width: 120px; }
-            .topic-button { font-size: 12px; padding: 8px 10px; min-width: 110px; }
-            .rounds-selector-container { margin: 0; }
-            .rounds-label { font-size: 12px; }
-            .rounds-select-dropdown { font-size: 12px; padding: 7px 8px; min-width: 40px; }
+            .game-app { width: 95%; height: 90vh; } .game-board { grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(4, 1fr); }
+            .settings-dropdown { width: 280px; right: 15px; } .topic-selector-container { min-width: 120px; }
+            .topic-button { font-size: 12px; padding: 8px 10px; min-width: 110px; } .rounds-selector-container { margin: 0; }
+            .rounds-label { font-size: 12px; } .rounds-select-dropdown { font-size: 12px; padding: 7px 8px; min-width: 40px; }
             .game-header { padding: 10px 15px; gap: 5px;}
+
+            .theme-pixelquest .topic-button,
+            .theme-pixelquest .rounds-select-dropdown,
+            .theme-pixelquest .settings-row select { font-size: 18px; /* 12px * 1.5 */ padding: 6px 8px; }
+            .theme-pixelquest .rounds-label { font-size: 18px; }
         }
-        @media (max-width: 680px) { /* Header items wrap */
+        @media (max-width: 680px) {
             .game-header { flex-wrap: wrap; justify-content: space-between; padding: 10px 15px;}
-            .game-info { order: 1; width: calc(100% - 50px); /* Title takes most width, leaves space for menu btn */}
-            .menu-button { order: 2; width: 35px; height: 35px; font-size: 18px;}
+            .game-info { order: 1; width: calc(100% - 50px); } .menu-button { order: 2; width: 35px; height: 35px; font-size: 18px;}
             .topic-selector-container { order: 3; width: calc(50% - 5px); margin-top: 10px; justify-content: flex-start; }
             .rounds-selector-container { order: 4; width: calc(50% - 5px); margin-top: 10px; justify-content: flex-end; }
             .settings-dropdown { width: calc(100% - 30px); right: 15px; left: 15px; }
-        }
 
+            .theme-pixelquest .menu-button { width: 48px; height: 48px; font-size: 33px; /* 18px * 1.5 -> rounded */ }
+        }
         @media (max-width: 576px) {
             .game-info { width: calc(100% - 45px); }
-            .topic-selector-container { width: 100%; justify-content: center; }
-            .rounds-selector-container { width: 100%; margin-top: 8px; justify-content: center; }
-
+            .topic-selector-container { order: 3; width: calc(50% - 5px); margin-top: 10px; justify-content: flex-start; }
+            .rounds-selector-container { order: 4; width: calc(50% - 5px); margin-top: 10px; justify-content: flex-end; }
             .game-app { height: auto; min-height: 85vh; }
             .game-board { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(6, 1fr); gap: 10px; padding: 15px; }
-            .game-stats { flex-wrap: wrap; gap: 10px; justify-content: center; padding: 10px 15px; }
-            .stat-item { flex: 0 0 40%; align-items: center; }
-            .new-game-button { flex-basis: 100%; margin-top: 10px; }
-            .game-title { font-size: 18px; }
-            .game-subtitle { font-size: 11px; }
-             #game-subtitle-round { font-size: 11px; }
-            .card-content { font-size: 14px; }
-            .card-content.small-text { font-size: 12px; }
-            .card-content.x-small-text { font-size: 11px; }
-            .card-content.xx-small-text { font-size: 10px;}
-            /* .settings-dropdown width already handled by 680px */
-            .topic-dropdown-content { width: calc(100% - 30px); }
-            .modal-content-wrapper { padding: 20px; }
-            .modal-content-wrapper h3 { font-size: 20px; }
-            .modal-content-wrapper p { font-size: 14px; }
-            .modal-buttons .new-game-button { flex-basis: 100%; } /* Stack buttons on small screens */
-            .settings-row { flex-direction: column; align-items: flex-start; }
-            .settings-row .select-wrapper, .settings-row .toggle-switch { margin-left: 0; margin-top: 5px; width: 100%; max-width: none;}
-            .settings-row .toggle-switch { align-self: flex-end; }
-             .settings-row .game-mode-label-text { margin-left: 0; align-self: flex-end; padding-right: 55px; /* approx toggle width + gap */}
+            .game-stats { flex-wrap: wrap; gap: 10px; justify-content: space-around; padding: 10px 15px; }
+            .stat-item { flex-grow: 1; flex-shrink: 1; flex-basis: auto; min-width: 65px; text-align: center; align-items: center; }
+            .new-game-button { flex-basis: 100%; margin-top: 10px; } .game-title { font-size: 18px; }
+            .game-subtitle, #game-subtitle-round { font-size: 11px; }
+            .card-content { font-size: 14px; } .card-content.small-text { font-size: 12px; }
+            .card-content.x-small-text { font-size: 11px; } .card-content.xx-small-text { font-size: 10px;}
+            .topic-dropdown-content { width: calc(100% - 20px); } .modal-content-wrapper { padding: 20px; }
+            .modal-content-wrapper h3 { font-size: 20px; } .modal-content-wrapper p { font-size: 14px; }
+            .modal-buttons .new-game-button { flex-basis: 100%; }
+            .settings-row:has(select) { flex-direction: column; align-items: flex-start; }
+            .settings-row:has(select) .settings-label { margin-bottom: 5px; }
+            .settings-row:has(select) .select-wrapper { width: 100%; margin-left: 0; margin-top: 0; max-width: none; }
+            .settings-row > div:has(.toggle-switch):has(.game-mode-label-text) { display: flex; align-items: center; }
+            .settings-row .game-mode-label-text { margin-left: 8px; }
+            .settings-row .toggle-switch { margin-top: 0; width: 50px; max-width: 50px; flex-shrink: 0; margin-left: auto; }
+            .settings-row .settings-action-button { width: 100%; max-width: none; flex-grow: 1; margin-top: 5px; }
+            .settings-row:has(.settings-action-button) { justify-content: center; }
 
+            /* Pixel Quest Responsive Font Sizes */
+            .theme-pixelquest .game-title { font-size: 27px; /* 18px * 1.5 */ }
+            .theme-pixelquest .game-subtitle,
+            .theme-pixelquest #game-subtitle-round { font-size: 17px; /* 11px * 1.5 */ }
+            .theme-pixelquest .card-content { font-size: 21px; /* 14px * 1.5 */ }
+            .theme-pixelquest .card-content.small-text { font-size: 18px; /* 12px * 1.5 */ }
+            .theme-pixelquest .card-content.x-small-text { font-size: 17px; /* 11px * 1.5 */ }
+            .theme-pixelquest .card-content.xx-small-text { font-size: 15px; /* 10px * 1.5 */ }
+            .theme-pixelquest .modal-content-wrapper h3 { font-size: 30px; /* 20px * 1.5 */ }
+            .theme-pixelquest .modal-content-wrapper p { font-size: 21px; /* 14px * 1.5 */ }
+            /* General button/select font sizes from 850px media query should still apply if not overridden here again */
         }
 
-        /* Dark Mode Styles */
-        body.dark-mode {
-            background-color: #2c2c2c;
-        }
+        /* Default Light Theme (implicitly .theme-light or body without theme class) */
+        /* All base styles above act as the light theme */
 
-        .dark-mode .game-app {
+        /* Dark Theme Styles */
+        body.theme-dark { background-color: #2c2c2c; }
+        .theme-dark .game-app {
             background: linear-gradient(145deg, #454545, #3b3b3b);
-            box-shadow:
-                15px 15px 35px #252525,
-                -15px -15px 35px #515151;
+            box-shadow: 10px 10px 24px #252525, -10px -10px 24px #515151;
         }
-        .dark-mode .game-app::before {
-             background: linear-gradient(45deg, transparent 0%, rgba(255, 255, 255, 0.02) 25%, rgba(255, 255, 255, 0.04) 50%, rgba(255, 255, 255, 0.02) 75%, transparent 100%);
+        .theme-dark .game-app::before {
+             background: linear-gradient(45deg, transparent 0%, rgba(255, 255, 255, 0.01) 25%, rgba(255, 255, 255, 0.03) 50%, rgba(255, 255, 255, 0.01) 75%, transparent 100%);
         }
-
-        .dark-mode .game-header {
+        .theme-dark .game-header {
             background: linear-gradient(145deg, #424242, #383838);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 1px 7px rgba(0, 0, 0, 0.15);
         }
-        .dark-mode .game-title { color: #d1d1d1; }
-        .dark-mode .game-subtitle { color: #9e9e9e; }
-
-        .dark-mode .topic-button {
+        .theme-dark .game-title { color: #d1d1d1; }
+        .theme-dark .game-subtitle { color: #9e9e9e; }
+        .theme-dark .topic-button {
             background: linear-gradient(145deg, #4f4f4f, #454545);
-            box-shadow: 3px 3px 7px #252525, -3px -3px 7px #515151;
-            border: 1px solid rgba(100, 100, 100, 0.15);
-            color: #d1d1d1;
-        }
-        .dark-mode .topic-button:active {
-            box-shadow: inset 2px 2px 4px #252525, inset -2px -2px 4px #515151;
-        }
-        .dark-mode .topic-dropdown-content {
-            background: linear-gradient(145deg, #404040, #363636);
-            box-shadow: 6px 6px 15px #222222, -6px -6px 15px #4e4e4e;
-        }
-        .dark-mode .topic-dropdown-content label {
-            color: #c0c0c0;
-        }
-        .dark-mode .topic-dropdown-content label:hover {
-            background-color: rgba(100, 100, 100, 0.1);
-        }
-        .dark-mode .topic-dropdown-content input[type="checkbox"] {
-            accent-color: #707070;
-        }
-
-        .dark-mode .rounds-label { color: #c0c0c0; }
-        .dark-mode .rounds-select-dropdown {
-            background: linear-gradient(145deg, #4f4f4f, #454545);
-            box-shadow: 3px 3px 7px #252525, -3px -3px 7px #515151;
-            border: 1px solid rgba(100, 100, 100, 0.15);
-            color: #d1d1d1;
-        }
-        .dark-mode .rounds-select-dropdown:focus {
-             box-shadow: inset 1px 1px 2px #252525, inset -1px -1px 2px #515151,
-                        3px 3px 7px #252525, -3px -3px 7px #515151;
-        }
-
-
-        .dark-mode .menu-button {
-            background: linear-gradient(145deg, #454545, #3b3b3b);
-            box-shadow: 4px 4px 8px #252525, -4px -4px 8px #515151;
-            color: #d1d1d1;
-        }
-        .dark-mode .menu-button:active {
-            box-shadow: inset 3px 3px 6px #252525, inset -3px -3px 6px #515151;
-        }
-
-        .dark-mode .settings-dropdown {
-            background: linear-gradient(145deg, #404040, #363636);
-            box-shadow:
-                8px 8px 20px #222222,
-                -8px -8px 20px #4e4e4e;
-        }
-        .dark-mode .settings-row select {
-            background: linear-gradient(145deg, #4a4a4a, #404040);
             box-shadow: 2px 2px 5px #252525, -2px -2px 5px #515151;
-            border: 1px solid rgba(100,100,100,0.1);
-            color: #d1d1d1;
+            border: 1px solid rgba(100, 100, 100, 0.1); color: #d1d1d1;
         }
-        .dark-mode .settings-label { color: #c0c0c0; }
-        .dark-mode .game-mode-label-text { color: #909090; }
-        .dark-mode .settings-action-button {
+        .theme-dark .topic-button:active { box-shadow: inset 1px 1px 3px #252525, inset -1px -1px 3px #515151; }
+        .theme-dark .topic-dropdown-content {
+            background: linear-gradient(145deg, #404040, #363636);
+            box-shadow: 4px 4px 10px #222222, -4px -4px 10px #4e4e4e;
+        }
+        .theme-dark .topic-dropdown-content label { color: #c0c0c0; }
+        .theme-dark .topic-dropdown-content label:hover { background-color: rgba(100, 100, 100, 0.1); }
+        .theme-dark .topic-dropdown-content input[type="checkbox"] { accent-color: #707070; }
+        .theme-dark .rounds-label { color: #c0c0c0; }
+        .theme-dark .rounds-select-dropdown {
             background: linear-gradient(145deg, #4f4f4f, #454545);
-            box-shadow: 3px 3px 7px #252525, -3px -3px 7px #515151;
-            border: 1px solid rgba(100, 100, 100, 0.15);
-            color: #d1d1d1;
+            box-shadow: 2px 2px 5px #252525, -2px -2px 5px #515151;
+            border: 1px solid rgba(100, 100, 100, 0.1); color: #d1d1d1;
         }
-        .dark-mode .settings-action-button:active {
-            box-shadow: inset 2px 2px 4px #252525, inset -2px -2px 4px #515151;
+        .theme-dark .rounds-select-dropdown:focus {
+             box-shadow: inset 1px 1px 1px #252525, inset -1px -1px 1px #515151,
+                        2px 2px 5px #252525, -2px -2px 5px #515151;
         }
-
-        .dark-mode .toggle-slider {
+        .theme-dark .menu-button {
+            background: linear-gradient(145deg, #454545, #3b3b3b);
+            box-shadow: 3px 3px 6px #252525, -3px -3px 6px #515151; color: #d1d1d1;
+        }
+        .theme-dark .menu-button:active { box-shadow: inset 2px 2px 4px #252525, inset -2px -2px 4px #515151; }
+        .theme-dark .settings-dropdown {
+            background: linear-gradient(145deg, #404040, #363636);
+            box-shadow: 5px 5px 14px #222222, -5px -5px 14px #4e4e4e;
+        }
+        .theme-dark .settings-row select { /* Lang & Theme selects */
+            background: linear-gradient(145deg, #4a4a4a, #404040);
+            box-shadow: 1px 1px 3px #252525, -1px -1px 3px #515151;
+            border: 1px solid rgba(100,100,100,0.07); color: #d1d1d1;
+        }
+        .theme-dark .settings-label { color: #c0c0c0; }
+        .theme-dark .game-mode-label-text { color: #909090; }
+        .theme-dark .settings-action-button {
+            background: linear-gradient(145deg, #4f4f4f, #454545);
+            box-shadow: 2px 2px 5px #252525, -2px -2px 5px #515151;
+            border: 1px solid rgba(100, 100, 100, 0.1); color: #d1d1d1;
+        }
+        .theme-dark .settings-action-button:active { box-shadow: inset 1px 1px 3px #252525, inset -1px -1px 3px #515151; }
+        .theme-dark .toggle-slider {
             background: #3a3a3a;
-            box-shadow: inset 2px 2px 4px #2d2d2d, inset -2px -2px 4px #474747;
+            box-shadow: inset 1px 1px 3px #2d2d2d, inset -1px -1px 3px #474747;
         }
-        .dark-mode .toggle-slider:before {
+        .theme-dark .toggle-slider:before {
             background: linear-gradient(145deg, #525252, #484848);
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+            box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
         }
-        .dark-mode input:checked + .toggle-slider {
-            background: linear-gradient(145deg, #507a50, #406a40);
-        }
-        .dark-mode input:checked + .toggle-slider:before {
-            background: linear-gradient(145deg, #608a60, #507a50);
-        }
-
-        .dark-mode .game-board {
+        .theme-dark input:checked + .toggle-slider { background: linear-gradient(145deg, #507a50, #406a40); }
+        .theme-dark input:checked + .toggle-slider:before { background: linear-gradient(145deg, #608a60, #507a50); }
+        .theme-dark .game-board {
             background: linear-gradient(125deg, #3f3f3f, #353535);
-            box-shadow: inset 5px 5px 15px #2a2a2a, inset -5px -5px 15px #4a4a4a;
+            box-shadow: inset 3px 3px 10px #2a2a2a, inset -3px -3px 10px #4a4a4a;
         }
-        .dark-mode .game-board::-webkit-scrollbar-thumb { background-color: #5a5a5a; }
-        .dark-mode .game-board::-webkit-scrollbar-thumb:hover { background-color: #6a6a6a; }
-        .dark-mode .game-board-message {
-            color: #c0c0c0;
+        .theme-dark .game-board::-webkit-scrollbar-thumb { background-color: #5a5a5a; }
+        .theme-dark .game-board::-webkit-scrollbar-thumb:hover { background-color: #6a6a6a; }
+        .theme-dark .game-board-message { color: #c0c0c0; }
+        .theme-dark .memory-card:hover:not(.matched) { box-shadow: 5px 5px 14px #232323, -5px -5px 14px #4f4f4f; }
+        .theme-dark .card-face {
+            box-shadow: 3px 3px 10px #282828, -3px -3px 10px #484848;
+            border: 1px solid rgba(100, 100, 100, 0.07);
         }
-
-
-        .dark-mode .memory-card:hover:not(.matched) {
-            box-shadow:
-                7px 7px 20px #232323,
-                -7px -7px 20px #4f4f4f;
+        .theme-dark .card-face::before {
+            background: linear-gradient(60deg, transparent 35%, rgba(255, 255, 255, 0.01) 45%, rgba(255, 255, 255, 0.03) 50%, rgba(255, 255, 255, 0.01) 55%, transparent 65%);
         }
-
-        .dark-mode .card-face {
-            box-shadow:
-                5px 5px 15px #282828,
-                -5px -5px 15px #484848;
-            border: 1px solid rgba(100, 100, 100, 0.1);
+        .theme-dark .card-front { background: linear-gradient(145deg, #4f4f4f, #454545); }
+        .theme-dark .card-back { background: linear-gradient(145deg, #4a4a4a, #404040); color: #c0c0c0; }
+        .theme-dark .card-content { color: #dcdcdc; }
+        .theme-dark .memory-card.is-flipped:active .card-back,
+        .theme-dark .memory-card:not(.is-flipped):active .card-front {
+             box-shadow: inset 2px 2px 4px #282828, inset -2px -2px 4px #484848,
+                        2px 2px 7px #282828, -2px -2px 7px #484848;
         }
-        .dark-mode .card-face::before {
-            background: linear-gradient(60deg, transparent 35%, rgba(255, 255, 255, 0.02) 45%, rgba(255, 255, 255, 0.04) 50%, rgba(255, 255, 255, 0.02) 55%, transparent 65%);
-        }
-        .dark-mode .card-front {
-            background: linear-gradient(145deg, #4f4f4f, #454545);
-        }
-        .dark-mode .card-back {
+        .theme-dark .memory-card.selected .card-front {
             background: linear-gradient(145deg, #4a4a4a, #404040);
-            color: #c0c0c0;
-        }
-        .dark-mode .card-content {
-            color: #dcdcdc;
-        }
-
-        .dark-mode .memory-card.is-flipped:active .card-back {
-             box-shadow:
-                inset 3px 3px 6px #282828,
-                inset -3px -3px 6px #484848,
-                3px 3px 10px #282828,
-                -3px -3px 10px #484848;
-        }
-         .dark-mode .memory-card:not(.is-flipped):active .card-front {
-             box-shadow:
-                inset 3px 3px 6px #282828,
-                inset -3px -3px 6px #484848,
-                3px 3px 10px #282828,
-                -3px -3px 10px #484848;
-        }
-
-        .dark-mode .memory-card.selected .card-front {
-            background: linear-gradient(145deg, #4a4a4a, #404040);
-            box-shadow:
-                inset 4px 4px 8px #2d2d2d,
-                inset -4px -4px 8px #575757,
-                3px 3px 10px #282828,
-                -3px -3px 10px #484848;
+            box-shadow: inset 3px 3px 6px #2d2d2d, inset -3px -3px 6px #575757,
+                        2px 2px 7px #282828, -2px -2px 7px #484848;
             border: 1px solid #707070;
         }
-
-        .dark-mode .memory-card.matched .card-front {
-            opacity: 0.7;
-            background: linear-gradient(145deg, #3e3e3e, #343434);
-            box-shadow:
-                inset 3px 3px 6px #242424,
-                inset -3px -3px 6px #444444;
+        .theme-dark .memory-card.matched .card-front {
+            opacity: 0.7; background: linear-gradient(145deg, #3e3e3e, #343434);
+            box-shadow: inset 2px 2px 4px #242424, inset -2px -2px 4px #444444;
         }
-        .dark-mode .memory-card.matched .card-front .card-content {
-            color: #888888;
-        }
-
-        .dark-mode .memory-card.incorrect:not(.is-flipped) .card-front {
+        .theme-dark .memory-card.matched .card-front .card-content { color: #888888; }
+        .theme-dark .memory-card.incorrect:not(.is-flipped) .card-front,
+        .theme-dark .memory-card.incorrect.is-flipped .card-back {
             background: linear-gradient(145deg, #5c4545, #523b3b);
         }
-        .dark-mode .memory-card.incorrect.is-flipped .card-back {
-             background: linear-gradient(145deg, #5c4545, #523b3b);
-        }
-
-        .dark-mode .game-stats {
+        .theme-dark .game-stats {
             background: linear-gradient(145deg, #404040, #363636);
-            border-top: 1px solid rgba(100, 100, 100, 0.15);
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.15);
+            border-top: 1px solid rgba(100, 100, 100, 0.1);
+            box-shadow: 0 -1px 7px rgba(0, 0, 0, 0.1);
         }
-        .dark-mode .stat-label { color: #a0a0a0; }
-        .dark-mode .stat-value { color: #dcdcdc; }
-
-        .dark-mode .new-game-button {
+        .theme-dark .stat-label { color: #a0a0a0; }
+        .theme-dark .stat-value { color: #dcdcdc; }
+        .theme-dark .new-game-button {
             background: linear-gradient(145deg, #585858, #4e4e4e);
-            box-shadow: 4px 4px 8px #2a2a2a, -4px -4px 8px #626262;
-            border: 1px solid rgba(100, 100, 100, 0.2);
-            color: #dcdcdc;
+            box-shadow: 3px 3px 6px #2a2a2a, -4px -4px 8px #626262;
+            border: 1px solid rgba(100, 100, 100, 0.14); color: #dcdcdc;
         }
-        .dark-mode .new-game-button:active {
-            box-shadow: inset 3px 3px 6px #2a2a2a, inset -3px -3px 6px #626262;
+        .theme-dark .new-game-button:active { box-shadow: inset 2px 2px 4px #2a2a2a, inset -2px -2px 4px #626262; }
+        .theme-dark .new-game-button::before {
+            background: linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.04) 50%, transparent 70%);
         }
-        .dark-mode .new-game-button::before {
-            background: linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.06) 50%, transparent 70%);
+        .theme-dark .modal-overlay { background-color: rgba(20, 20, 20, 0.75); }
+        .theme-dark .modal-content-wrapper {
+            background: linear-gradient(145deg, #454545, #3b3b3b);
+            box-shadow: 10px 10px 24px #252525, -10px -10px 24px #515151; color: #d1d1d1;
+        }
+        .theme-dark .modal-content-wrapper h3 { color: #d1d1d1; }
+        .theme-dark .modal-content-wrapper p .modal-link { color: #e1e1e1; }
+        .theme-dark .modal-content-wrapper p .modal-link:hover { color: #f1f1f1; }
+        .theme-dark #modal-close-btn {
+            background: linear-gradient(145deg, #4f4f4f, #454545);
+            box-shadow: 2px 2px 5px #252525, -2px -2px 5px #515151; color: #d1d1d1;
+        }
+        .theme-dark #modal-close-btn:active { box-shadow: inset 1px 1px 3px #252525, inset -1px -1px 3px #515151; }
+
+        /* Memphis Light Theme Styles */
+        body.theme-memphis { background-color: #fdf0d5; /* Creamy yellow background */ }
+        .theme-memphis .game-app {
+            background: #ffffff; border: 3px solid #000000;
+            box-shadow: 8px 8px 0px #000000; border-radius: 0;
+        }
+        .theme-memphis .game-app::before { background: none; }
+        .theme-memphis .game-header {
+            background: #f94144; /* Bright Red */ color: #000000;
+            box-shadow: none; border-bottom: 3px solid #000000;
+        }
+        .theme-memphis .game-title { color: #000000; }
+        .theme-memphis .game-subtitle { color: #333333; }
+        .theme-memphis .topic-button,
+        .theme-memphis .rounds-select-dropdown,
+        .theme-memphis .menu-button,
+        .theme-memphis .settings-action-button,
+        .theme-memphis .settings-row select, /* Lang & Theme selects */
+        .theme-memphis .new-game-button {
+            background-color: #f9c74f; /* Bright Yellow */ color: #000000;
+            border: 2px solid #000000; box-shadow: 3px 3px 0px #000000;
+            border-radius: 0; font-weight: bold;
+        }
+        .theme-memphis .topic-button:active,
+        .theme-memphis .menu-button:active,
+        .theme-memphis .settings-action-button:active,
+        .theme-memphis .new-game-button:active {
+            box-shadow: inset 2px 2px 0px #000000; transform: translate(2px, 2px);
+        }
+        .theme-memphis .topic-dropdown-content,
+        .theme-memphis .settings-dropdown {
+            background: #ffffff; border: 2px solid #000000;
+            box-shadow: 4px 4px 0px #000000; border-radius: 0;
+        }
+        .theme-memphis .topic-dropdown-content label { color: #000000; }
+        .theme-memphis .topic-dropdown-content label:hover { background-color: #f9c74f33; }
+        .theme-memphis .topic-dropdown-content input[type="checkbox"] { accent-color: #f94144; }
+        .theme-memphis .rounds-label { color: #000000; }
+        .theme-memphis .settings-label { color: #000000; }
+        .theme-memphis .game-mode-label-text { color: #444444; }
+        .theme-memphis .toggle-slider {
+            background: #cccccc; box-shadow: none; border: 2px solid #000000; border-radius: 0;
+        }
+        .theme-memphis .toggle-slider:before {
+            background: #ffffff; border: 2px solid #000000; box-shadow: none; border-radius: 0; height: 16px; width: 16px; left: 4px; bottom: 4px;
+        }
+        .theme-memphis input:checked + .toggle-slider { background: #90be6d; /* Green */ }
+        .theme-memphis input:checked + .toggle-slider:before { background: #ffffff; transform: translateX(22px); }
+        .theme-memphis .game-board {
+            background: #43aa8b; /* Tealish Green */
+            box-shadow: inset 4px 4px 0px #2a7058, inset -4px -4px 0px #5cc4aa; /* Inset border effect */
+            border: none;
+        }
+        .theme-memphis .game-board::-webkit-scrollbar-thumb { background-color: #000000; border: 2px solid #f9c74f; border-radius: 0;}
+        .theme-memphis .game-board::-webkit-scrollbar-thumb:hover { background-color: #333333; }
+        .theme-memphis .game-board-message { color: #ffffff; font-weight: bold; }
+        .theme-memphis .memory-card { border-radius: 0; }
+        .theme-memphis .memory-card:hover:not(.matched) { box-shadow: 4px 4px 0px #000000; transform: translate(-1px, -1px); }
+        .theme-memphis .card-face {
+            border: 2px solid #000000; box-shadow: 3px 3px 0px #000000; border-radius: 0;
+        }
+        .theme-memphis .card-face::before { background: none; }
+        .theme-memphis .card-front { background-color: #f9c74f; /* Yellow */ }
+        .theme-memphis .card-back { background-color: #f8961e; /* Orange */ color: #000000; }
+        .theme-memphis .card-content { color: #000000; }
+        .theme-memphis .memory-card.is-flipped:active .card-back,
+        .theme-memphis .memory-card:not(.is-flipped):active .card-front {
+            box-shadow: inset 2px 2px 0px #000000; transform: translate(2px, 2px);
+        }
+        .theme-memphis .memory-card.selected .card-front {
+            background-color: #f9844a; /* Darker orange */ border: 2px solid #000000;
+            box-shadow: 3px 3px 0px #000000, inset 0 0 0 2px #FFFFFF; /* White inner highlight */
+        }
+        .theme-memphis .memory-card.matched .card-front {
+            background-color: #577590; /* Cool Gray-Blue */ opacity: 0.7;
+        }
+        .theme-memphis .memory-card.matched .card-front .card-content { color: #222222; }
+        .theme-memphis .memory-card.incorrect:not(.is-flipped) .card-front,
+        .theme-memphis .memory-card.incorrect.is-flipped .card-back {
+            background-color: #5277b2; /* Muted Blue-Purple for incorrect */
+        }
+        .theme-memphis .game-stats {
+            background: #f94144; /* Bright Red */ color: #000000;
+            border-top: 3px solid #000000; box-shadow: none;
+        }
+        .theme-memphis .stat-label { color: #333333; font-weight: bold; }
+        .theme-memphis .stat-value { color: #000000; font-weight: bold; }
+        .theme-memphis .new-game-button::before { background: none; }
+        .theme-memphis .modal-overlay { background-color: rgba(0, 0, 0, 0.5); }
+        .theme-memphis .modal-content-wrapper {
+            background: #ffffff; border: 3px solid #000000;
+            box-shadow: 6px 6px 0px #000000; color: #000000; border-radius: 0;
+        }
+        .theme-memphis .modal-content-wrapper h3 { color: #000000; }
+        .theme-memphis .modal-content-wrapper p .modal-link { color: #f94144; }
+        .theme-memphis .modal-content-wrapper p .modal-link:hover { color: #d83033; }
+        .theme-memphis #modal-close-btn {
+            background-color: #577590; /* Cool Gray-Blue */ color: #ffffff;
         }
 
-        /* Dark Mode Modal Styles */
-        .dark-mode .modal-overlay {
-            background-color: rgba(20, 20, 20, 0.75);
+        /* Light Navy Formal Flat Theme Styles - MODIFIED */
+        body.theme-navy { background-color: #eef2f5; /* Light Bluish Grey */ }
+        .theme-navy .game-app {
+            background: #ffffff; border: 1px solid #d1d9e0;
+            box-shadow: 0 4px 12px rgba(0, 20, 40, 0.08); border-radius: 8px;
         }
-        .dark-mode .modal-content-wrapper {
-            background: linear-gradient(145deg, #454545, #3b3b3b);
-            box-shadow:
-                15px 15px 35px #252525,
-                -15px -15px 35px #515151;
-            color: #d1d1d1;
+        .theme-navy .game-app::before { background: none; }
+        .theme-navy .game-header {
+            background: #D6EAF8; /* Very Light Blue */ color: #001f3f; /* Dark Navy text */
+            box-shadow: none; border-bottom: 1px solid #A9CCE3; /* Complementary border */
+            border-radius: 8px 8px 0 0;
         }
-        .dark-mode .modal-content-wrapper h3 {
-            color: #d1d1d1;
+        .theme-navy .game-title { color: #001f3f; }
+        .theme-navy .game-subtitle { color: #1A5276; }
+        .theme-navy .topic-button,
+        .theme-navy .rounds-select-dropdown,
+        .theme-navy .menu-button {
+            background-color: #E0EAFC; /* Lighter blue */ color: #001f3f; /* Dark Navy Text */
+            border: 1px solid #B0C4DE; /* Steel blue border */
+            box-shadow: none; border-radius: 4px;
         }
-         .dark-mode .modal-content-wrapper p .modal-link {
-            color: #e1e1e1;
+        .theme-navy .topic-button:active,
+        .theme-navy .menu-button:active { background-color: #C4D7F0; /* Darker of E0EAFC */ }
+
+        .theme-navy .settings-action-button,
+        .theme-navy .new-game-button,
+        .theme-navy .settings-row select { /* Lang & Theme selects */
+            background-color: #D6EAF8; /* Very light blue */ color: #001f3f; /* Dark Navy Text */
+            border: 1px solid #A9CCE3; /* Complementary border */
+            box-shadow: none; border-radius: 4px;
         }
-        .dark-mode .modal-content-wrapper p .modal-link:hover {
-            color: #f1f1f1;
+        .theme-navy .settings-action-button:active,
+        .theme-navy .new-game-button:active { background-color: #B9D7F0; /* Darker of D6EAF8 */ }
+
+        .theme-navy #modal-close-btn {
+            background-color: #EAECEE; /* Light Grey */ color: #001f3f; /* Dark Navy Text */
+            border: 1px solid #D5D8DC; box-shadow: none; border-radius: 4px;
         }
-        .dark-mode #modal-close-btn {
-            background: linear-gradient(145deg, #4f4f4f, #454545);
-            box-shadow: 3px 3px 7px #252525, -3px -3px 7px #515151;
-            color: #d1d1d1;
+        .theme-navy #modal-close-btn:active { background-color: #D5D8DC; /* Darker Grey */ }
+
+        .theme-navy .topic-dropdown-content,
+        .theme-navy .settings-dropdown {
+            background: #ffffff; border: 1px solid #d1d9e0;
+            box-shadow: 0 3px 8px rgba(0, 20, 40, 0.1); border-radius: 6px;
         }
-        .dark-mode #modal-close-btn:active {
-            box-shadow: inset 2px 2px 4px #252525, inset -2px -2px 4px #515151;
+        .theme-navy .topic-dropdown-content label { color: #001f3f; }
+        .theme-navy .topic-dropdown-content label:hover { background-color: #e6f2ff; }
+        .theme-navy .topic-dropdown-content input[type="checkbox"] { accent-color: #007bff; } /* Standard blue for accent */
+        .theme-navy .rounds-label { color: #001f3f; }
+        .theme-navy .settings-label { color: #001f3f; }
+        .theme-navy .game-mode-label-text { color: #506a80; }
+        .theme-navy .toggle-slider {
+            background: #ced4da; box-shadow: none; border: 1px solid #adb5bd; border-radius: 13px;
         }
+        .theme-navy .toggle-slider:before {
+            background: #ffffff; box-shadow: 0 1px 2px rgba(0,0,0,0.1); border-radius: 50%;
+        }
+        .theme-navy input:checked + .toggle-slider { background: #007bff; } /* Standard blue for accent */
+        .theme-navy .game-board {
+            background: #f8f9fa; /* Very Light Grey */ box-shadow: none; border: none;
+        }
+        .theme-navy .game-board::-webkit-scrollbar-thumb { background-color: #A9CCE3; border: 2px solid #f8f9fa; border-radius: 4px;}
+        .theme-navy .game-board::-webkit-scrollbar-thumb:hover { background-color: #85BADC; }
+        .theme-navy .game-board-message { color: #001f3f; }
+        .theme-navy .memory-card { border-radius: 6px; }
+        .theme-navy .memory-card:hover:not(.matched) { box-shadow: 0 2px 6px rgba(0, 20, 40, 0.1); }
+        .theme-navy .card-face {
+            border: 1px solid #d1d9e0; box-shadow: 0 1px 3px rgba(0,20,40,0.05); border-radius: 6px;
+        }
+        .theme-navy .card-face::before { background: none; }
+        .theme-navy .card-front { background-color: #ffffff; }
+        .theme-navy .card-back {
+            background-color: #E0EAFC; /* Lighter blue, same as some buttons */ color: #001f3f; /* Dark Navy '?' */
+        }
+        .theme-navy .card-content { color: #001f3f; /* Navy text on white card front */ }
+        .theme-navy .memory-card.is-flipped:active .card-back,
+        .theme-navy .memory-card:not(.is-flipped):active .card-front {
+            box-shadow: inset 0 0 5px rgba(0,20,40,0.1);
+        }
+        .theme-navy .memory-card.selected .card-front {
+            background-color: #e6f2ff; /* Light blue tint */ border-color: #007bff;
+        }
+        .theme-navy .memory-card.matched .card-front {
+            background-color: #e9ecef; /* Light grey matched */ opacity: 0.8;
+        }
+        .theme-navy .memory-card.matched .card-front .card-content { color: #6c757d; }
+        .theme-navy .memory-card.incorrect:not(.is-flipped) .card-front,
+        .theme-navy .memory-card.incorrect.is-flipped .card-back {
+            background-color: #ffebee; /* Light red tint */
+        }
+        .theme-navy .game-stats {
+            background-color: #f8f9fa; border-top: 1px solid #d1d9e0;
+            box-shadow: none; border-radius: 0 0 8px 8px;
+        }
+        .theme-navy .stat-label { color: #506a80; }
+        .theme-navy .stat-value { color: #001f3f; }
+        .theme-navy .new-game-button::before { background: none; }
+        .theme-navy .modal-overlay { background-color: rgba(0, 31, 63, 0.6); } /* Semi-transparent Navy */
+        .theme-navy .modal-content-wrapper {
+            background: #ffffff; border: 1px solid #d1d9e0;
+            box-shadow: 0 5px 15px rgba(0, 20, 40, 0.15); color: #001f3f; border-radius: 6px;
+        }
+        .theme-navy .modal-content-wrapper h3 { color: #001f3f; }
+        .theme-navy .modal-content-wrapper p .modal-link { color: #007bff; }
+        .theme-navy .modal-content-wrapper p .modal-link:hover { color: #0056b3; }
+
+
+        /* Pixel Quest Theme Styles - FONT SIZE INCREASED 50% */
+        body.theme-pixelquest {
+            background-color: #87CEEB; /* Sky Blue */
+        }
+        .theme-pixelquest .game-app,
+        .theme-pixelquest .modal-content-wrapper { /* Base font size increase */
+            font-size: 150%;
+        }
+
+        .theme-pixelquest .game-app,
+        .theme-pixelquest .game-app button,
+        .theme-pixelquest .game-app select,
+        .theme-pixelquest .game-app label,
+        .theme-pixelquest .game-app input[type="text"],
+        .theme-pixelquest .game-app .game-title,
+        .theme-pixelquest .game-app .game-subtitle,
+        .theme-pixelquest .game-app .rounds-label,
+        .theme-pixelquest .game-app .settings-label,
+        .theme-pixelquest .game-app .game-mode-label-text,
+        .theme-pixelquest .game-app .card-content,
+        .theme-pixelquest .game-app .card-back,
+        .theme-pixelquest .game-app .stat-label,
+        .theme-pixelquest .game-app .stat-value,
+        .theme-pixelquest .game-app .game-board-message,
+        .theme-pixelquest .modal-content-wrapper,
+        .theme-pixelquest .modal-content-wrapper h3,
+        .theme-pixelquest .modal-content-wrapper p {
+            font-family: 'Pixelify Sans', 'Courier New', Courier, monospace;
+        }
+
+        .theme-pixelquest .game-app {
+            background: #F0E68C; border: 4px solid #000000;
+            box-shadow: 6px 6px 0px #000000; border-radius: 0;
+        }
+        .theme-pixelquest .game-app::before { background: none; }
+
+        .theme-pixelquest .game-header {
+            background: #8B4513; color: #FFFFFF;
+            box-shadow: none; border-bottom: 4px solid #000000; border-radius: 0;
+        }
+        .theme-pixelquest .game-title { color: #FFFFFF; font-weight: 700; font-size: 30px; /* 20px * 1.5 */ }
+        .theme-pixelquest .game-subtitle { color: #F5F5DC; font-size: 18px; /* 12px * 1.5 */ }
+
+        .theme-pixelquest .topic-button,
+        .theme-pixelquest .rounds-select-dropdown,
+        .theme-pixelquest .settings-row select,
+        .theme-pixelquest .settings-action-button,
+        .theme-pixelquest .new-game-button,
+        .theme-pixelquest #modal-close-btn {
+            background-color: #228B22; color: #FFFFFF;
+            border: 3px solid #000000; box-shadow: 3px 3px 0px #000000;
+            border-radius: 0; font-weight: 700;
+            padding: 8px 12px; /* Increased padding */
+            text-shadow: 1px 1px 0px rgba(0,0,0,0.3);
+        }
+        /* Specific font sizes for these buttons/selects */
+        .theme-pixelquest .topic-button,
+        .theme-pixelquest .rounds-select-dropdown,
+        .theme-pixelquest .settings-row select { font-size: 20px; /* ~13px * 1.5 */ }
+        .theme-pixelquest .settings-action-button,
+        .theme-pixelquest .new-game-button,
+        .theme-pixelquest #modal-close-btn { font-size: 21px; /* ~14px * 1.5 */ }
+
+
+        .theme-pixelquest .menu-button {
+            padding: 0; width: 54px; height: 54px; /* 36px * 1.5 */
+            font-size: 36px; /* 24px * 1.5 */
+            background-color: #228B22; color: #FFFFFF;
+            border: 3px solid #000000; box-shadow: 3px 3px 0px #000000;
+            border-radius: 0; font-weight: 700;
+            text-shadow: 1px 1px 0px rgba(0,0,0,0.3);
+        }
+
+        .theme-pixelquest .topic-button:active,
+        .theme-pixelquest .menu-button:active,
+        .theme-pixelquest .settings-action-button:active,
+        .theme-pixelquest .new-game-button:active,
+        .theme-pixelquest #modal-close-btn:active {
+            box-shadow: inset 2px 2px 0px rgba(0,0,0,0.6);
+            transform: translate(2px, 2px);
+            background-color: #1A691A;
+        }
+
+        .theme-pixelquest .topic-dropdown-content,
+        .theme-pixelquest .settings-dropdown {
+            background: #FFF8DC; border: 3px solid #000000;
+            box-shadow: 4px 4px 0px #000000; border-radius: 0;
+        }
+        .theme-pixelquest .topic-dropdown-content label { color: #000000; font-size: 20px; /* ~13px * 1.5 */ }
+        .theme-pixelquest .topic-dropdown-content label:hover { background-color: rgba(144, 238, 144, 0.3); }
+
+        .theme-pixelquest .topic-dropdown-content input[type="checkbox"] {
+            appearance: none; -webkit-appearance: none;
+            width: 24px; height: 24px; /* 16px * 1.5 */ border: 2px solid #000;
+            border-radius: 0; background-color: #fff;
+            position: relative; vertical-align: middle;
+            margin-right: 8px; cursor: pointer; /* Increased margin */
+        }
+        .theme-pixelquest .topic-dropdown-content input[type="checkbox"]:checked { background-color: #90EE90; }
+        .theme-pixelquest .topic-dropdown-content input[type="checkbox"]:checked::before {
+            content: "X"; display: flex; align-items: center; justify-content: center;
+            width: 100%; height: 100%; font-size: 18px; /* 12px * 1.5 */ color: #000;
+            font-weight: 700; position: absolute; top: 0; left: 0; line-height: 1.1; /* Adjusted line-height */
+        }
+
+        .theme-pixelquest .rounds-label { color: #FFFFFF; font-size: 20px; /* ~13px * 1.5 */ }
+        .theme-pixelquest .settings-label { color: #000000; font-size: 21px; /* 14px * 1.5 */ }
+        .theme-pixelquest .game-mode-label-text { color: #000000; font-size: 18px; /* 12px * 1.5 */ }
+
+        .theme-pixelquest .toggle-switch { width: 66px; height: 36px; /* 44*1.5, 24*1.5 */ }
+        .theme-pixelquest .toggle-slider {
+            background: #A9A9A9; box-shadow: none;
+            border: 2px solid #000000; border-radius: 0;
+        }
+        .theme-pixelquest .toggle-slider:before {
+            background: #FFFFFF; border: 2px solid #000000; box-shadow: none;
+            border-radius: 0; height: 24px; width: 24px; /* 16px*1.5 */
+            left: 3px; bottom: 3px; /* 2px*1.5 */
+        }
+        .theme-pixelquest input:checked + .toggle-slider { background: #32CD32; }
+        .theme-pixelquest input:checked + .toggle-slider:before { transform: translateX(30px); /* 20px*1.5 */ }
+
+        .theme-pixelquest .game-board {
+            background: #DEB887; box-shadow: none; border: none; padding: 10px;
+        }
+        .theme-pixelquest .game-board::-webkit-scrollbar { width: 12px; }
+        .theme-pixelquest .game-board::-webkit-scrollbar-track { background: #A0522D; border-left: 2px solid #000;}
+        .theme-pixelquest .game-board::-webkit-scrollbar-thumb {
+            background-color: #5C3E31; border: 2px solid #000000; border-radius: 0;
+        }
+        .theme-pixelquest .game-board::-webkit-scrollbar-thumb:hover { background-color: #442D24; }
+        .theme-pixelquest .game-board-message { color: #000000; font-weight: 700; font-size: 1.65em; /* 1.1em * 1.5 */ }
+
+        .theme-pixelquest .memory-card { border-radius: 0; }
+        .theme-pixelquest .memory-card:hover:not(.matched) {
+            box-shadow: 3px 3px 0px #000000; transform: translate(-2px, -2px);
+        }
+        .theme-pixelquest .card-face {
+            border: 3px solid #000000; box-shadow: 3px 3px 0px #000000;
+            border-radius: 0;
+        }
+        .theme-pixelquest .card-face::before { background: none; }
+        .theme-pixelquest .card-front { background-color: #FFD700; }
+        .theme-pixelquest .card-back { background-color: #D2691E; color: #FFFFFF; font-size: 72px; /* 48px * 1.5 */ line-height:1; }
+        .theme-pixelquest .card-content { color: #000000; font-weight: 700; font-size: 24px; /* 16px * 1.5 */ }
+        .theme-pixelquest .card-content.small-text { font-size: 20px; /* 13px * 1.5 */ }
+        .theme-pixelquest .card-content.x-small-text { font-size: 17px; /* 11px * 1.5 */ }
+        .theme-pixelquest .card-content.xx-small-text { font-size: 14px; /* 9px * 1.5 */ }
+
+        .theme-pixelquest .memory-card.is-flipped:active .card-back,
+        .theme-pixelquest .memory-card:not(.is-flipped):active .card-front {
+            box-shadow: inset 2px 2px 0px rgba(0,0,0,0.6); transform: translate(2px, 2px);
+        }
+        .theme-pixelquest .memory-card.selected .card-front {
+            background-color: #FFA500;
+            box-shadow: 3px 3px 0px #000000, inset 0 0 0 3px #FFFFFFBF;
+        }
+        .theme-pixelquest .memory-card.matched .card-front {
+            background-color: #808080; opacity: 0.75;
+            box-shadow: inset 3px 3px 0px rgba(0,0,0,0.5);
+        }
+        .theme-pixelquest .memory-card.matched .card-front .card-content { color: #222222; }
+        .theme-pixelquest .memory-card.incorrect:not(.is-flipped) .card-front,
+        .theme-pixelquest .memory-card.incorrect.is-flipped .card-back {
+            background-color: #FF0000;
+        }
+
+        .theme-pixelquest .game-stats {
+            background: #8B4513; color: #FFFFFF;
+            border-top: 4px solid #000000; box-shadow: none;
+        }
+        .theme-pixelquest .stat-label { color: #F5F5DC; font-weight: normal; font-size: 18px; /* 12px * 1.5 */ }
+        .theme-pixelquest .stat-value { color: #FFFFFF; font-weight: 700; font-size: 24px; /* 16px * 1.5 */ }
+        .theme-pixelquest .new-game-button::before { background: none; }
+
+        .theme-pixelquest .modal-overlay { background-color: rgba(0, 0, 0, 0.75); }
+        .theme-pixelquest .modal-content-wrapper {
+            background: #FFFACD; border: 4px solid #000000;
+            box-shadow: 6px 6px 0px #000000;
+            color: #000000; border-radius: 0;
+        }
+        /* font-size: 150% on .modal-content-wrapper will scale children if they use em or inherit */
+        .theme-pixelquest .modal-content-wrapper h3 { color: #000000; font-weight: 700; font-size: 33px; /* 22px * 1.5 */ }
+        .theme-pixelquest .modal-content-wrapper p { color: #000000; /* font-size will be 16px * 1.5 = 24px due to parent's 150% */ }
+        .theme-pixelquest .modal-content-wrapper p .modal-link { color: #0000FF; text-decoration: underline; }
+        .theme-pixelquest .modal-content-wrapper p .modal-link:hover { color: #FF00FF; }
+
 
     </style>
 </head>
-<body>
+<body class="theme-light"> <!-- Default theme -->
+    <!-- THE REST OF THE HTML REMAINS THE SAME (as provided in the previous step) -->
     <div class="game-app">
         <div class="game-header">
             <div class="game-info">
@@ -946,37 +1051,25 @@
                     <span data-translate-key="topicsButton">Темы</span> (<span id="topic-count-display">1</span>)
                     <span class="dropdown-arrow">▼</span>
                 </button>
-                <div id="topic-dropdown" class="topic-dropdown-content">
-                    <!-- Checkboxes will be generated by JS -->
-                </div>
+                <div id="topic-dropdown" class="topic-dropdown-content"></div>
             </div>
              <div class="rounds-selector-container">
                 <label for="rounds-select" class="rounds-label" data-translate-key="roundsLabel">Раунды:</label>
                 <select id="rounds-select" class="rounds-select-dropdown">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
+                    <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option>
                 </select>
             </div>
-            <div class="menu-button" id="menu-button" data-translate-key="settingsMenuTitle" title="Настройки">
-                ⋮ <!-- Vertical ellipsis -->
-            </div>
+            <div class="menu-button" id="menu-button" data-translate-key="settingsMenuTitle" title="Настройки">⋮</div>
         </div>
 
         <div class="settings-dropdown" id="settings-dropdown">
             <div class="settings-row">
                 <label for="main-lang-select" class="settings-label" data-translate-key="mainLanguageLabel">Основной язык:</label>
-                <div class="select-wrapper">
-                    <select id="main-lang-select"></select>
-                </div>
+                <div class="select-wrapper"><select id="main-lang-select"></select></div>
             </div>
             <div class="settings-row">
                 <label for="foreign-lang-select" class="settings-label" data-translate-key="foreignLanguageLabel">Язык для изучения:</label>
-                 <div class="select-wrapper">
-                    <select id="foreign-lang-select"></select>
-                </div>
+                 <div class="select-wrapper"><select id="foreign-lang-select"></select></div>
             </div>
             <div class="settings-row">
                 <div class="settings-label" data-translate-key="gameModeLabel">Режим игры</div>
@@ -991,16 +1084,16 @@
             <div class="settings-row">
                 <div class="settings-label" data-translate-key="soundLabel">Звук</div>
                 <label class="toggle-switch">
-                    <input type="checkbox" checked id="sound-toggle">
-                    <span class="toggle-slider"></span>
+                    <input type="checkbox" checked id="sound-toggle"><span class="toggle-slider"></span>
                 </label>
             </div>
             <div class="settings-row">
-                <div class="settings-label" data-translate-key="darkModeLabel">Темная тема</div>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="dark-mode-toggle">
-                    <span class="toggle-slider"></span>
-                </label>
+                <label for="theme-select" class="settings-label" data-translate-key="themeLabel">Тема:</label>
+                <div class="select-wrapper">
+                    <select id="theme-select">
+                        <!-- Options populated by JS -->
+                    </select>
+                </div>
             </div>
             <div class="settings-row">
                 <button id="about-button" class="settings-action-button" data-translate-key="aboutButton">О программе</button>
@@ -1028,15 +1121,13 @@
 
     <div class="modal-overlay" id="game-end-modal">
         <div class="modal-content-wrapper">
-            <h3 id="modal-title"></h3>
-            <p id="modal-message-text"></p>
+            <h3 id="modal-title"></h3><p id="modal-message-text"></p>
             <div class="modal-buttons">
                 <button id="modal-play-again-btn" class="new-game-button" data-translate-key="playAgainButton">Играть снова</button>
                 <button id="modal-close-btn" class="new-game-button" data-translate-key="closeButton">Закрыть</button>
             </div>
         </div>
     </div>
-
     <div class="modal-overlay" id="about-modal">
         <div class="modal-content-wrapper">
             <h3 id="about-modal-title" data-translate-key="aboutModal.title">О программе</h3>
@@ -1048,13 +1139,11 @@
     </div>
 
 <script>
-        // ... (keep existing const declarations and initial variable setups) ...
         const gameBoard = document.querySelector('.game-board');
         const movesValueEl = document.getElementById('moves-value');
         const matchesValueEl = document.getElementById('matches-value');
         const timeValueEl = document.getElementById('time-value');
         const newGameButton = document.getElementById('new-game-btn');
-
         const menuButton = document.getElementById('menu-button');
         const settingsDropdown = document.getElementById('settings-dropdown');
         const soundToggle = document.getElementById('sound-toggle');
@@ -1062,213 +1151,223 @@
         const gameModeLabelTextEl = document.getElementById('game-mode-label-text');
         const gameSubtitleModeEl = document.getElementById('game-subtitle-mode');
         const gameSubtitleRoundEl = document.getElementById('game-subtitle-round');
-        const darkModeToggle = document.getElementById('dark-mode-toggle');
-
+        const themeSelect = document.getElementById('theme-select');
         const topicSelectorButton = document.getElementById('topic-selector-button');
         const topicDropdown = document.getElementById('topic-dropdown');
         const topicCountDisplay = document.getElementById('topic-count-display');
         const roundsSelect = document.getElementById('rounds-select');
-
         const mainLangSelect = document.getElementById('main-lang-select');
         const foreignLangSelect = document.getElementById('foreign-lang-select');
-
         const gameEndModal = document.getElementById('game-end-modal');
         const modalTitleEl = document.getElementById('modal-title');
         const modalMessageTextEl = document.getElementById('modal-message-text');
         const modalPlayAgainBtn = document.getElementById('modal-play-again-btn');
         const modalCloseBtn = document.getElementById('modal-close-btn');
-
         const aboutButton = document.getElementById('about-button');
         const aboutModal = document.getElementById('about-modal');
         const aboutModalTitleEl = document.getElementById('about-modal-title');
         const aboutModalMessageTextContentEl = document.getElementById('about-modal-message-text-content');
         const aboutModalCloseBtn = document.getElementById('about-modal-close-btn');
 
-        let audioCtx;
-        let firstCard = null;
-        let secondCard = null;
-        let lockBoard = true;
-        let gameActive = false;
-        let boardHasBeenSetUpAtLeastOnce = false;
-
-        let moves = 0;
-        let matches = 0;
-        let roundTimerInterval;
-        let roundSecondsElapsed = 0;
-
-        let selectedNumberOfRounds = 1;
-        let currentRound = 0;
+        let audioCtx; let firstCard = null; let secondCard = null;
+        let lockBoard = true; let gameActive = false; let boardHasBeenSetUpAtLeastOnce = false;
+        let moves = 0; let matches = 0; let roundTimerInterval; let roundSecondsElapsed = 0;
+        let selectedNumberOfRounds = 1; let currentRound = 0;
         let wordsUsedInAllRounds = new Set();
-        let totalMovesAcrossAllRounds = 0;
-        let totalTimeAcrossAllRounds = 0;
+        let totalMovesAcrossAllRounds = 0; let totalTimeAcrossAllRounds = 0;
+        let totalSuccessfulMatchesAcrossAllRounds = 0;
+        const MAX_PAIRS_DISPLAYED = 6; let currentTotalPairsInRound = 0;
+        let soundEnabled = true; let gameMode = 'simple';
+        let currentTheme = 'light';
+        let currentMainLanguage = 'en'; let currentForeignLanguage = 'ru';
 
-        const MAX_PAIRS_DISPLAYED = 6;
-        let currentTotalPairsInRound = 0;
-
-        let soundEnabled = true;
-        let gameMode = 'simple'; // 'simple' or 'memory'
-        let isDarkMode = false; // Will be set by loadDarkModePreference
-
-        let currentMainLanguage = 'en';
-        let currentForeignLanguage = 'ru';
+        const themes = {
+            light: { nameKey: "themeLight", base: "light" },
+            dark: { nameKey: "themeDark", base: "dark" },
+            memphis: { nameKey: "themeMemphis", base: "light" },
+            navy: { nameKey: "themeNavy", base: "light" },
+            pixelquest: { nameKey: "themePixelQuest", base: "light" }
+        };
 
         const availableLanguages = {
-            en: "English",
-            ru: "Русский",
-            es: "Español",
-            fr: "Français",
-            sr_latin: "Srpski (Latinica)",
-            sr_cyrillic: "Српски (Ћирилица)"
+            en: "English", ru: "Русский", es: "Español", fr: "Français",
+            sr_latin: "Srpski (Latinica)", sr_cyrillic: "Српски (Ћирилица)"
         };
 
         const uiStrings = {
             en: {
-                pageTitle: "1111 Words - Matching Game",
-                gameTitle: "1111 Words",
-                subtitleModeSimple: "Match words with their translation",
-                subtitleModeMemory: "Find and remember the pairs",
-                topicsButton: "Topics",
-                roundsLabel: "Rounds:",
-                settingsMenuTitle: "Settings",
-                mainLanguageLabel: "Main Language:",
-                foreignLanguageLabel: "Language to Learn:",
-                gameModeLabel: "Game Mode",
-                gameModeSimple: "Simple",
-                gameModeMemory: "Memory",
+                pageTitle: "1111 Words - Matching Game", gameTitle: "1111 Words",
+                subtitleModeSimple: "Match words with their translation", subtitleModeMemory: "Find and remember the pairs",
+                topicsButton: "Topics", roundsLabel: "Rounds:", settingsMenuTitle: "Settings",
+                mainLanguageLabel: "Main Language:", foreignLanguageLabel: "Language to Learn:",
+                gameModeLabel: "Game Mode", gameModeSimple: "Simple", gameModeMemory: "Memory",
                 soundLabel: "Sound",
-                darkModeLabel: "Dark Theme",
-                aboutButton: "About",
-                movesStatLabel: "Moves",
-                pairsStatLabel: "Pairs",
-                timeStatLabel: "Time",
-                newGameButton: "New Game",
-                playAgainButton: "Play Again",
-                closeButton: "Close",
-                okButton: "OK",
-                modalTitleGameEnd: "Game Over!",
-                modalTitleAllRoundsComplete: "All {0} rounds completed!",
-                modalMessageStats: "Moves: {0}. \nTime: {1}.",
-                modalMessageTotalStats: "Total moves: {0}. \nTotal time: {1}.",
-                modalTitleAttention: "Attention",
+                themeLabel: "Theme", themeLight: "Light", themeDark: "Dark", themeMemphis: "Memphis", themeNavy: "Navy Formal", themePixelQuest: "Pixel Quest",
+                aboutButton: "About", movesStatLabel: "Moves", pairsStatLabel: "Pairs", timeStatLabel: "Time",
+                newGameButton: "New Game", playAgainButton: "Play Again", closeButton: "Close", okButton: "OK",
+                modalTitleGameEnd: "Congratulations!\n You matched all pairs!", modalTitleAllRoundsComplete: "All {0} rounds completed!",
+                modalMessageStats: "Moves: {0}. \nTime: {1}.", modalMessageTotalStats: "Total moves: {0}. \nTotal time: {1}.",
+                modalMessageMistakes: "Mistakes: {0}", modalTitleAttention: "Attention",
                 modalMessageMustSelectTopic: "At least one topic must be selected.\nDefaulting to 'Basics'.",
                 modalMessageNoWordsForRound: "Not enough unique words for this round.\nGame stopped. Try selecting more topics or reducing rounds.",
                 modalMessageAllWordsUsed: "All words from selected topics for the current game have been used. Start a new game or choose other topics.",
                 modalMessageNoWordsGameEnd: "You have used all available words for the selected topics in this game.\nGame Over.",
-                modalMessageNoWordsError: "Error: No words",
-                modalMessageSelectTopic: "Please select at least one topic in the settings.",
-                modalMessageGameFinished: "Game finished! Results in the window above.",
-                modalMessageStartGame: "Press \"New Game\" to start.",
-                roundSubtitle: "Round {0}/{1}",
-                roundSubtitleSingle: "Rounds: {0}",
-                topics: {
-                    basics: "Basics", food: "Food/Restaurants", travel: "Travel", tech: "Tech/Computers", business: "Business/Economy"
-                },
-                aboutModal: {
-                    title: "About",
-                    content: "A game for learning words from five spheres of life.\n0.1.3 beta version (may display fonts and colors incorrectly on some mobile devices).\n\nAuthor: VOVSN\nGitHub: <a href=\"https://github.com/VOVSn\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"modal-link\">https://github.com/VOVSn</a>\n\nThis is an open-source project. You can contribute to the repository on GitHub!"
-                }
+                modalMessageNoWordsError: "Error: No words", modalMessageSelectTopic: "Please select at least one topic in the settings.",
+                modalMessageGameFinished: "Game finished! Results in the window above.", modalMessageStartGame: "Press \"New Game\" to start.",
+                roundSubtitle: "Round {0}/{1}", roundSubtitleSingle: "Rounds: {0}",
+                topics: { basics: "Basics", food: "Food", travel: "Travel", tech: "Tech", business: "Business" },
+                aboutModal: { title: "About", content: "A game for learning words from five spheres of life.\n0.1.8 alpha version.\n\nLearn 1111 WORDS with me!\n\nAuthor: Vladimir Korolev\nGitHub: <a href=\"https://github.com/VOVSn\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"modal-link\">https://github.com/VOVSn</a>\n\nThis is an open-source project."}
             },
             ru: {
-                pageTitle: "1111 Слов - Игра на Сопоставление",
-                gameTitle: "1111 Слов",
-                subtitleModeSimple: "Сопоставьте слова с переводом",
-                subtitleModeMemory: "Найдите и запомните пары",
-                topicsButton: "Темы",
-                roundsLabel: "Раунды:",
-                settingsMenuTitle: "Настройки",
-                mainLanguageLabel: "Основной язык:",
-                foreignLanguageLabel: "Язык для изучения:",
-                gameModeLabel: "Режим игры",
-                gameModeSimple: "Простой",
-                gameModeMemory: "Память",
+                pageTitle: "1111 Слов - Игра на Сопоставление", gameTitle: "1111 Слов",
+                subtitleModeSimple: "Сопоставьте слова с переводом", subtitleModeMemory: "Найдите и запомните пары",
+                topicsButton: "Темы", roundsLabel: "Раунды:", settingsMenuTitle: "Настройки",
+                mainLanguageLabel: "Основной язык:", foreignLanguageLabel: "Язык для изучения:",
+                gameModeLabel: "Режим игры", gameModeSimple: "Простой", gameModeMemory: "Память",
                 soundLabel: "Звук",
-                darkModeLabel: "Темная тема",
-                aboutButton: "О программе",
-                movesStatLabel: "Ходы",
-                pairsStatLabel: "Пары",
-                timeStatLabel: "Время",
-                newGameButton: "Новая игра",
-                playAgainButton: "Играть снова",
-                closeButton: "Закрыть",
-                okButton: "OK",
-                modalTitleGameEnd: "Игра завершена!",
-                modalTitleAllRoundsComplete: "Все {0} раундов завершены!",
-                modalMessageStats: "Ходов: {0}. \nВремя: {1}.",
-                modalMessageTotalStats: "Общее количество ходов: {0}. \nОбщее время: {1}.",
-                modalTitleAttention: "Внимание",
+                themeLabel: "Тема", themeLight: "Светлая", themeDark: "Темная", themeMemphis: "Мемфис", themeNavy: "Формальная Темно-синяя", themePixelQuest: "Пиксельный Квест",
+                aboutButton: "О программе", movesStatLabel: "Ходы", pairsStatLabel: "Пары", timeStatLabel: "Время",
+                newGameButton: "Новая игра", playAgainButton: "Играть снова", closeButton: "Закрыть", okButton: "OK",
+                modalTitleGameEnd: "Поздравляем!\n Вы составили все пары!", modalTitleAllRoundsComplete: "Все {0} раундов завершены!",
+                modalMessageStats: "Ходов: {0}. \nВремя: {1}.", modalMessageTotalStats: "Общее количество ходов: {0}. \nОбщее время: {1}.",
+                modalMessageMistakes: "Ошибки: {0}", modalTitleAttention: "Внимание",
                 modalMessageMustSelectTopic: "Должна быть выбрана хотя бы одна тема.\nПо умолчанию выбрана 'Основы'.",
                 modalMessageNoWordsForRound: "Недостаточно уникальных слов для этого раунда.\nИгра остановлена. Попробуйте выбрать больше тем или уменьшить количество раундов.",
                 modalMessageAllWordsUsed: "Все слова из выбранных тем для текущей игры использованы. Начните новую игру или выберите другие темы.",
                 modalMessageNoWordsGameEnd: "Вы использовали все доступные слова для выбранных тем в этой игре.\nИгра завершена.",
-                modalMessageNoWordsError: "Ошибка: нет слов",
-                modalMessageSelectTopic: "Пожалуйста, выберите хотя бы одну тему в настройках.",
-                modalMessageGameFinished: "Игра завершена! Результаты в окне выше.",
-                modalMessageStartGame: "Нажмите \"Новая игра\", чтобы начать.",
-                roundSubtitle: "Раунд {0}/{1}",
-                roundSubtitleSingle: "Раунды: {0}",
-                topics: {
-                    basics: "Основы", food: "Еда/Рестораны", travel: "Путешествия", tech: "Техника/Компьютеры", business: "Бизнес/Экономика"
-                },
-                aboutModal: {
-                    title: "О программе",
-                    content: "Игра для изучения слов из пяти сфер жизни.\n0.1.3 beta версия (может некорректно отображать шрифты и цвета на некоторых мобильных устройствах).\n\nАвтор: VOVSN\nGitHub: <a href=\"https://github.com/VOVSn\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"modal-link\">https://github.com/VOVSn</a>\n\nЭто проект с открытым исходным кодом. Вы можете внести свой вклад в репозиторий на GitHub!"
-                }
+                modalMessageNoWordsError: "Ошибка: нет слов", modalMessageSelectTopic: "Пожалуйста, выберите хотя бы одну тему в настройках.",
+                modalMessageGameFinished: "Игра завершена! Результаты в окне выше.", modalMessageStartGame: "Нажмите \"Новая игра\", чтобы начать.",
+                roundSubtitle: "Раунд {0}/{1}", roundSubtitleSingle: "Раунды: {0}",
+                topics: { basics: "Основы", food: "Еда", travel: "Путешествия", tech: "Техника", business: "Бизнес" },
+                aboutModal: { title: "О программе", content: "Игра для изучения слов из пяти сфер жизни.\n0.1.8 alpha версия.\n\nИзучайте 1111 СЛОВ со мной!\n\nАвтор: VOVSN\nGitHub: <a href=\"https://github.com/VOVSn\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"modal-link\">https://github.com/VOVSn</a>\n\nЭто проект с открытым исходным кодом."}
             },
-            es: { pageTitle: "1111 Palabras - Juego de Coincidencias", gameTitle: "1111 Palabras", topics: {basics: "Básicos", food: "Comida/Restaurantes", travel: "Viajes", tech: "Tecnología/Computadoras", business:"Negocios/Economía"}, subtitleModeSimple: "Empareja las palabras con su traducción", subtitleModeMemory: "Encuentra y recuerda las parejas", gameModeSimple: "Sencillo", gameModeMemory: "Memoria", mainLanguageLabel: "Idioma Principal:", foreignLanguageLabel: "Idioma a Aprender:", roundsLabel: "Rondas:", settingsMenuTitle: "Ajustes", gameModeLabel: "Modo de Juego", soundLabel: "Sonido", darkModeLabel: "Tema Oscuro", aboutButton: "Acerca de", movesStatLabel: "Movimientos", pairsStatLabel: "Pares", timeStatLabel: "Tiempo", newGameButton: "Nuevo Juego", playAgainButton: "Jugar de Nuevo", closeButton: "Cerrar", okButton: "OK", modalTitleGameEnd: "¡Juego Terminado!", modalTitleAllRoundsComplete: "¡Todas las {0} rondas completadas!", modalMessageStats: "Movimientos: {0}.\nTiempo: {1}.", modalMessageTotalStats: "Movimientos totales: {0}.\nTiempo total: {1}.", modalTitleAttention: "Atención", modalMessageMustSelectTopic: "Debe seleccionarse al menos un tema.\nPor defecto se selecciona 'Básicos'.", modalMessageNoWordsForRound: "No hay suficientes palabras únicas para esta ronda.\nJuego detenido. Intenta seleccionar más temas o reducir las rondas.", modalMessageAllWordsUsed: "Todas las palabras de los temas seleccionados para el juego actual han sido utilizadas. Comienza un nuevo juego o elige otros temas.", modalMessageNoWordsGameEnd: "Has utilizado todas las palabras disponibles para los temas seleccionados en este juego.\nJuego Terminado.", modalMessageNoWordsError: "Error: Sin palabras", modalMessageSelectTopic: "Por favor, selecciona al menos un tema en los ajustes.", modalMessageGameFinished: "¡Juego finalizado! Resultados en la ventana superior.", modalMessageStartGame: "Presiona \"Nuevo Juego\" para comenzar.", roundSubtitle: "Ronda {0}/{1}", roundSubtitleSingle: "Rondas: {0}", aboutModal: { title: "Acerca de", content: "Un juego para aprender palabras de cinco ámbitos de la vida.\nVersión beta 0.1.3 (puede mostrar fuentes y colores incorrectamente en algunos dispositivos móviles).\n\nAutor: VOVSN\nGitHub: <a href=\"https://github.com/VOVSn\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"modal-link\">https://github.com/VOVSn</a>\n\nEste es un proyecto de código abierto. ¡Puedes contribuir al repositorio en GitHub!"}},
-            fr: { pageTitle: "1111 Mots - Jeu de Correspondance", gameTitle: "1111 Mots", topics: {basics: "Les bases", food: "Nourriture/Restaurants", travel: "Voyages", tech: "Technologie/Ordinateurs", business:"Affaires/Économie"}, subtitleModeSimple: "Associez les mots à leur traduction", subtitleModeMemory: "Trouvez et mémorisez les paires", gameModeSimple: "Simple", gameModeMemory: "Mémoire", mainLanguageLabel: "Langue Principale :", foreignLanguageLabel: "Langue à Apprendre :", roundsLabel: "Manches :", settingsMenuTitle: "Paramètres", gameModeLabel: "Mode de Jeu", soundLabel: "Son", darkModeLabel: "Thème Sombre", aboutButton: "À propos", movesStatLabel: "Coups", pairsStatLabel: "Paires", timeStatLabel: "Temps", newGameButton: "Nouveau Jeu", playAgainButton: "Rejouer", closeButton: "Fermer", okButton: "OK", modalTitleGameEnd: "Partie Terminée !", modalTitleAllRoundsComplete: "Toutes les {0} manches terminées !", modalMessageStats: "Coups : {0}.\nTemps : {1}.", modalMessageTotalStats: "Total des coups : {0}.\nTemps total : {1}.", modalTitleAttention: "Attention", modalMessageMustSelectTopic: "Au moins un thème doit être sélectionné.\n'Les bases' est sélectionné par défaut.", modalMessageNoWordsForRound: "Pas assez de mots uniques pour cette manche.\nJeu arrêté. Essayez de sélectionner plus de thèmes ou de réduire le nombre de manches.", modalMessageAllWordsUsed: "Tous les mots des thèmes sélectionnés pour le jeu actuel ont été utilisés. Commencez un nouveau jeu ou choisissez d'autres thèmes.", modalMessageNoWordsGameEnd: "Vous avez utilisé tous les mots disponibles pour les thèmes sélectionnés dans ce jeu.\nPartie Terminée.", modalMessageNoWordsError: "Erreur : Pas de mots", modalMessageSelectTopic: "Veuillez sélectionner au moins un thème dans les paramètres.", modalMessageGameFinished: "Partie terminée ! Résultats dans la fenêtre ci-dessus.", modalMessageStartGame: "Appuyez sur \"Nouveau Jeu\" pour commencer.", roundSubtitle: "Manche {0}/{1}", roundSubtitleSingle: "Manches : {0}", aboutModal: { title: "À propos", content: "Un jeu pour apprendre des mots de cinq domaines de la vie.\nVersion bêta 0.1.3 (peut afficher incorrectement les polices et les couleurs sur certains appareils mobiles).\n\nAutheur : VOVSN\nGitHub : <a href=\"https://github.com/VOVSn\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"modal-link\">https://github.com/VOVSn</a>\n\nCeci est un projet open-source. Vous pouvez contribuer au dépôt sur GitHub !"}},
-            sr_latin: { pageTitle: "1111 Reči - Igra Spajanja", gameTitle: "1111 Reči", topics: {basics: "Osnove", food: "Hrana/Restorani", travel: "Putovanja", tech: "Tehnika/Računari", business:"Posao/Ekonomija"}, subtitleModeSimple: "Poveži reči sa prevodom", subtitleModeMemory: "Pronađi i zapamti parove", gameModeSimple: "Jednostavno", gameModeMemory: "Memorija", mainLanguageLabel: "Glavni Jezik:", foreignLanguageLabel: "Jezik za Učenje:", roundsLabel: "Runde:", settingsMenuTitle: "Podešavanja", gameModeLabel: "Režim Igre", soundLabel: "Zvuk", darkModeLabel: "Tamna Tema", aboutButton: "O programu", movesStatLabel: "Potezi", pairsStatLabel: "Parovi", timeStatLabel: "Vreme", newGameButton: "Nova Igra", playAgainButton: "Igraj Ponovo", closeButton: "Zatvori", okButton: "U redu", modalTitleGameEnd: "Igra Završena!", modalTitleAllRoundsComplete: "Svih {0} rundi završeno!", modalMessageStats: "Poteza: {0}.\nVreme: {1}.", modalMessageTotalStats: "Ukupno poteza: {0}.\nUkupno vreme: {1}.", modalTitleAttention: "Pažnja", modalMessageMustSelectTopic: "Mora biti izabrana bar jedna tema.\nPodrazumevano je izabrana 'Osnove'.", modalMessageNoWordsForRound: "Nema dovoljno jedinstvenih reči za ovu rundu.\nIgra zaustavljena. Pokušajte da izaberete više tema ili smanjite broj rundi.", modalMessageAllWordsUsed: "Sve reči iz izabranih tema za trenutnu igru su iskorišćene. Započnite novu igru ili izaberite druge teme.", modalMessageNoWordsGameEnd: "Iskoristili ste sve dostupne reči za izabrane teme u ovoj igri.\nIgra Završena.", modalMessageNoWordsError: "Greška: Nema reči", modalMessageSelectTopic: "Molimo izaberite bar jednu temu u podešavanjima.", modalMessageGameFinished: "Igra završena! Rezultati u prozoru iznad.", modalMessageStartGame: "Pritisnite \"Nova Igra\" da počnete.", roundSubtitle: "Runda {0}/{1}", roundSubtitleSingle: "Runde: {0}", aboutModal: { title: "O programu", content: "Igra za učenje reči iz pet sfera života.\n0.1.3 beta verzija (može nepravilno prikazivati fontove i boje na nekim mobilnim uređajima).\n\nAutor: VOVSN\nGitHub: <a href=\"https://github.com/VOVSn\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"modal-link\">https://github.com/VOVSn</a>\n\nOvo je projekat otvorenog koda. Možete doprineti repozitorijumu na GitHub-u!"}},
-            sr_cyrillic: { pageTitle: "1111 Речи - Игра Спајања", gameTitle: "1111 Речи", topics: {basics: "Основе", food: "Храна/Ресторани", travel: "Путовања", tech: "Техника/Рачунари", business:"Посао/Економија"}, subtitleModeSimple: "Повежи речи са преводом", subtitleModeMemory: "Пронађи и запамти парове", gameModeSimple: "Једноставно", gameModeMemory: "Меморија", mainLanguageLabel: "Главни Језик:", foreignLanguageLabel: "Језик за Учење:", roundsLabel: "Рунде:", settingsMenuTitle: "Подешавања", gameModeLabel: "Режим Игре", soundLabel: "Звук", darkModeLabel: "Тамна Тема", aboutButton: "О програму", movesStatLabel: "Потези", pairsStatLabel: "Парови", timeStatLabel: "Време", newGameButton: "Нова Игра", playAgainButton: "Играј Поново", closeButton: "Затвори", okButton: "У реду", modalTitleGameEnd: "Игра Завршена!", modalTitleAllRoundsComplete: "Свих {0} рунди завршено!", modalMessageStats: "Потеза: {0}.\nВреме: {1}.", modalMessageTotalStats: "Укупно потеза: {0}.\nУкупно време: {1}.", modalTitleAttention: "Пажња", modalMessageMustSelectTopic: "Мора бити изабрана бар једна тема.\nПодразумевано је изабрана 'Основе'.", modalMessageNoWordsForRound: "Нема довољно јединствених речи за ову рунду.\nИгра заустављена. Покушајте да изаберете више тема или смањите број рунди.", modalMessageAllWordsUsed: "Све речи из изабраних тема за тренутну игру су искоришћене. Започните нову игру или изаберите друге теме.", modalMessageNoWordsGameEnd: "Искористили сте све доступне речи за изабране теме у овој игри.\nИгра Завршена.", modalMessageNoWordsError: "Грешка: Нема речи", modalMessageSelectTopic: "Молимо изаберите бар једну тему у подешавањима.", modalMessageGameFinished: "Игра завршена! Резултати у прозору изнад.", modalMessageStartGame: "Притисните \"Нова Игра\" да почнете.", roundSubtitle: "Рунда {0}/{1}", roundSubtitleSingle: "Рунде: {0}", aboutModal: { title: "О програму", content: "Игра за учење речи из пет сфера живота.\n0.1.3 бета верзија (може неправилно приказивати фонтове и боје на неким мобилним уређајима).\n\nАутор: VOVSN\nGitHub: <a href=\"https://github.com/VOVSn\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"modal-link\">https://github.com/VOVSn</a>\n\nОво је пројекат отвореног кода. Можете допринети репозиторијуму на ГитХаб-у!"}},
+            es: {
+                pageTitle: "1111 Palabras - Juego de Coincidencias", gameTitle: "1111 Palabras",
+                topics: { basics: "Básicos", food: "Comida", travel: "Viajes", tech: "Tecnología", business:"Negocios" },
+                subtitleModeSimple: "Empareja las palabras con su traducción", subtitleModeMemory: "Encuentra y recuerda las parejas",
+                gameModeSimple: "Sencillo", gameModeMemory: "Memoria", mainLanguageLabel: "Idioma Principal:",
+                foreignLanguageLabel: "Idioma a Aprender:", roundsLabel: "Rondas:", settingsMenuTitle: "Ajustes",
+                gameModeLabel: "Modo de Juego", soundLabel: "Sonido",
+                themeLabel: "Tema", themeLight: "Claro", themeDark: "Oscuro", themeMemphis: "Memphis", themeNavy: "Formal Marino", themePixelQuest: "Aventura Pixelada",
+                aboutButton: "Acerca de", movesStatLabel: "Movimientos", pairsStatLabel: "Pares", timeStatLabel: "Tiempo",
+                newGameButton: "Nuevo Juego", playAgainButton: "Jugar de Nuevo", closeButton: "Cerrar", okButton: "OK",
+                modalTitleGameEnd: "¡Felicidades!\n\n ¡Has emparejado todos los pares!", modalTitleAllRoundsComplete: "¡Todas las {0} rondas completadas!",
+                modalMessageStats: "Movimientos: {0}.\nTiempo: {1}.", modalMessageTotalStats: "Movimientos totales: {0}.\nTiempo total: {1}.",
+                modalMessageMistakes: "Errores: {0}", modalTitleAttention: "Atención",
+                modalMessageMustSelectTopic: "Debe seleccionarse al menos un tema.\nPor defecto se selecciona 'Básicos'.",
+                modalMessageNoWordsForRound: "No hay suficientes palabras únicas para esta ronda.\nJuego detenido. Intenta seleccionar más temas o reducir las rondas.",
+                modalMessageAllWordsUsed: "Todas las palabras de los temas seleccionados para el juego actual han sido utilizadas. Comienza un nuevo juego o elige otros temas.",
+                modalMessageNoWordsGameEnd: "Has utilizado todas las palabras disponibles para los temas seleccionados en este juego.\nJuego Terminado.",
+                modalMessageNoWordsError: "Error: Sin palabras", modalMessageSelectTopic: "Por favor, selecciona al menos un tema en los ajustes.",
+                modalMessageGameFinished: "¡Juego finalizado! Resultados en la ventana superior.", modalMessageStartGame: "Presiona \"Nuevo Juego\" para comenzar.",
+                roundSubtitle: "Ronda {0}/{1}", roundSubtitleSingle: "Rondas: {0}",
+                aboutModal: { title: "Acerca de", content: "Un juego para aprender palabras de cinco ámbitos de la vida.\nVersión alpha 0.1.8.\n\n¡Aprende 1111 PALABRAS conmigo!\n\nAutor: VOVSN\nGitHub: <a href=\"https://github.com/VOVSn\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"modal-link\">https://github.com/VOVSn</a>\n\nEste es un proyecto de código abierto."}
+            },
+            fr: {
+                pageTitle: "1111 Mots - Jeu de Correspondance", gameTitle: "1111 Mots",
+                topics: { basics: "Les bases", food: "Nourriture", travel: "Voyages", tech: "Technologie", business:"Affaires" },
+                subtitleModeSimple: "Associez les mots à leur traduction", subtitleModeMemory: "Trouvez et mémorisez les paires",
+                gameModeSimple: "Simple", gameModeMemory: "Mémoire", mainLanguageLabel: "Langue Principale :",
+                foreignLanguageLabel: "Langue à Apprendre :", roundsLabel: "Manches :", settingsMenuTitle: "Paramètres",
+                gameModeLabel: "Mode de Jeu", soundLabel: "Son",
+                themeLabel: "Thème", themeLight: "Clair", themeDark: "Sombre", themeMemphis: "Memphis", themeNavy: "Bleu Marine Formel", themePixelQuest: "Quête en Pixels",
+                aboutButton: "À propos", movesStatLabel: "Coups", pairsStatLabel: "Paires", timeStatLabel: "Temps",
+                newGameButton: "Nouveau Jeu", playAgainButton: "Rejouer", closeButton: "Fermer", okButton: "OK",
+                modalTitleGameEnd: "Félicitations !\n Vous avez associé toutes les paires !", modalTitleAllRoundsComplete: "Toutes les {0} manches terminées !",
+                modalMessageStats: "Coups : {0}.\nTemps : {1}.", modalMessageTotalStats: "Total des coups : {0}.\nTemps total : {1}.",
+                modalMessageMistakes: "Erreurs : {0}", modalTitleAttention: "Attention",
+                modalMessageMustSelectTopic: "Au moins un thème doit être sélectionné.\n'Les bases' est sélectionné par défaut.",
+                modalMessageNoWordsForRound: "Pas assez de mots uniques pour cette manche.\nJeu arrêté. Essayez de sélectionner plus de thèmes ou de réduire le nombre de manches.",
+                modalMessageAllWordsUsed: "Tous les mots des thèmes sélectionnés pour le jeu actuel ont été utilisés. Commencez un nouveau jeu ou choisissez d'autres thèmes.",
+                modalMessageNoWordsGameEnd: "Vous avez utilisé tous les mots disponibles pour les thèmes sélectionnés dans ce jeu.\nPartie Terminée.",
+                modalMessageNoWordsError: "Erreur : Pas de mots", modalMessageSelectTopic: "Veuillez sélectionner au moins un thème dans les paramètres.",
+                modalMessageGameFinished: "Partie terminée ! Résultats dans la fenêtre ci-dessus.", modalMessageStartGame: "Appuyez sur \"Nouveau Jeu\" pour commencer.",
+                roundSubtitle: "Manche {0}/{1}", roundSubtitleSingle: "Manches : {0}",
+                aboutModal: { title: "À propos", content: "Un jeu pour apprendre des mots de cinq domaines de la vie.\nVersion alpha 0.1.8.\n\nApprenez 1111 MOTS avec moi !\n\nAutheur : VOVSN\nGitHub : <a href=\"https://github.com/VOVSn\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"modal-link\">https://github.com/VOVSn</a>\n\nCeci est un projet open-source."}
+            },
+             sr_latin: {
+                pageTitle: "1111 Reči - Igra Spajanja", gameTitle: "1111 Reči",
+                topics: { basics: "Osnove", food: "Hrana", travel: "Putovanja", tech: "Tehnika", business:"Posao" },
+                subtitleModeSimple: "Poveži reči sa prevodom", subtitleModeMemory: "Pronađi i zapamti parove",
+                gameModeSimple: "Jednostavno", gameModeMemory: "Memorija", mainLanguageLabel: "Glavni Jezik:",
+                foreignLanguageLabel: "Jezik za Učenje:", roundsLabel: "Runde:", settingsMenuTitle: "Podešavanja",
+                gameModeLabel: "Režim Igre", soundLabel: "Zvuk",
+                themeLabel: "Tema", themeLight: "Svetla", themeDark: "Tamna", themeMemphis: "Memfis", themeNavy: "Formalna Teget", themePixelQuest: "Piksel Avantura",
+                aboutButton: "O programu", movesStatLabel: "Potezi", pairsStatLabel: "Parovi", timeStatLabel: "Vreme",
+                newGameButton: "Nova Igra", playAgainButton: "Igraj Ponovo", closeButton: "Zatvori", okButton: "U redu",
+                modalTitleGameEnd: "Čestitamo!\n Spojili ste sve parove!", modalTitleAllRoundsComplete: "Svih {0} rundi završeno!",
+                modalMessageStats: "Poteza: {0}.\nVreme: {1}.", modalMessageTotalStats: "Ukupno poteza: {0}.\nUkupno vreme: {1}.",
+                modalMessageMistakes: "Greške: {0}", modalTitleAttention: "Pažnja",
+                modalMessageMustSelectTopic: "Mora biti izabrana bar jedna tema.\nPodrazumevano je izabrana 'Osnove'.",
+                modalMessageNoWordsForRound: "Nema dovoljno jedinstvenih reči za ovu rundu.\nIgra zaustavljena. Pokušajte da izaberete više tema ili smanjite broj rundi.",
+                modalMessageAllWordsUsed: "Sve reči iz izabranih tema za trenutnu igru su iskorišćene. Započnite novu igru ili izaberite druge teme.",
+                modalMessageNoWordsGameEnd: "Iskoristili ste sve dostupne reči za izabrane teme u ovoj igri.\nIgra Završena.",
+                modalMessageNoWordsError: "Greška: Nema reči", modalMessageSelectTopic: "Molimo izaberite bar jednu temu u podešavanjima.",
+                modalMessageGameFinished: "Igra završena! Rezultati u prozoru iznad.", modalMessageStartGame: "Pritisnite \"Nova Igra\" da počnete.",
+                roundSubtitle: "Runda {0}/{1}", roundSubtitleSingle: "Runde: {0}",
+                aboutModal: { title: "O programu", content: "Igra za učenje reči iz pet sfera života.\n0.1.8 alpha verzija.\n\nNaučite 1111 REČI sa mnom!\n\nAutor: VOVSN\nGitHub: <a href=\"https://github.com/VOVSn\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"modal-link\">https://github.com/VOVSn</a>\n\nOvo je projekat otvorenog koda."}
+            },
+            sr_cyrillic: {
+                pageTitle: "1111 Речи - Игра Спајања", gameTitle: "1111 Речи",
+                topics: { basics: "Основе", food: "Храна", travel: "Путовања", tech: "Техника", business:"Посао" },
+                subtitleModeSimple: "Повежи речи са преводом", subtitleModeMemory: "Пронађи и запамти парове",
+                gameModeSimple: "Једноставно", gameModeMemory: "Меморија", mainLanguageLabel: "Главни Језик:",
+                foreignLanguageLabel: "Језик за Учење:", roundsLabel: "Рунде:", settingsMenuTitle: "Подешавања",
+                gameModeLabel: "Режим Игре", soundLabel: "Звук",
+                themeLabel: "Тема", themeLight: "Светла", themeDark: "Тамна", themeMemphis: "Мемфис", themeNavy: "Формална Тегет", themePixelQuest: "Пиксел Авантура",
+                aboutButton: "О програму", movesStatLabel: "Потези", pairsStatLabel: "Парови", timeStatLabel: "Време",
+                newGameButton: "Нова Игра", playAgainButton: "Играј Поново", closeButton: "Затвори", okButton: "У реду",
+                modalTitleGameEnd: "Честитамо!\n Спојили сте све парове!", modalTitleAllRoundsComplete: "Свих {0} рунди завршено!",
+                modalMessageStats: "Потеза: {0}.\nВреме: {1}.", modalMessageTotalStats: "Укупно потеза: {0}.\nУкупно време: {1}.",
+                modalMessageMistakes: "Грешке: {0}", modalTitleAttention: "Пажња",
+                modalMessageMustSelectTopic: "Мора бити изабрана бар једна тема.\nПодразумевано је изабрана 'Основе'.",
+                modalMessageNoWordsForRound: "Нема довољно јединствених речи за ову рунду.\nИгра заустављена. Покушајте да изаберете више тема или смањите број рунди.",
+                modalMessageAllWordsUsed: "Све речи из изабраних тема за тренутну игру су искоришћене. Започните нову игру или изаберите друге теме.",
+                modalMessageNoWordsGameEnd: "Искористили сте све доступне речи за изабране теме у овој игри.\nИгра Завршена.",
+                modalMessageNoWordsError: "Грешка: Нема речи", modalMessageSelectTopic: "Молимо изаберите бар једну тему у подешавањима.",
+                modalMessageGameFinished: "Игра завршена! Резултати у прозору изнад.", modalMessageStartGame: "Притисните \"Нова Игра\" да почнете.",
+                roundSubtitle: "Рунда {0}/{1}", roundSubtitleSingle: "Рунде: {0}",
+                aboutModal: { title: "О програму", content: "Игра за учење речи из пет сфера живота.\n0.1.8 алфа верзија.\n\nНаучите 1111 РЕЧИ са мном!\n\nАутор: VOVSN\nGitHub: <a href=\"https://github.com/VOVSn\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"modal-link\">https://github.com/VOVSn</a>\n\nОво је пројекат отвореног кода."}
+            },
         };
-        function _(key, ...args) {
-            let langStrings = uiStrings[currentMainLanguage] || uiStrings.en; // Fallback to English
-            let string = key.split('.').reduce((obj, i) => (obj ? obj[i] : null), langStrings);
 
-            if (!string && currentMainLanguage !== 'en') { // Fallback to English if string not found in current lang
+        function _(key, ...args) {
+            let langStrings = uiStrings[currentMainLanguage] || uiStrings.en;
+            let string = key.split('.').reduce((obj, i) => (obj ? obj[i] : null), langStrings);
+            if (!string && currentMainLanguage !== 'en') {
                  langStrings = uiStrings.en;
                  string = key.split('.').reduce((obj, i) => (obj ? obj[i] : null), langStrings);
             }
-
-            if (!string) return key; // Return key if not found anywhere
-
+            if (!string) return key;
             if (args.length) {
-                args.forEach((arg, index) => {
-                    string = string.replace(`{${index}}`, arg);
-                });
+                args.forEach((arg, index) => { string = string.replace(`{${index}}`, arg); });
             }
             return string;
         }
+
         function updateAllUIText() {
-            document.documentElement.lang = currentMainLanguage.split('_')[0]; // For 'sr_latin' -> 'sr'
+            document.documentElement.lang = currentMainLanguage.split('_')[0];
             document.querySelectorAll('[data-translate-key]').forEach(el => {
                 const key = el.dataset.translateKey;
-                if (el.tagName === 'TITLE') {
-                    el.textContent = _(key);
-                } else if (el.hasAttribute('title') && el.id === 'menu-button') { // Special case for menu button title
-                    el.title = _(key);
-                }
+                if (el.tagName === 'TITLE') { el.textContent = _(key); }
+                else if (el.hasAttribute('title') && el.id === 'menu-button') { el.title = _(key); }
                 else {
                     const textNode = Array.from(el.childNodes).find(node => node.nodeType === Node.TEXT_NODE && node.textContent.trim() !== '');
-                    if (textNode && (el.id === 'topic-selector-button' && key === 'topicsButton')) {
-                         textNode.textContent = _(key);
-                    } else if (!el.querySelector('[data-translate-key]')) {
+                    if (textNode && (el.id === 'topic-selector-button' && key === 'topicsButton')) { textNode.textContent = _(key); }
+                    else if (!el.querySelector('[data-translate-key]')) {
                         if (el.id === 'topic-selector-button' && el.querySelector('#topic-count-display')) {
                             const mainTextNode = Array.from(el.childNodes).find(node => node.nodeType === Node.TEXT_NODE && node.nodeValue.trim() !== '');
                             if(mainTextNode) mainTextNode.nodeValue = _(key) + " ";
-                        } else {
-                           el.textContent = _(key);
-                        }
+                        } else { el.textContent = _(key); }
                     } else {
-                        const ownTextNode = Array.from(el.childNodes).find(
-                            node => node.nodeType === Node.TEXT_NODE && node.textContent.trim() !== ''
-                        );
-                        if (ownTextNode) {
-                            ownTextNode.textContent = _(key);
-                        }
+                        const ownTextNode = Array.from(el.childNodes).find(node => node.nodeType === Node.TEXT_NODE && node.textContent.trim() !== '');
+                        if (ownTextNode) { ownTextNode.textContent = _(key); }
                     }
                 }
             });
             updateGameSubtitles();
             populateTopicDropdown();
+            populateThemeDropdown();
             gameModeLabelTextEl.textContent = _(gameMode === 'memory' ? 'gameModeMemory' : 'gameModeSimple');
             if (modalPlayAgainBtn) modalPlayAgainBtn.textContent = _('playAgainButton');
             if (modalCloseBtn) modalCloseBtn.textContent = _('closeButton');
@@ -1276,13 +1375,13 @@
             if (newGameButton) newGameButton.textContent = _('newGameButton');
             if (aboutButton) aboutButton.textContent = _('aboutButton');
             if (aboutModalTitleEl) aboutModalTitleEl.textContent = _('aboutModal.title');
-
             if (gameBoard.querySelector('.game-board-message')) {
                  if (!gameActive && !boardHasBeenSetUpAtLeastOnce) {
                     gameBoard.innerHTML = `<p class="game-board-message">${_('modalMessageStartGame')}</p>`;
                 }
             }
         }
+
 		const topicInternalKeys = ['basics', 'food', 'travel', 'tech', 'business'];
         let selectedTopics = ['basics'];
 
@@ -2507,16 +2606,45 @@
 			{ pairId: 1111, topic: 'business', translations: { en: "Business Ethics", ru: "Деловая этика / Бизнес-этика", es: "Ética empresarial / Ética de negocios", fr: "Éthique des affaires / Déontologie professionnelle", sr_latin: "Poslovna etika", sr_cyrillic: "Пословна етика" }},
 		];
 
-        function showGameEndModal(title, message) {
+        function applyTheme(themeKey) { /* ... unchanged ... */
+            if (!themes[themeKey]) return;
+            document.body.classList.remove(...Object.keys(themes).map(tKey => `theme-${tKey}`));
+            document.body.classList.add(`theme-${themeKey}`);
+            document.documentElement.style.colorScheme = themes[themeKey].base;
+            const colorSchemeMeta = document.querySelector('meta[name="color-scheme"]');
+            if (colorSchemeMeta) {
+                colorSchemeMeta.content = themes[themeKey].base;
+            }
+            currentTheme = themeKey;
+            localStorage.setItem('selectedTheme', themeKey);
+        }
+
+        function populateThemeDropdown() { /* ... unchanged ... */
+            if (!themeSelect) return;
+            const savedValue = currentTheme || themeSelect.value;
+            themeSelect.innerHTML = '';
+            Object.keys(themes).forEach(key => {
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = _(themes[key].nameKey);
+                themeSelect.appendChild(option);
+            });
+            if (themes[savedValue]) {
+                 themeSelect.value = savedValue;
+            } else if (themeSelect.options.length > 0) {
+                 themeSelect.value = themeSelect.options[0].value;
+            }
+        }
+        function showGameEndModal(title, message) { /* ... unchanged ... */
             modalTitleEl.textContent = title;
             modalMessageTextEl.innerHTML = message.replace(/\n/g, '<br>');
             gameEndModal.classList.add('active');
             lockBoard = true;
         }
-        function hideGameEndModal() {
+        function hideGameEndModal() { /* ... unchanged ... */
             gameEndModal.classList.remove('active');
         }
-        function showAboutModal() {
+        function showAboutModal() { /* ... unchanged ... */
             if (settingsDropdown.classList.contains('active')) {
                 settingsDropdown.classList.remove('active');
             }
@@ -2528,29 +2656,19 @@
                 aboutModal.classList.add('active');
             }
         }
-        function hideAboutModal() {
-            if (aboutModal) {
+        function hideAboutModal() { /* ... unchanged ... */
+             if (aboutModal) {
                 aboutModal.classList.remove('active');
             }
         }
-        function playSound(soundType) {
+        function playSound(soundType) { /* ... unchanged ... */
             if (!soundEnabled) return;
             if (!audioCtx) {
-                try {
-                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                } catch (e) {
-                    console.error("Web Audio API is not supported in this browser.", e);
-                    soundEnabled = false;
-                    if(soundToggle) soundToggle.checked = false;
-                    return;
-                }
+                try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+                catch (e) { console.error("Web Audio API is not supported.", e); soundEnabled = false; if(soundToggle) soundToggle.checked = false; return; }
             }
             if (audioCtx.state === 'suspended') audioCtx.resume();
-
-            let oscillator, gainNode;
-            const now = audioCtx.currentTime;
-            const baseVolume = 0.05;
-
+            let oscillator, gainNode; const now = audioCtx.currentTime; const baseVolume = 0.05;
             switch (soundType) {
                 case 'flip':
                     oscillator = audioCtx.createOscillator(); gainNode = audioCtx.createGain();
@@ -2588,121 +2706,65 @@
                     break;
             }
         }
-        function shuffle(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
+        function shuffle(array) { /* ... unchanged ... */
+            for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } return array;
         }
-        function createCardElement(cardDisplayData) {
-            const card = document.createElement('div');
-            card.classList.add('memory-card');
-            card.dataset.pairId = cardDisplayData.pairId;
-            card.dataset.langKey = cardDisplayData.langKey;
-
-            const cardInner = document.createElement('div');
-            cardInner.classList.add('card-inner');
-
-            const cardFront = document.createElement('div');
-            cardFront.classList.add('card-face', 'card-front');
-            const cardContent = document.createElement('div');
-            cardContent.classList.add('card-content');
-
-            const text = cardDisplayData.displayText;
-            cardContent.textContent = text;
-
-            if (text.length > 25) {
-                 cardContent.classList.add('xx-small-text');
-            } else if (text.length > 20) {
-                cardContent.classList.add('x-small-text');
-            } else if (text.length > 15) {
-                cardContent.classList.add('small-text');
-            }
-
+        function createCardElement(cardDisplayData) { /* ... unchanged ... */
+            const card = document.createElement('div'); card.classList.add('memory-card');
+            card.dataset.pairId = cardDisplayData.pairId; card.dataset.langKey = cardDisplayData.langKey;
+            const cardInner = document.createElement('div'); cardInner.classList.add('card-inner');
+            const cardFront = document.createElement('div'); cardFront.classList.add('card-face', 'card-front');
+            const cardContent = document.createElement('div'); cardContent.classList.add('card-content');
+            const text = cardDisplayData.displayText; cardContent.textContent = text;
+            if (text.length > 25) { cardContent.classList.add('xx-small-text'); }
+            else if (text.length > 20) { cardContent.classList.add('x-small-text'); }
+            else if (text.length > 15) { cardContent.classList.add('small-text'); }
             cardFront.appendChild(cardContent);
-
-            const cardBack = document.createElement('div');
-            cardBack.classList.add('card-face', 'card-back');
-            cardBack.textContent = '?';
-
-            cardInner.appendChild(cardFront);
-            cardInner.appendChild(cardBack);
-            card.appendChild(cardInner);
-
-            card.addEventListener('click', handleCardClick);
-            return card;
+            const cardBack = document.createElement('div'); cardBack.classList.add('card-face', 'card-back'); cardBack.textContent = '?';
+            cardInner.appendChild(cardFront); cardInner.appendChild(cardBack); card.appendChild(cardInner);
+            card.addEventListener('click', handleCardClick); return card;
         }
-        function updateGameSubtitles() {
+        function updateGameSubtitles() { /* ... unchanged ... */
             gameSubtitleModeEl.textContent = _(gameMode === 'simple' ? 'subtitleModeSimple' : 'subtitleModeMemory');
             if (gameActive || currentRound > 0) {
-                 if (selectedNumberOfRounds > 1) {
-                    gameSubtitleRoundEl.textContent = _('roundSubtitle', currentRound, selectedNumberOfRounds);
-                } else {
-                    gameSubtitleRoundEl.textContent = "";
-                }
-            } else {
-                 gameSubtitleRoundEl.textContent = _('roundSubtitleSingle', selectedNumberOfRounds);
-            }
+                 if (selectedNumberOfRounds > 1) { gameSubtitleRoundEl.textContent = _('roundSubtitle', currentRound, selectedNumberOfRounds); }
+                 else { gameSubtitleRoundEl.textContent = ""; }
+            } else { gameSubtitleRoundEl.textContent = _('roundSubtitleSingle', selectedNumberOfRounds); }
         }
-        function initGame() {
-            gameActive = false;
-            lockBoard = true;
-            boardHasBeenSetUpAtLeastOnce = false;
-
-            currentRound = 0;
-            wordsUsedInAllRounds.clear();
-            totalMovesAcrossAllRounds = 0;
-            totalTimeAcrossAllRounds = 0;
-
-            clearInterval(roundTimerInterval);
-            roundTimerInterval = null;
-
-            updateGameSubtitles();
-            proceedToNextRound();
+        function initGame() { /* ... unchanged ... */
+            gameActive = false; lockBoard = true; boardHasBeenSetUpAtLeastOnce = false;
+            currentRound = 0; wordsUsedInAllRounds.clear(); totalMovesAcrossAllRounds = 0;
+            totalTimeAcrossAllRounds = 0; totalSuccessfulMatchesAcrossAllRounds = 0;
+            clearInterval(roundTimerInterval); roundTimerInterval = null;
+            updateGameSubtitles(); proceedToNextRound();
         }
-        function proceedToNextRound() {
-            currentRound++;
-            lockBoard = true;
-            gameActive = false;
-
+        function proceedToNextRound() { /* ... unchanged ... */
+            currentRound++; lockBoard = true; gameActive = false;
             if (currentRound > selectedNumberOfRounds) {
-                playSound('win');
-                let finalMessage, modalTitleKey;
+                playSound('win'); let finalMessage = "", modalTitleText = ""; let mistakesMessagePart = "";
                 if (selectedNumberOfRounds > 1) {
-                     modalTitleKey = 'modalTitleAllRoundsComplete';
-                     finalMessage = _('modalMessageTotalStats', totalMovesAcrossAllRounds, formatTime(totalTimeAcrossAllRounds));
+                    modalTitleText = _('modalTitleAllRoundsComplete', selectedNumberOfRounds);
+                    const totalMistakes = totalMovesAcrossAllRounds - totalSuccessfulMatchesAcrossAllRounds;
+                    finalMessage = _('modalMessageTotalStats', totalMovesAcrossAllRounds, formatTime(totalTimeAcrossAllRounds));
+                    if (totalMistakes >= 0) { mistakesMessagePart = "\n" + _('modalMessageMistakes', totalMistakes); }
                 } else {
-                    modalTitleKey = "modalTitleGameEnd";
+                    modalTitleText = _('modalTitleGameEnd');
+                    const roundMistakes = moves - matches;
                     finalMessage = _('modalMessageStats', moves, formatTime(roundSecondsElapsed));
+                    if (roundMistakes >= 0) { mistakesMessagePart = "\n" + _('modalMessageMistakes', roundMistakes); }
                 }
-                const modalTitleText = _(modalTitleKey, selectedNumberOfRounds > 1 ? selectedNumberOfRounds : undefined);
-                gameSubtitleRoundEl.textContent = modalTitleText;
+                finalMessage += mistakesMessagePart; gameSubtitleRoundEl.textContent = modalTitleText;
                 showGameEndModal(modalTitleText, finalMessage);
-                currentRound = 0;
-                gameBoard.innerHTML = `<p class="game-board-message">${_('modalMessageGameFinished')}</p>`;
-                updateStats();
-                timeValueEl.textContent = formatTime(0);
-                return;
+                currentRound = 0; gameBoard.innerHTML = `<p class="game-board-message">${_('modalMessageGameFinished')}</p>`;
+                updateStats(); timeValueEl.textContent = formatTime(0); return;
             }
-
-            updateGameSubtitles();
-            moves = 0;
-            matches = 0;
-            firstCard = null;
-            secondCard = null;
-
-            clearInterval(roundTimerInterval);
-            roundTimerInterval = null;
-            roundSecondsElapsed = 0;
+            updateGameSubtitles(); moves = 0; matches = 0; firstCard = null; secondCard = null;
+            clearInterval(roundTimerInterval); roundTimerInterval = null; roundSecondsElapsed = 0;
             timeValueEl.textContent = formatTime(roundSecondsElapsed);
-
-            updateStats();
-            setupBoardForCurrentRound();
+            updateStats(); setupBoardForCurrentRound();
         }
-        function setupBoardForCurrentRound() {
+        function setupBoardForCurrentRound() { /* ... unchanged ... */
             gameBoard.innerHTML = '';
-
             let availableConcepts = allWordPairsMasterList
                 .filter(word => selectedTopics.includes(word.topic))
                 .filter(word => word.translations[currentMainLanguage] && word.translations[currentForeignLanguage])
@@ -2710,423 +2772,220 @@
 
             if (availableConcepts.length === 0 && selectedTopics.length > 0 && boardHasBeenSetUpAtLeastOnce) {
                  gameBoard.innerHTML = `<p class="game-board-message">${_('modalMessageAllWordsUsed')}</p>`;
-                 currentTotalPairsInRound = 0;
-                 boardHasBeenSetUpAtLeastOnce = true;
-                 gameActive = false;
-                 lockBoard = true;
-                 updateStats();
+                 currentTotalPairsInRound = 0; boardHasBeenSetUpAtLeastOnce = true; gameActive = false; lockBoard = true; updateStats();
                   if (currentRound > 0 && selectedNumberOfRounds >=1) {
                     showGameEndModal(_('modalMessageNoWordsGameEnd'), _('modalMessageNoWordsGameEnd'));
                     let roundDisplay = currentRound -1;
-                    if (roundDisplay <= 0 && selectedNumberOfRounds === 1) roundDisplay = 1;
-                    else if (roundDisplay <= 0) roundDisplay = selectedNumberOfRounds;
-
-                    gameSubtitleRoundEl.textContent = `${_('roundSubtitle', roundDisplay, selectedNumberOfRounds)} - ${_('modalMessageNoWordsError')}`;
-                    currentRound = 0;
-                }
-                return;
+                    if (roundDisplay <= 0 && selectedNumberOfRounds === 1) roundDisplay = 1; else if (roundDisplay <= 0) roundDisplay = selectedNumberOfRounds;
+                    gameSubtitleRoundEl.textContent = `${_('roundSubtitle', roundDisplay, selectedNumberOfRounds)} - ${_('modalMessageNoWordsError')}`; currentRound = 0;
+                } return;
             } else if (availableConcepts.length < 1 && selectedTopics.length > 0) {
                 gameBoard.innerHTML = `<p class="game-board-message">${_('modalMessageNoWordsForRound')}</p>`;
                 currentTotalPairsInRound = 0;
-                gameSubtitleRoundEl.textContent += ` - ${_('modalMessageNoWordsError')}`;
-                lockBoard = true;
-                gameActive = false;
-                clearInterval(roundTimerInterval); roundTimerInterval = null;
-                updateStats();
-                boardHasBeenSetUpAtLeastOnce = true;
-                return;
+                if (currentRound > 0 || selectedNumberOfRounds > 1) { gameSubtitleRoundEl.textContent += ` - ${_('modalMessageNoWordsError')}`; }
+                lockBoard = true; gameActive = false; clearInterval(roundTimerInterval); roundTimerInterval = null;
+                updateStats(); boardHasBeenSetUpAtLeastOnce = true; return;
             } else if (selectedTopics.length === 0) {
                  gameBoard.innerHTML = `<p class="game-board-message">${_('modalMessageSelectTopic')}</p>`;
-                 currentTotalPairsInRound = 0;
-                 updateStats();
-                 lockBoard = true;
-                 gameActive = false;
-                 boardHasBeenSetUpAtLeastOnce = true;
-                 return;
+                 currentTotalPairsInRound = 0; updateStats(); lockBoard = true; gameActive = false; boardHasBeenSetUpAtLeastOnce = true; return;
             }
-
             const shuffledConcepts = shuffle([...availableConcepts]);
             currentTotalPairsInRound = Math.min(MAX_PAIRS_DISPLAYED, shuffledConcepts.length);
-
-
             if (currentTotalPairsInRound === 0) {
-                const messageText = (wordsUsedInAllRounds.size > 0 && availableConcepts.length === 0) ?
-                     _('modalMessageAllWordsUsed') :
-                     _('modalMessageNoWordsForRound');
+                const messageText = (wordsUsedInAllRounds.size > 0 && availableConcepts.length === 0) ? _('modalMessageAllWordsUsed') : _('modalMessageNoWordsForRound');
                 gameBoard.innerHTML = `<p class="game-board-message">${messageText}</p>`;
-                updateStats();
-                lockBoard = true;
-                gameActive = false;
-                boardHasBeenSetUpAtLeastOnce = true;
+                updateStats(); lockBoard = true; gameActive = false; boardHasBeenSetUpAtLeastOnce = true;
                 if (currentRound > 0 && selectedNumberOfRounds > 1 && availableConcepts.length === 0 && wordsUsedInAllRounds.size > 0) {
                     showGameEndModal(_('modalMessageNoWordsGameEnd'), _('modalMessageNoWordsGameEnd'));
                     let roundDisplay = currentRound - 1 > 0 ? currentRound - 1 : 1;
-                    gameSubtitleRoundEl.textContent = `${_('roundSubtitle', roundDisplay, selectedNumberOfRounds)} - ${_('modalMessageNoWordsError')}`;
-                    currentRound = 0;
-                } else if (currentRound > 0 && selectedNumberOfRounds >= 1) {
-                    gameSubtitleRoundEl.textContent += ` - ${_('modalMessageNoWordsError')}`;
-                }
+                    gameSubtitleRoundEl.textContent = `${_('roundSubtitle', roundDisplay, selectedNumberOfRounds)} - ${_('modalMessageNoWordsError')}`; currentRound = 0;
+                } else if (currentRound > 0 || selectedNumberOfRounds > 1) { gameSubtitleRoundEl.textContent += ` - ${_('modalMessageNoWordsError')}`; }
                 return;
             }
-
             const conceptsForThisRound = shuffledConcepts.slice(0, currentTotalPairsInRound);
-
             let gameCardsData = [];
             conceptsForThisRound.forEach(pairConcept => {
-                gameCardsData.push({
-                    displayText: pairConcept.translations[currentMainLanguage],
-                    pairId: pairConcept.pairId,
-                    langKey: currentMainLanguage
-                });
-                gameCardsData.push({
-                    displayText: pairConcept.translations[currentForeignLanguage],
-                    pairId: pairConcept.pairId,
-                    langKey: currentForeignLanguage
-                });
+                gameCardsData.push({ displayText: pairConcept.translations[currentMainLanguage], pairId: pairConcept.pairId, langKey: currentMainLanguage });
+                gameCardsData.push({ displayText: pairConcept.translations[currentForeignLanguage], pairId: pairConcept.pairId, langKey: currentForeignLanguage });
             });
-
             shuffle(gameCardsData);
-
-            gameCardsData.forEach(data => {
-                const cardElement = createCardElement(data);
-                gameBoard.appendChild(cardElement);
-            });
-
+            gameCardsData.forEach(data => { gameBoard.appendChild(createCardElement(data)); });
             const allCards = gameBoard.querySelectorAll('.memory-card');
-            if (gameMode === 'simple') {
-                // Simple mode: cards start face-up (content showing).
-                // Ensure no .is-flipped class.
-                allCards.forEach(cardEl => cardEl.classList.remove('is-flipped'));
-                lockBoard = false;
-            } else { // Memory mode
-                // Memory mode: cards briefly show content, then flip to '?' (face-down).
-                lockBoard = true;
-                // 1. Initially, show content (face-up, no .is-flipped class)
-                allCards.forEach(cardEl => cardEl.classList.remove('is-flipped'));
-
-                // 2. After a delay, flip to '?' (face-down, add .is-flipped class)
+            if (gameMode === 'simple') { allCards.forEach(cardEl => cardEl.classList.remove('is-flipped')); lockBoard = false; }
+            else {
+                lockBoard = true; allCards.forEach(cardEl => cardEl.classList.remove('is-flipped'));
                 setTimeout(() => {
-                    allCards.forEach(cardEl => {
-                        if (!cardEl.classList.contains('matched')) { // Don't flip already matched ones (safety)
-                            cardEl.classList.add('is-flipped'); // Add .is-flipped to show '?'
-                        }
-                    });
-                    lockBoard = false; // Board is ready for play
-                }, 1500 + (currentTotalPairsInRound * 100)); // Time content is visible
+                    allCards.forEach(cardEl => { if (!cardEl.classList.contains('matched')) { cardEl.classList.add('is-flipped'); }});
+                    lockBoard = false;
+                }, 1500 + (currentTotalPairsInRound * 100));
             }
-
-            updateStats();
-            gameActive = true;
-            boardHasBeenSetUpAtLeastOnce = true;
+            updateStats(); gameActive = true; boardHasBeenSetUpAtLeastOnce = true;
         }
-
-        function handleCardClick() {
-            if (lockBoard || !gameActive || this.classList.contains('matched') || this === firstCard) {
-                return;
-            }
-
-            // Card flipping logic based on gameMode:
-            // CSS: .is-flipped on .memory-card -> shows card-back ('?')
-            //      No .is-flipped -> shows card-front (content)
-            if (gameMode === 'memory') {
-                // In memory mode, a clickable card is face-down (showing '?'), meaning it HAS 'is-flipped'.
-                // Clicking it should reveal content by REMOVING 'is-flipped'.
-                if (this.classList.contains('is-flipped')) {
-                    this.classList.remove('is-flipped'); // Remove .is-flipped to show content
-                    playSound('flip');
-                }
-                // If card was already face-up (no 'is-flipped'), it shouldn't be processed by this click
-                // if it's not the firstCard or already matched (handled by initial checks).
-            } else { // simple mode
-                // Cards are always face-up. Play sound only for the first card of a pair selection.
-                if (!firstCard) {
-                    playSound('flip');
-                }
-            }
-
-            if (moves === 0 && matches === 0 && !roundTimerInterval && gameActive) {
-                startRoundTimer();
-            }
-
-            this.classList.add('selected'); // Visual cue for selection
-
-            if (!firstCard) {
-                firstCard = this; // 'this' is now face-up (content showing)
-                return;
-            }
-
-            secondCard = this; // 'this' is also now face-up (content showing)
-            // Sound for second card in simple mode was here, removed as first click sound should suffice.
-
-            moves++;
-            totalMovesAcrossAllRounds++;
-            updateStats();
-            lockBoard = true;
-
-            checkForMatch();
+        function handleCardClick() { /* ... unchanged ... */
+            if (lockBoard || !gameActive || this.classList.contains('matched') || this === firstCard) return;
+            if (gameMode === 'memory') { if (this.classList.contains('is-flipped')) { this.classList.remove('is-flipped'); playSound('flip'); }}
+            else { if (!firstCard) { playSound('flip'); }}
+            if (moves === 0 && matches === 0 && !roundTimerInterval && gameActive) { startRoundTimer(); }
+            this.classList.add('selected');
+            if (!firstCard) { firstCard = this; return; }
+            secondCard = this; moves++;
+            if (selectedNumberOfRounds > 1) totalMovesAcrossAllRounds++; else totalMovesAcrossAllRounds = moves;
+            updateStats(); lockBoard = true; checkForMatch();
         }
-
-        function checkForMatch() {
-            const isMatch = firstCard.dataset.pairId === secondCard.dataset.pairId &&
-                            firstCard.dataset.langKey !== secondCard.dataset.langKey;
-
+        function checkForMatch() { /* ... unchanged ... */
+            const isMatch = firstCard.dataset.pairId === secondCard.dataset.pairId && firstCard.dataset.langKey !== secondCard.dataset.langKey;
             if (isMatch) {
-                playSound('match');
-                matches++;
-                updateStats();
-                firstCard.classList.remove('selected');
-                secondCard.classList.remove('selected');
-                firstCard.classList.add('matched');
-                secondCard.classList.add('matched');
-                // In simple mode, matched cards stay face-up (no .is-flipped).
-                // In memory mode, matched cards also stay face-up (content showing, so NO .is-flipped class).
-                resetTurn();
-                checkRoundWin();
+                playSound('match'); matches++; updateStats();
+                firstCard.classList.remove('selected'); secondCard.classList.remove('selected');
+                firstCard.classList.add('matched'); secondCard.classList.add('matched');
+                resetTurn(); checkRoundWin();
             } else {
-                playSound('noMatch');
-                firstCard.classList.add('incorrect');
-                secondCard.classList.add('incorrect');
+                playSound('noMatch'); firstCard.classList.add('incorrect'); secondCard.classList.add('incorrect');
                 setTimeout(() => {
-                    firstCard.classList.remove('selected', 'incorrect');
-                    secondCard.classList.remove('selected', 'incorrect');
-                    if (gameMode === 'memory') {
-                        // Flip back to face-down ('?') if not matched.
-                        // Face-down means ADDING 'is-flipped'.
-                        firstCard.classList.add('is-flipped');
-                        secondCard.classList.add('is-flipped');
-                    }
-                    // In simple mode, incorrect cards remain face-up.
+                    firstCard.classList.remove('selected', 'incorrect'); secondCard.classList.remove('selected', 'incorrect');
+                    if (gameMode === 'memory') { firstCard.classList.add('is-flipped'); secondCard.classList.add('is-flipped'); }
                     resetTurn();
                 }, 1000);
             }
         }
-        function resetTurn() {
-            firstCard = null;
-            secondCard = null;
-            lockBoard = !(matches < currentTotalPairsInRound && gameActive);
+        function resetTurn() { /* ... unchanged ... */
+             firstCard = null; secondCard = null; lockBoard = !(matches < currentTotalPairsInRound && gameActive);
         }
-        function updateStats() {
-            movesValueEl.textContent = moves;
-            matchesValueEl.textContent = `${matches}/${currentTotalPairsInRound}`;
+        function updateStats() { /* ... unchanged ... */
+            movesValueEl.textContent = moves; matchesValueEl.textContent = `${matches}/${currentTotalPairsInRound}`;
         }
-        function startRoundTimer() {
-            roundSecondsElapsed = 0;
-            timeValueEl.textContent = formatTime(roundSecondsElapsed);
-            clearInterval(roundTimerInterval);
+        function startRoundTimer() { /* ... unchanged ... */
+            timeValueEl.textContent = formatTime(roundSecondsElapsed); clearInterval(roundTimerInterval);
             roundTimerInterval = setInterval(() => {
                 if (gameActive) {
                     roundSecondsElapsed++;
-                    totalTimeAcrossAllRounds++;
+                    if (selectedNumberOfRounds > 1) totalTimeAcrossAllRounds++; else totalTimeAcrossAllRounds = roundSecondsElapsed;
                     timeValueEl.textContent = formatTime(roundSecondsElapsed);
-                } else {
-                    clearInterval(roundTimerInterval);
-                }
+                } else { clearInterval(roundTimerInterval); }
             }, 1000);
         }
-        function formatTime(totalSeconds) {
-            const minutes = Math.floor(totalSeconds / 60);
-            const seconds = totalSeconds % 60;
+        function formatTime(totalSeconds) { /* ... unchanged ... */
+            const minutes = Math.floor(totalSeconds / 60); const seconds = totalSeconds % 60;
             return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
         }
-        function checkRoundWin() {
+        function checkRoundWin() { /* ... unchanged ... */
             if (matches === currentTotalPairsInRound && currentTotalPairsInRound > 0) {
-                clearInterval(roundTimerInterval);
-                gameActive = false;
-                lockBoard = true;
-                playSound('win');
-
+                clearInterval(roundTimerInterval); gameActive = false; lockBoard = true; playSound('win');
+                if (selectedNumberOfRounds > 1) { totalSuccessfulMatchesAcrossAllRounds += matches; }
+                else { totalSuccessfulMatchesAcrossAllRounds = matches; }
                 const cardsInRound = Array.from(gameBoard.querySelectorAll('.memory-card.matched'));
                 const pairIdsInThisRound = new Set(cardsInRound.map(card => card.dataset.pairId.toString()));
                 pairIdsInThisRound.forEach(pid => wordsUsedInAllRounds.add(pid));
-
-                setTimeout(() => {
-                    proceedToNextRound();
-                }, 1500);
+                setTimeout(() => { proceedToNextRound(); }, 1500);
             }
         }
-        function handleSettingsChangeAndRestart() {
-            if (settingsDropdown.classList.contains('active')) settingsDropdown.classList.remove('active');
-            if (topicDropdown.classList.contains('active')) {
-                topicDropdown.classList.remove('active');
-                topicSelectorButton.classList.remove('open');
-            }
-            initGame(); // This will set up the board with new settings, including gameMode.
+        function handleSettingsChangeAndRestart() { /* ... unchanged ... */
+            if (topicDropdown.classList.contains('active')) { topicDropdown.classList.remove('active'); topicSelectorButton.classList.remove('open'); }
+            initGame();
         }
-        function populateTopicDropdown() {
-            topicDropdown.innerHTML = '';
-            const fragment = document.createDocumentFragment();
+        function populateTopicDropdown() { /* ... unchanged ... */
+            topicDropdown.innerHTML = ''; const fragment = document.createDocumentFragment();
             topicInternalKeys.forEach(key => {
-                const label = document.createElement('label');
-                const checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                checkbox.value = key;
-                checkbox.name = 'topic-checkbox';
-                checkbox.checked = selectedTopics.includes(key);
-                checkbox.addEventListener('change', handleTopicSelectionChange);
-
-                label.appendChild(checkbox);
-                label.appendChild(document.createTextNode(" " + _(`topics.${key}`)));
+                const label = document.createElement('label'); const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox'; checkbox.value = key; checkbox.name = 'topic-checkbox';
+                checkbox.checked = selectedTopics.includes(key); checkbox.addEventListener('change', handleTopicSelectionChange);
+                label.appendChild(checkbox); label.appendChild(document.createTextNode(" " + _(`topics.${key}`)));
                 fragment.appendChild(label);
             });
-            topicDropdown.appendChild(fragment);
-            updateSelectedTopicsDisplay();
+            topicDropdown.appendChild(fragment); updateSelectedTopicsDisplay();
         }
-        function updateSelectedTopicsDisplay() {
+        function updateSelectedTopicsDisplay() { /* ... unchanged ... */
             topicCountDisplay.textContent = selectedTopics.length;
         }
-        function handleTopicSelectionChange() {
+        function handleTopicSelectionChange() { /* ... unchanged ... */
             const checkboxes = topicDropdown.querySelectorAll('input[type="checkbox"][name="topic-checkbox"]');
-            selectedTopics = [];
-            checkboxes.forEach(cb => {
-                if (cb.checked) {
-                    selectedTopics.push(cb.value);
-                }
-            });
-
+            selectedTopics = []; checkboxes.forEach(cb => { if (cb.checked) selectedTopics.push(cb.value); });
             if (selectedTopics.length === 0) {
-                selectedTopics.push('basics');
-                const basicsCheckbox = topicDropdown.querySelector('input[value="basics"]');
+                selectedTopics.push('basics'); const basicsCheckbox = topicDropdown.querySelector('input[value="basics"]');
                 if (basicsCheckbox) basicsCheckbox.checked = true;
-
                 showGameEndModal(_('modalTitleAttention'), _('modalMessageMustSelectTopic'));
-                modalPlayAgainBtn.style.display = 'none';
-                modalCloseBtn.textContent = _('okButton');
-
+                modalPlayAgainBtn.style.display = 'none'; modalCloseBtn.textContent = _('okButton');
                 const tempCloseHandler = () => {
-                    hideGameEndModal();
-                    modalPlayAgainBtn.style.display = '';
-                    modalCloseBtn.textContent = _('closeButton');
+                    hideGameEndModal(); modalPlayAgainBtn.style.display = ''; modalCloseBtn.textContent = _('closeButton');
                     modalCloseBtn.removeEventListener('click', tempCloseHandler);
                     if(originalModalCloseBtnHandler) modalCloseBtn.addEventListener('click', originalModalCloseBtnHandler);
                 };
                  if(originalModalCloseBtnHandler) modalCloseBtn.removeEventListener('click', originalModalCloseBtnHandler);
                 modalCloseBtn.addEventListener('click', tempCloseHandler);
             }
-            updateSelectedTopicsDisplay();
-            localStorage.setItem('selectedTopics', JSON.stringify(selectedTopics));
+            updateSelectedTopicsDisplay(); localStorage.setItem('selectedTopics', JSON.stringify(selectedTopics));
             handleSettingsChangeAndRestart();
         }
 
-        topicSelectorButton.addEventListener('click', (event) => {
-            event.stopPropagation();
-            topicDropdown.classList.toggle('active');
-            topicSelectorButton.classList.toggle('open');
-            if (settingsDropdown.classList.contains('active')) {
-                settingsDropdown.classList.remove('active');
-            }
+        topicSelectorButton.addEventListener('click', (event) => { /* ... unchanged ... */
+            event.stopPropagation(); topicDropdown.classList.toggle('active'); topicSelectorButton.classList.toggle('open');
+            if (settingsDropdown.classList.contains('active')) settingsDropdown.classList.remove('active');
         });
         newGameButton.addEventListener('click', initGame);
-        menuButton.addEventListener('click', (event) => {
-            event.stopPropagation();
-            settingsDropdown.classList.toggle('active');
-            if (topicDropdown.classList.contains('active')) {
-                topicDropdown.classList.remove('active');
-                topicSelectorButton.classList.remove('open');
-            }
+        menuButton.addEventListener('click', (event) => { /* ... unchanged ... */
+            event.stopPropagation(); settingsDropdown.classList.toggle('active');
+            if (topicDropdown.classList.contains('active')) { topicDropdown.classList.remove('active'); topicSelectorButton.classList.remove('open');}
         });
-        document.addEventListener('click', (event) => {
-            if (settingsDropdown && !settingsDropdown.contains(event.target) && menuButton && !menuButton.contains(event.target)) {
-                settingsDropdown.classList.remove('active');
-            }
-            if (topicDropdown && !topicDropdown.contains(event.target) && topicSelectorButton && !topicSelectorButton.contains(event.target)) {
-                topicDropdown.classList.remove('active');
-                topicSelectorButton.classList.remove('open');
-            }
+        document.addEventListener('click', (event) => { /* ... unchanged ... */
+            if (settingsDropdown && !settingsDropdown.contains(event.target) && menuButton && !menuButton.contains(event.target)) settingsDropdown.classList.remove('active');
+            if (topicDropdown && !topicDropdown.contains(event.target) && topicSelectorButton && !topicSelectorButton.contains(event.target)) { topicDropdown.classList.remove('active'); topicSelectorButton.classList.remove('open'); }
         });
-        soundToggle.addEventListener('change', () => {
-            soundEnabled = soundToggle.checked;
-            localStorage.setItem('soundEnabled', soundEnabled.toString());
+        soundToggle.addEventListener('change', () => { /* ... unchanged ... */
+            soundEnabled = soundToggle.checked; localStorage.setItem('soundEnabled', soundEnabled.toString());
             if (soundEnabled && audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
         });
-        darkModeToggle.addEventListener('change', () => {
-            isDarkMode = darkModeToggle.checked;
-            document.body.classList.toggle('dark-mode', isDarkMode);
-            localStorage.setItem('darkMode', isDarkMode.toString());
-        });
 
-        gameModeToggle.addEventListener('change', () => {
-            gameMode = gameModeToggle.checked ? 'memory' : 'simple';
-            gameModeLabelTextEl.textContent = _(gameMode === 'memory' ? 'gameModeMemory' : 'gameModeSimple');
-            localStorage.setItem('gameMode', gameMode);
-            // Always restart game on mode change to ensure correct setup.
-            handleSettingsChangeAndRestart();
-        });
-
-        roundsSelect.addEventListener('change', (e) => {
-            const newNumRounds = parseInt(e.target.value);
-            if (newNumRounds === selectedNumberOfRounds) return;
-
-            selectedNumberOfRounds = newNumRounds;
-            localStorage.setItem('selectedNumberOfRounds', selectedNumberOfRounds.toString());
-            if (gameActive || currentRound > 0 || boardHasBeenSetUpAtLeastOnce) {
-                initGame();
-            } else {
-                updateGameSubtitles();
-            }
-        });
-
-        function populateLanguageDropdown(selectElement, selectedLangKeyToSet) {
-            const currentValue = selectElement.value;
-            selectElement.innerHTML = '';
-
-            Object.keys(availableLanguages).forEach(key => {
-                const option = document.createElement('option');
-                option.value = key;
-                option.textContent = availableLanguages[key];
-                selectElement.appendChild(option);
+        if (themeSelect) {
+            themeSelect.addEventListener('change', (e) => {
+                applyTheme(e.target.value);
             });
-
-            if (availableLanguages[selectedLangKeyToSet]) {
-                selectElement.value = selectedLangKeyToSet;
-            } else if (availableLanguages[currentValue]) {
-                selectElement.value = currentValue;
-            } else if (selectElement.options.length > 0) {
-                selectElement.value = selectElement.options[0].value;
-            }
         }
 
-        mainLangSelect.addEventListener('change', (e) => {
-            const newMainLang = e.target.value;
-            currentMainLanguage = newMainLang;
-
+        gameModeToggle.addEventListener('change', () => { /* ... unchanged ... */
+            gameMode = gameModeToggle.checked ? 'memory' : 'simple';
+            gameModeLabelTextEl.textContent = _(gameMode === 'memory' ? 'gameModeMemory' : 'gameModeSimple');
+            localStorage.setItem('gameMode', gameMode); handleSettingsChangeAndRestart();
+        });
+        roundsSelect.addEventListener('change', (e) => { /* ... unchanged ... */
+            const newNumRounds = parseInt(e.target.value); if (newNumRounds === selectedNumberOfRounds) return;
+            selectedNumberOfRounds = newNumRounds; localStorage.setItem('selectedNumberOfRounds', selectedNumberOfRounds.toString());
+            if (gameActive || currentRound > 0 || boardHasBeenSetUpAtLeastOnce) initGame(); else updateGameSubtitles();
+        });
+        function populateLanguageDropdown(selectElement, selectedLangKeyToSet) { /* ... unchanged ... */
+            const currentValue = selectElement.value; selectElement.innerHTML = '';
+            Object.keys(availableLanguages).forEach(key => {
+                const option = document.createElement('option'); option.value = key; option.textContent = availableLanguages[key];
+                selectElement.appendChild(option);
+            });
+            if (availableLanguages[selectedLangKeyToSet]) selectElement.value = selectedLangKeyToSet;
+            else if (availableLanguages[currentValue]) selectElement.value = currentValue;
+            else if (selectElement.options.length > 0) selectElement.value = selectElement.options[0].value;
+        }
+        mainLangSelect.addEventListener('change', (e) => { /* ... unchanged ... */
+            const newMainLang = e.target.value; currentMainLanguage = newMainLang;
             if (currentMainLanguage === currentForeignLanguage) {
                 const otherAvailableLangs = Object.keys(availableLanguages).filter(lang => lang !== currentMainLanguage);
                 currentForeignLanguage = otherAvailableLangs.length > 0 ? otherAvailableLangs[0] : (currentMainLanguage === 'en' ? 'ru' : 'en');
-                foreignLangSelect.value = currentForeignLanguage;
-                localStorage.setItem('currentForeignLanguage', currentForeignLanguage);
+                foreignLangSelect.value = currentForeignLanguage; localStorage.setItem('currentForeignLanguage', currentForeignLanguage);
             }
-            localStorage.setItem('currentMainLanguage', currentMainLanguage);
-            updateAllUIText();
-            handleSettingsChangeAndRestart();
+            localStorage.setItem('currentMainLanguage', currentMainLanguage); updateAllUIText(); handleSettingsChangeAndRestart();
         });
-
-        foreignLangSelect.addEventListener('change', (e) => {
-            const newForeignLang = e.target.value;
-            currentForeignLanguage = newForeignLang;
-
-            let mainLanguageChangedByLogic = false;
+        foreignLangSelect.addEventListener('change', (e) => { /* ... unchanged ... */
+            const newForeignLang = e.target.value; currentForeignLanguage = newForeignLang; let mainLanguageChangedByLogic = false;
             if (currentForeignLanguage === currentMainLanguage) {
                 const otherAvailableLangs = Object.keys(availableLanguages).filter(lang => lang !== currentForeignLanguage);
                 currentMainLanguage = otherAvailableLangs.length > 0 ? otherAvailableLangs[0] : (currentForeignLanguage === 'ru' ? 'en' : 'ru');
-                mainLangSelect.value = currentMainLanguage;
-                localStorage.setItem('currentMainLanguage', currentMainLanguage);
-                mainLanguageChangedByLogic = true;
+                mainLangSelect.value = currentMainLanguage; localStorage.setItem('currentMainLanguage', currentMainLanguage); mainLanguageChangedByLogic = true;
             }
             localStorage.setItem('currentForeignLanguage', currentForeignLanguage);
-
-            if (mainLanguageChangedByLogic) {
-                updateAllUIText();
-            }
+            if (mainLanguageChangedByLogic) updateAllUIText();
             handleSettingsChangeAndRestart();
         });
 
-        const loadPreferences = () => {
-            const savedDarkMode = localStorage.getItem('darkMode');
-            isDarkMode = savedDarkMode !== null ? savedDarkMode === 'true' : true;
-            document.body.classList.toggle('dark-mode', isDarkMode);
-            if (darkModeToggle) darkModeToggle.checked = isDarkMode;
-            if (savedDarkMode === null) localStorage.setItem('darkMode', 'true');
-
+        const loadPreferences = () => { /* ... unchanged ... */
+            const savedTheme = localStorage.getItem('selectedTheme');
+            currentTheme = (savedTheme && themes[savedTheme]) ? savedTheme : 'light';
+            applyTheme(currentTheme);
 
             const savedSound = localStorage.getItem('soundEnabled');
             soundEnabled = savedSound !== null ? savedSound === 'true' : true;
@@ -3142,78 +3001,41 @@
 
             currentMainLanguage = localStorage.getItem('currentMainLanguage') || 'en';
             currentForeignLanguage = localStorage.getItem('currentForeignLanguage') || 'ru';
-
             if (currentMainLanguage === currentForeignLanguage) {
-                if (currentMainLanguage === 'en' && availableLanguages['ru']) {
-                    currentForeignLanguage = 'ru';
-                } else if (availableLanguages['en']) {
-                    currentForeignLanguage = 'en';
-                    if (currentMainLanguage === 'en') {
-                        currentMainLanguage = Object.keys(availableLanguages).find(lang => lang !== 'en') || 'ru';
-                    }
-                } else {
-                    currentForeignLanguage = Object.keys(availableLanguages).find(lang => lang !== currentMainLanguage) || Object.keys(availableLanguages)[1];
-                }
-                localStorage.setItem('currentMainLanguage', currentMainLanguage);
-                localStorage.setItem('currentForeignLanguage', currentForeignLanguage);
+                 if (currentMainLanguage === 'en' && availableLanguages['ru']) { currentForeignLanguage = 'ru'; }
+                 else if (availableLanguages['en']) { currentForeignLanguage = 'en'; if (currentMainLanguage === 'en') { currentMainLanguage = Object.keys(availableLanguages).find(lang => lang !== 'en') || 'ru'; }}
+                 else { currentForeignLanguage = Object.keys(availableLanguages).find(lang => lang !== currentMainLanguage) || Object.keys(availableLanguages)[1];}
+                 localStorage.setItem('currentMainLanguage', currentMainLanguage); localStorage.setItem('currentForeignLanguage', currentForeignLanguage);
             }
-
             populateLanguageDropdown(mainLangSelect, currentMainLanguage);
             populateLanguageDropdown(foreignLangSelect, currentForeignLanguage);
 
             const savedTopics = localStorage.getItem('selectedTopics');
-            if (savedTopics) {
-                try {
-                    selectedTopics = JSON.parse(savedTopics);
-                    if (!Array.isArray(selectedTopics) || selectedTopics.length === 0 || !selectedTopics.every(t => topicInternalKeys.includes(t))) {
-                        selectedTopics = ['basics'];
-                    }
-                } catch (e) { selectedTopics = ['basics']; }
-            } else { selectedTopics = ['basics']; }
+            if (savedTopics) { try { selectedTopics = JSON.parse(savedTopics); if (!Array.isArray(selectedTopics) || selectedTopics.length === 0 || !selectedTopics.every(t => topicInternalKeys.includes(t))) selectedTopics = ['basics']; } catch (e) { selectedTopics = ['basics']; }}
+            else { selectedTopics = ['basics']; }
         };
 
         let originalModalCloseBtnHandler;
-
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', () => { /* ... unchanged ... */
             loadPreferences();
             updateAllUIText();
             updateSelectedTopicsDisplay();
-
             gameBoard.innerHTML = `<p class="game-board-message">${_('modalMessageStartGame')}</p>`;
-            movesValueEl.textContent = '0';
-            matchesValueEl.textContent = `0/${MAX_PAIRS_DISPLAYED}`;
-            timeValueEl.textContent = formatTime(0);
-            lockBoard = true;
-            gameActive = false;
-
-            modalPlayAgainBtn.addEventListener('click', () => {
-                hideGameEndModal();
-                initGame();
-            });
-
+            movesValueEl.textContent = '0'; matchesValueEl.textContent = `0/${MAX_PAIRS_DISPLAYED}`;
+            timeValueEl.textContent = formatTime(0); lockBoard = true; gameActive = false;
+            modalPlayAgainBtn.addEventListener('click', () => { hideGameEndModal(); initGame(); });
             originalModalCloseBtnHandler = () => {
                  hideGameEndModal();
                 if (boardHasBeenSetUpAtLeastOnce && currentRound === 0 && !gameActive) {
-                    gameBoard.innerHTML = `<p class="game-board-message">${_('modalMessageGameFinished')}</p>`;
-                } else if (!boardHasBeenSetUpAtLeastOnce && !gameActive) {
-                     gameBoard.innerHTML = `<p class="game-board-message">${_('modalMessageStartGame')}</p>`;
-                }
+                    if (gameBoard.querySelector('.game-board-message') && gameBoard.querySelector('.game-board-message').textContent.includes(_('modalMessageNoWordsError'))) { gameBoard.innerHTML = `<p class="game-board-message">${_('modalMessageStartGame')}</p>`; }
+                    else { gameBoard.innerHTML = `<p class="game-board-message">${_('modalMessageGameFinished')}</p>`; }
+                } else if (!boardHasBeenSetUpAtLeastOnce && !gameActive) { gameBoard.innerHTML = `<p class="game-board-message">${_('modalMessageStartGame')}</p>`; }
             };
             modalCloseBtn.addEventListener('click', originalModalCloseBtnHandler);
-
-            gameEndModal.addEventListener('click', (event) => {
-                if (event.target === gameEndModal) {
-                    modalCloseBtn.click();
-                }
-            });
-
+            gameEndModal.addEventListener('click', (event) => { if (event.target === gameEndModal) modalCloseBtn.click(); });
             if (aboutButton) aboutButton.addEventListener('click', showAboutModal);
             if (aboutModalCloseBtn) aboutModalCloseBtn.addEventListener('click', hideAboutModal);
-            if (aboutModal) {
-                aboutModal.addEventListener('click', (event) => {
-                    if (event.target === aboutModal) hideAboutModal();
-                });
-            }
+            if (aboutModal) { aboutModal.addEventListener('click', (event) => { if (event.target === aboutModal) hideAboutModal(); }); }
         });
     </script>
 </body>

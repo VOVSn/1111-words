@@ -1,14 +1,27 @@
 # "1111 Words" Game Series: Learn Languages Easily and Flexibly!
 # Серия Игр "1111 Слов": Изучаем Языки Легко и Гибко!
 
+**Play the latest multilingual version live at: [1111words.vovsn.com](http://1111words.vovsn.com)**
+
+**Играйте в последнюю многоязычную версию онлайн: [1111words.vovsn.com](http://1111words.vovsn.com)**
+
 Welcome to a collection of exciting word-matching games designed to help you learn various languages! Our flagship game, **"1111 Words" (multilingual version)**, allows you to choose your native language and the language you want to learn, offering 1111 of the most common words. Classic single-language versions are also available for **Spanish, Serbian, and French**.
+
 Добро пожаловать в коллекцию увлекательных игр на сопоставление слов, созданных для помощи в изучении различных языков! Наша флагманская игра **"1111 Слов" (многоязычная версия)** позволяет вам выбирать родной язык и язык для изучения, предлагая 1111 наиболее употребительных слов. Также доступны классические одноязычные версии для **испанского, сербского и французского** языков.
 
-## 🌟 New: "1111 Words" - Multilingual Game (v0.1.3 beta, not tested on mobile devices)
-## 🌟 Новинка: "1111 Слов" - Многоязычная Игра (v0.1.3 beta, не протестирована на мобильных устройствах)
+## 🌟 New: "1111 Words" - Multilingual Game (v0.1.8 alpha, mobile testing ongoing)
+
+## 🌟 Новинка: "1111 Слов" - Многоязычная Игра (v0.1.8 alpha, тестирование на мобильных устройствах продолжается)
 
 Introducing our most flexible and versatile game in the series – **`1111_WORDS.html`**!
+
 Представляем вам нашу самую гибкую и универсальную игру в серии – **`1111_WORDS.html`**!
+
+<!-- Placeholder for Screenshot 1: Main game interface with Light theme -->
+<p align="center">
+  <img src="screenshot_1.png" alt="Game Interface - Light Theme" width="40%">
+</p>
+<!-- /Placeholder -->
 
 This version allows you to:
 Эта версия позволяет вам:
@@ -43,11 +56,11 @@ This version allows you to:
 *   **1111 Words:** A carefully selected vocabulary covering essential topics.
 *   **1111 Слов:** Тщательно подобранный словарный запас, охватывающий основные темы.
 
-*   **Themes:** Words are grouped by themes (Basics, Food/Restaurants, Travel, Technology/Computers, Business/Economy), allowing you to focus on specific areas.
-*   **Темы:** Слова сгруппированы по темам (Основы, Еда/Рестораны, Путешествия, Техника/Компьютеры, Бизнес/Экономика), что позволяет фокусироваться на конкретных областях.
+*   **Word Topics:** Words are grouped by topics (Basics, Food/Restaurants, Travel, Technology/Computers, Business/Economy), allowing you to focus on specific areas.
+*   **Темы Слов:** Слова сгруппированы по темам (Основы, Еда/Рестораны, Путешествия, Техника/Компьютеры, Бизнес/Экономика), что позволяет фокусироваться на конкретных областях.
 
 *   **Game Modes:**
-    *   **Easy:** Cards are initially face up, making it easier to find pairs – ideal for beginners.
+    *   **Simple:** Cards are initially face up, making it easier to find pairs – ideal for beginners.
     *   **Memory:** Classic mode where cards are face down, and you need to remember their locations – for memory training and deeper learning.
 *   **Режимы Игры:**
     *   **Простой:** Карточки изначально открыты, что облегчает поиск пар – идеально для начинающих.
@@ -59,8 +72,30 @@ This version allows you to:
 *   **Responsive Design:** The game looks and works great on computers, tablets, and mobile phones.
 *   **Адаптивный Дизайн:** Игра отлично выглядит и работает на компьютерах, планшетах и мобильных телефонах.
 
-*   **Dark Theme:** For comfortable use at any time of day.
-*   **Темная Тема:** Для комфортного использования в любое время суток.
+<!-- Placeholder for Screenshot 2: Settings menu showing theme selection (e.g., Pixel Quest) -->
+<p align="center">
+  <img src="screenshot_2_settings.png" alt="Settings Menu - Theme Selection" width="40%">
+</p>
+<!-- /Placeholder -->
+
+*   **Multiple Themes:** Choose your preferred visual style!
+    *   **Light (Default):** A clean, bright, and modern neumorphic design.
+    *   **Dark:** For comfortable use at any time of day, also with a neumorphic feel.
+    *   **Memphis:** A vibrant and playful theme inspired by the Memphis design style, with bold colors and geometric patterns.
+    *   **Navy Formal:** A sleek and professional flat design with a light navy and blue color palette.
+    *   **Pixel Quest:** A retro 8-bit/16-bit gaming theme with pixelated fonts and blocky aesthetics, featuring larger text for readability.
+*   **Разнообразие Тем:** Выберите предпочитаемый визуальный стиль!
+    *   **Светлая (По умолчанию):** Чистый, яркий и современный неоморфный дизайн.
+    *   **Темная:** Для комфортного использования в любое время суток, также с неоморфным ощущением.
+    *   **Мемфис:** Яркая и игривая тема, вдохновленная стилем Мемфис, со смелыми цветами и геометрическими узорами.
+    *   **Формальная Темно-синяя:** Элегантный и профессиональный плоский дизайн со светло-синей и темно-синей цветовой палитрой.
+    *   **Пиксельный Квест:** Ретро-тема в стиле 8-битных/16-битных игр с пиксельными шрифтами и блочной эстетикой, с увеличенным размером текста для лучшей читаемости.
+
+<!-- Placeholder for Screenshot 3: Game board with a different theme (e.g., Memphis or Dark) -->
+<p align="center">
+  <img src="screenshot_3_memphis.png" alt="Game Board - Memphis Theme" width="40%">
+</p>
+<!-- /Placeholder -->
 
 *   **Sound Effects:** Pleasant sound accompaniment for in-game actions (can be disabled).
 *   **Звуковые Эффекты:** Приятное звуковое сопровождение действий в игре (можно отключить).
@@ -68,8 +103,8 @@ This version allows you to:
 *   **Statistics:** Tracking of moves, pairs found, and time spent per round.
 *   **Статистика:** Отслеживание ходов, найденных пар и времени, затраченного на раунд.
 
-*   **Serbian Version:** Built-in support for Latin and Cyrillic scripts.
-*   **Сербская версия:** Встроенная поддержка латиницы и кириллицы.
+*   **Serbian Script Support:** Built-in support for Latin and Cyrillic scripts when Serbian is selected.
+*   **Поддержка Сербской Письменности:** Встроенная поддержка латиницы и кириллицы при выборе сербского языка.
 
 *   **All in one file:** The game is a **single HTML file** with embedded styles (CSS) and logic (JavaScript). This makes it extremely convenient for sharing via messengers or email – just send the file, and the recipient can play immediately in their browser without needing installation or internet access (after the first download).
 *   **Все в одном файле:** Игра представляет собой **один HTML-файл** со встроенными стилями (CSS) и логикой (JavaScript). Это делает ее чрезвычайно удобной для обмена через мессенджеры или электронную почту – просто отправьте файл, и получатель сможет сразу играть в браузере без необходимости установки или доступа в интернет (после первой загрузки).
@@ -77,8 +112,8 @@ This version allows you to:
 ## 📜 Classic Single-Language Game Versions (v0.1.0)
 ## 📜 Классические Одноязычные Версии Игр (v0.1.0)
 
-These versions focus on learning one specific language from Russian. Each game also contains 1111 words and a similar set of features (themes, modes, rounds, statistics, etc.).
-Эти версии фокусируются на изучении одного конкретного языка с русского. Каждая игра также содержит 1111 слов и схожий набор функций (темы, режимы, раунды, статистика и т.д.).
+These versions focus on learning one specific language from Russian. Each game also contains 1111 words and a similar set of features (word topics, game modes, rounds, statistics, etc.) but with a simpler theme.
+Эти версии фокусируются на изучении одного конкретного языка с русского. Каждая игра также содержит 1111 слов и схожий набор функций (темы слов, режимы игры, раунды, статистика и т.д.), но с более простой темой оформления.
 
 1.  **1111 Spanish Words (`1111_Spanish_words_.html`)**
     *   Learn popular Spanish words and phrases (Russian -> Spanish).
@@ -101,26 +136,30 @@ These versions focus on learning one specific language from Russian. Each game a
 ## Технологии
 
 *   HTML5
-*   CSS3 (using Flexbox and Grid for layout)
+*   CSS3 (using Flexbox and Grid for layout, multiple themes including Neumorphism, Flat Design, Memphis, and Pixel Art styles)
 *   Pure JavaScript (ES6+)
+*   Google Fonts (Noto Sans, Pixelify Sans)
 *   HTML5
-*   CSS3 (с использованием Flexbox и Grid для верстки)
+*   CSS3 (с использованием Flexbox и Grid для верстки, несколько тем, включая неоморфизм, плоский дизайн, Мемфис и пиксель-арт стили)
 *   Чистый JavaScript (ES6+)
+*   Google Fonts (Noto Sans, Pixelify Sans)
 
 ## How to Play
 ## Как Играть
 
-1.  **Download the HTML file** of the desired game (e.g., `1111_WORDS.html` for the multilingual version or `1111_Spanish_words_.html` for the classic Spanish version).
-1.  **Скачайте HTML-файл** нужной игры (например, `1111_WORDS.html` для многоязычной версии или `1111_Spanish_words_.html` для классической испанской).
+1.  **Go to [1111words.vovsn.com](http://1111words.vovsn.com)** to play the latest multilingual version.
+    *   Alternatively, **download the HTML file** of the desired game (e.g., `1111_WORDS.html` for the multilingual version or `1111_Spanish_words_.html` for a classic version).
+1.  **Перейдите на [1111words.vovsn.com](http://1111words.vovsn.com)**, чтобы играть в последнюю многоязычную версию.
+    *   Либо **скачайте HTML-файл** нужной игры (например, `1111_WORDS.html` для многоязычной версии или `1111_Spanish_words_.html` для классической).
 
-2.  **Open the file in any modern web browser** (Google Chrome, Firefox, Safari, Edge, etc.).
-2.  **Откройте файл в любом современном веб-браузере** (Google Chrome, Firefox, Safari, Edge и т.д.).
+2.  If downloaded, **open the file in any modern web browser** (Google Chrome, Firefox, Safari, Edge, etc.).
+2.  Если скачали, **откройте файл в любом современном веб-браузере** (Google Chrome, Firefox, Safari, Edge и т.д.).
 
 3.  **Configure the game:**
-    *   **For "1111 Words" (multilingual):** Via the menu (⋮), select your **"Native Language"** and **"Language to Learn"**. Then choose the desired word **themes**, number of **rounds**, and other settings.
-    *   **For classic versions:** Via the menu (⋮), choose the desired word **themes**, number of **rounds**, and configure other settings.
+    *   **For "1111 Words" (multilingual):** Via the menu (⋮), select your **"Native Language"** and **"Language to Learn"**. Then choose the desired word **topics**, number of **rounds**, **theme**, and other settings.
+    *   **For classic versions:** Via the menu (⋮), choose the desired word **topics**, number of **rounds**, and configure other settings.
 3.  **Настройте игру:**
-    *   **Для "1111 Слов" (многоязычная):** Через меню (⋮) выберите ваш **"Основной язык"** и **"Язык для изучения"**. Затем выберите желаемые **темы** слов, количество **раундов** и другие параметры.
+    *   **Для "1111 Слов" (многоязычная):** Через меню (⋮) выберите ваш **"Основной язык"** и **"Язык для изучения"**. Затем выберите желаемые **темы** слов, количество **раундов**, **тему оформления** и другие параметры.
     *   **Для классических версий:** Через меню (⋮) выберите желаемые **темы** слов, количество **раундов** и настройте другие параметры.
 
 4.  Click the **"New Game"** button.
@@ -144,6 +183,9 @@ This project is **fully Open Source**. We believe in the power of community and 
 *   **New languages:** Want to add support for a new language in `1111_WORDS.html`? Great!
 *   **Новые языки:** Хотите добавить поддержку нового языка в `1111_WORDS.html`? Отлично!
 
+*   **New Themes:** Have an idea for a cool new theme? We'd love to see it!
+*   **Новые Темы:** Есть идея для новой крутой темы? Мы будем рады ее увидеть!
+
 *   **Code improvement:** If you have ideas for code optimization, adding new features, or fixing bugs – we welcome your Pull Requests.
 *   **Улучшение кода:** Если у вас есть идеи по оптимизации кода, добавлению новых функций или исправлению багов – мы будем рады вашим Pull Request'ам.
 
@@ -159,10 +201,10 @@ This project is **fully Open Source**. We believe in the power of community and 
 **Where to find the code and how to contribute:**
 **Где найти код и как внести вклад:**
 
-*   **GitHub Repository:** [https://github.com/VOVSn/1111-words](https://github.com/VOVSn/1111-words) (Replace with the actual link if it has changed).
+*   **GitHub Repository:** [https://github.com/VOVSn/1111-words](https://github.com/VOVSn/1111-words)
     *   Main multilingual game: `1111_WORDS.html`
     *   Classic versions: `1111_Spanish_words.html`, `1111_Serbian_words.html`, `1111_French_words.html`
-*   **GitHub Репозиторий:** [https://github.com/VOVSn/1111-words](https://github.com/VOVSn/1111-words) (Замените на актуальную ссылку, если она изменилась).
+*   **GitHub Репозиторий:** [https://github.com/VOVSn/1111-words](https://github.com/VOVSn/1111-words)
     *   Основная многоязычная игра: `1111_WORDS.html`
     *   Классические версии: `1111_Spanish_words.html`, `1111_Serbian_words.html`, `1111_French_words.html`
 
